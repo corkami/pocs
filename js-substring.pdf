@@ -1,0 +1,20 @@
+% a pdf file showing that strings can be called via strings instead of functions
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.
+
+obj<<>>
+
+trailer
+<<
+/Root
+    <</Pages <<>>
+    /OpenAction
+        <<
+        /S/JavaScript
+        /JS(
+            app["alert"]("Hello World!");
+          )
+        >>
+    >>
+>>

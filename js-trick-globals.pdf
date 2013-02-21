@@ -1,0 +1,26 @@
+% a pdf file showing an anti-emulator trick: in Adobe Javascript, global variables are not behaving normally
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.
+
+obj<<>>
+
+trailer
+<<
+/Root
+  <<
+  /Pages <<>>
+  /OpenAction
+    <<
+    /S/JavaScript
+    /JS(
+      hidden=0;  // global
+      hidden_=0; // not global
+      if ((hidden_ === 0) && (hidden !== 0)) 
+          app.alert("nothing unusual detected.");
+      else
+          app.alert("ERROR!");
+      )
+    >>
+  >>
+>>

@@ -1,0 +1,25 @@
+% a pdf file where characters are encoded in numbers in unusual numeric
+% CAFEBABE can be both a hex number or a word. any lower case word can be encoded in base 36 (0123456789abcdefghijklmnopqrstuvwxyz)
+
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.
+
+obj<<>>
+
+trailer
+<<
+/Root
+    <</Pages <<>>
+    /OpenAction
+        <<
+        /S/JavaScript
+        /JS(
+        app.alert(
+            (6873049).toString(25) + " " + 
+            (38842069).toString(33) + "!"
+            );
+        )
+        >>
+    >>
+>>

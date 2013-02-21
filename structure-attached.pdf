@@ -1,0 +1,54 @@
+% minimalist PDF with attached file
+% useful to have Adobe Reader extract incomplete streams
+
+% Ange Albertini, BSD Licence, 2011
+
+%PDF-1.
+
+1 0 obj
+<<
+/Kids [2 0 R]
+/Type /Pages
+>>
+endobj
+
+2 0 obj
+<<
+  /Parent 1 0 R
+  /Annots 
+    [<<
+    /FS <<
+      /EF
+        <<
+        /F 3 0 R
+        >>
+      /F (attached.bin)
+      /Type /F
+      >>
+    /Subtype /FileAttachment
+    /Rect [18 797 45 824]
+    >>]
+  /MediaBox [0 0 795 842]
+  /Type /Page
+>>
+endobj
+
+3 0 obj
+<<
+  /Type /EmbeddedFile
+  %Filters
+>>
+%{
+stream
+Hello World !
+endstream
+%}
+endobj
+
+trailer
+<<
+  /Root
+    <<
+    /Pages 1 0 R
+    >>
+>>

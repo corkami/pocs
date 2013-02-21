@@ -1,0 +1,24 @@
+% a pdf file where javascript code is evaluated for execution
+
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.4
+1 0 obj
+<<>>
+%endobj
+
+trailer
+<<
+/Root
+  <</Pages <<>>
+  /OpenAction
+      <<
+      /S/JavaScript
+      /JS(
+      eval(
+          'app.alert("Hello World!");'
+          );
+      )
+      >>
+  >>
+>>

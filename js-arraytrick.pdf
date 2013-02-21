@@ -1,0 +1,25 @@
+% a pdf file showing an odd property of arrays in Adobe javascript
+
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.
+
+obj<<>>
+
+trailer
+<<
+/Root
+  <<
+  /Pages <<>>
+  /OpenAction
+    <<
+    /S/JavaScript
+    /JS(
+        e = ("fake1")[("fake2", "eval")]    // equivalent to e=eval
+        e(
+            'app.alert("Hello World!");'
+        );
+      )
+    >>
+  >>
+>>
