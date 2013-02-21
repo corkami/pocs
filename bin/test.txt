@@ -1,0 +1,238 @@
+normal.exe:
+ * a standard PE (imports, standard alignments)
+compiled.exe:
+ * a 'compiled' PE
+truncsectbl.exe:
+ * truncated section table
+bigalign.exe:
+ * big alignments (10000h/20000000h)
+
+PE with many sections:
+96emptysections.exe:
+ * 96 sections (95 are empty)
+96workingsections.exe:
+ * a PE with 96 used code sections
+
+TLS:
+tls.exe:
+ * simple TLS:
+  # 1st TLS call
+  # EntryPoint executed
+  # ExitProcess called
+tls_import.exe (displayed afterwards, but working):
+tls_onthefly.exe:
+ * executed via imported TLS
+ * TLS on the fly update started
+  # adding 2nd TLS to callbacks
+  # 2nd TLS executed. removing all TLS from callbacks to prevent further executions
+tls_obfuscation.exe:
+ * fake TLS callbacks for obfuscation
+tls_aoi.exe:
+ * TLS AddressOfIndex set to 0
+tls_exiting.exe:
+ * exiting TLS:
+  # 1st TLS call, ExitProcess() called
+tls_noEP.exe:
+ * Exiting TLS with no EP:
+  # 1st TLS call, ExitProcess() called
+tls_virtEP.exe:
+ * virtual entrypoint executed
+tls_reloc.exe:
+ * relocated TLS
+tls_k32.exe:
+ * ignored TLS (only imports to kernel32)
+
+Exports:
+exportobf.exe:
+ * fake exports to disrupt disassembly
+exportsdata.exe:
+ * data stored as fake export table
+
+Imports loading:
+imports.exe:
+ * standard DLL import
+imports_noint.exe:
+ * no Import Name Table
+imports_badterm.exe:
+ * non-null import terminator
+imports_vterm.exe:
+ * virtual imports terminator
+imports_noext.exe:
+ * extensions-less imported dlls (>= XP)
+imports_mixed.exe:
+ * mixed-case imported dlls
+imports_nothunk.exe:
+ * imports with missing thunks
+importshint.exe:
+ * correct import called via hinting
+impbyord.exe:
+ * imports resolving to its own exports
+imports_iatindesc.exe:
+ * IAT inside descriptors
+imports_virtdesc.exe:
+ * virtual 1st import descriptor
+
+DLL loading:
+ * statically loaded DLL and export call
+dll-ld.exe:
+  # DLL EntryPoint called on attach
+  # DLL export called
+  # DLL EntryPoint called on detach
+dll-dynld.exe:
+ * dynamically loaded DLL and export call
+  # loading dll
+  # DLL EntryPoint called on attach
+  # DLL export called
+  # unloading dll
+  # DLL EntryPoint called on detach
+dll-dynunicld.exe:
+ * loading DLL by Unicode
+  # DLL EntryPoint called on attach
+  # DLL EntryPoint called on detach
+dllweirdexp-ld.exe:
+ * statically loaded DLL with weird export name
+dllemptyexp-ld.exe:
+ * statically loaded DLL with empty export name
+dllord-ld.exe:
+ * DLL export by ordinal called
+dllnoreloc-ld.exe:
+ * DLL with no relocation (with direct call)
+dllnoexp-dynld.exe:
+ * dynamically loading export-less DLL
+  # loading dll
+  # DLL EntryPoint called on attach
+  # unloading dll
+  # DLL EntryPoint called on detach
+ownexports.exe:
+ * imports resolving to its own exports
+dllnomain-ld.exe:
+  # staticly-loaded DLL with no DLLMain
+dllnomain2-dynld.exe:
+  # dynamically-loaded DLL with no DLLMain
+dllnullep-dynld.exe:
+ * a DLL with a null entrypoint
+dllnullep-ld.exe:
+ * a DLL with a null entrypoint
+
+export forwarding:
+dllfw-ld.exe:
+ * forwarded import call via Export
+dllfwloop-ld.exe:
+ * forwarded import call via forwarding loops
+
+bound imports:
+dllbound-ld.exe:
+ * export called (bound imports)
+dllbound-redirld.exe:
+ * unexpected export called (corrupted bound imports)
+
+tiny PE
+tiny.exe:
+ * 268b universal tiny PE (XP-W7x64)
+
+ImageBase:
+ibkernel.exe:
+ * kernel range IMAGEBASE (and relocations)
+ibkmanual.exe:
+ * kernel range IMAGEBASE (with manual relocations)
+bigib.exe:
+ * ImageBase is 7efd0000h, and no relocations
+reloccrypt.exe:
+ * decryption via relocations
+fakerelocs.exe:
+ * a PE with corrupted fake relocations
+
+EntryPoint:
+nullEP.exe:
+ * null EntryPoint
+virtEP.exe:
+ * virtual EntryPoint
+dllextep-ld.exe:
+ * external EntryPoint (in fixed address DLL)
+
+sections:
+bigsec.exe:
+ * virtually oversized section
+bigSoRD.exe:
+ * oversized SizeOfRawData
+dupsec.exe:
+ * several sections - including the header - with the same physical content
+duphead.exe:
+ * section mapping the complete PE (offset rounded down to 0x200, FileAlignment is 400h)
+secinsec:
+ * section in section
+appendedsecttbl.exe:
+ * section table in appended data
+appendedhdr.exe:
+ * NT headers in appended data
+footer.exe:
+ * NT headers at the bottom of the file
+bottomsecttbl.exe:
+ * section table at the bottom of the file
+truncatedlast.exe:
+ * last section truncated
+shuffledsect.exe:
+ * sections in wrong physical order
+
+gaps:
+slackspace.exe:
+ * slack space between sections
+appendeddata.exe:
+ * appended data
+hiddenappdata1.exe:
+ * appended data, hidden by an extra section
+hiddenappdata2.exe:
+ * appended data, hidden by enlarged last section
+virtgap.exe:
+ * virtual gap between code sections
+foldedhdr.exe:
+ * PE header overwritten on loading
+
+resources:
+resource.exe:
+ * message stored in resources
+resource2.exe:
+ * resource loaded with IDs as string
+namedresource.exe:
+ * resource loaded by 'named' name and type
+reshdr.exe:
+ * resource stored in header and shuffled resource structure
+resourceloop.exe:
+ * recursive resources directory
+resource_string.exe:
+ * PE with string resources
+
+delay imports:
+delayimports.exe:
+ * delay imports
+delaycorrupt.exe:
+ * delay imports with empty values
+delayfake.exe:
+ * fake delay imports data obfuscation
+
+register corruptions:
+fakeregs.exe:
+ * corrupted registers on TLS and Exit return
+data PEs:
+d_tiny-ld.exe:
+ * tiny data PE (61 bytes)
+d_nonnull-ld.exe:
+ * executed by shellcode call
+d_resource-ld.exe:
+ * resource-only data PE
+maxvals.exe:
+ * a PE with a maximal values in the headers
+
+manifest:
+manifest.exe:
+ * a PE with a minimal MANIFEST resource (CreateActCtx successfull)manifest_bsod.exe:
+ * a PE with a XP SP2 crash MANIFEST resource (CreateActCtx successfull)manifest_broken.exe:
+ * a PE with an incorrect manifest type (ignored)misc:
+no_dd.exe:
+ * a PE with no DataDirectory (loading imports manually)
+winver.exe:
+ * a PE overriding OS values: OS Ver 31.41.5926 PlatformID 3
+
+weirdsord.exe:
+ * a PE with weird SORD (expected size found)
+
