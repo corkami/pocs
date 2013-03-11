@@ -1,0 +1,48 @@
+% no signature at all
+
+1 0 obj
+<<
+%	/Type /Catalog
+	/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+%	/Type /Pages
+	/Count 1
+	/Kids [ 3 0 R ]
+>>
+endobj
+
+3 0 obj
+<<
+%	/Type /Page
+	/Contents 4 0 R
+%	/Parent 2 0 R
+	/Resources <<
+		/Font <<
+			/F1 <<
+				/BaseFont /Arial
+			>>
+		>>
+	>>
+>>
+endobj
+
+4 0 obj
+<< >>
+stream
+BT
+/F1 100
+Tf 0
+Tr(Hello Linux!)Tj
+ET
+endstream
+endobj
+
+trailer
+<<
+    %extra object required
+	/Root 1 0 R
+>>
