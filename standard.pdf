@@ -1,0 +1,96 @@
+% a working PDF, giving different results in sumatra, chrome, Adobe
+% with oddities specific to each parser
+
+% thanks to Jonas Magazinius for his help for Chrome
+
+% Ange Albertini, BSD Licence 2013
+
+%PDF-1.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% sumatra objects
+
+10 0 obj
+<<
+    /Pages <<
+        /Count 0
+        /Kids [<<
+            /Contents 11 0 R
+            /Resources <<
+                /Font <<
+                    /F1 <<
+                        /BaseFont /Arial
+                    >>
+                >>
+            >>
+        >>]
+    >>
+>>
+endobj
+
+11 0 obj
+<< >>
+stream
+BT
+    /F1 140
+    Tf
+    (regarding)Tj
+ET
+endstream
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% chrome objects
+
+20 0 obj <<
+    /Pages <<
+        /Kids [ <<
+            /Contents -4294967275 4294967296 R  %  equivalent to 21 0 R
+            >>
+        >>
+    ]>>
+>>
+
+21 0 obj
+<< >>
+stream
+BT
+    110
+    Tf true
+    ('standard'...)Tj
+endstream
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% adobe objects
+
+30 0 obj
+<<
+    /Kids[<<
+        /Parent 30 0 R
+        /Contents[31 0 R]
+        >>
+    ]
+/Resources<<>>
+>>
+endobj
+
+31 0 obj
+<< >>
+stream
+BT
+    /F1 150
+    Tf 1 0 0 1 1 0
+    Tm(the PDF)Tj
+ET
+endstream
+endobj
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%chrome trailer (commented)
+% trailer<</Root 20 0 R>>
+
+%adobe trailer (normal)
+trailer<</Root<</Pages 30 0 R>>>>
+
+%sumatra trailer(no keyword)
+<</Root 10 0 R>>
