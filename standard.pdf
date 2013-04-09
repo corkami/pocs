@@ -5,26 +5,24 @@
 
 % Ange Albertini, BSD Licence 2013
 
-%PDF-1.
+%PDF-1. % not required at all for sumatra
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % sumatra objects
 
 10 0 obj
 <<
-    /Pages <<
-        /Count 0
-        /Kids [<<
-            /Contents 11 0 R
-            /Resources <<
-                /Font <<
-                    /F1 <<
-                        /BaseFont /Arial
-                    >>
+    /Count 0
+    /Kids [<<
+        /Contents 11 0 R
+        /Resources <<
+            /Font <<
+                /F1 <<
+                    /BaseFont /Arial
                 >>
             >>
-        >>]
-    >>
+        >>
+    >>]
 >>
 endobj
 
@@ -41,13 +39,12 @@ endstream
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % chrome objects
 
-20 0 obj <<
+20 0 obj
+<<
     /Pages <<
-        /Kids [ <<
+        /Kids [<<
             /Contents -4294967275 4294967296 R  %  equivalent to 21 0 R
-            >>
-        >>
-    ]>>
+    >>]
 >>
 
 21 0 obj
@@ -64,12 +61,11 @@ endstream
 
 30 0 obj
 <<
-    /Kids[<<
+    /Kids [<<
         /Parent 30 0 R
-        /Contents[31 0 R]
-        >>
-    ]
-/Resources<<>>
+        /Contents 31 0 R
+        /Resources <<>>
+    >>]
 >>
 endobj
 
@@ -93,4 +89,4 @@ endobj
 trailer<</Root<</Pages 30 0 R>>>>
 
 %sumatra trailer(no keyword)
-<</Root 10 0 R>>
+<</Root<</Pages 10 0 R>>>>
