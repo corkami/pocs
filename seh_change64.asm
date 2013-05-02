@@ -88,16 +88,17 @@ EntryPoint:
 EndCode:
 
 Imports: ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-istruc IMPORT_IMAGE_DESCRIPTOR
-    at IMPORT_IMAGE_DESCRIPTOR.DllName, dd kernel32.dll - IMAGEBASE
-    at IMPORT_IMAGE_DESCRIPTOR.IAT,     dd kernel32.dll_iat - IMAGEBASE
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.Name1,      dd kernel32.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk, dd kernel32.dll_iat - IMAGEBASE
 iend
-istruc IMPORT_IMAGE_DESCRIPTOR
-    at IMPORT_IMAGE_DESCRIPTOR.DllName, dd msvcrt.dll - IMAGEBASE
-    at IMPORT_IMAGE_DESCRIPTOR.IAT,     dd msvcrt.dll_iat - IMAGEBASE
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.Name1,      dd msvcrt.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk, dd msvcrt.dll_iat - IMAGEBASE
 iend
-istruc IMPORT_IMAGE_DESCRIPTOR
+istruc IMAGE_IMPORT_DESCRIPTOR
 iend
+
 
 _d
 
