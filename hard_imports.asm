@@ -144,6 +144,8 @@ table
     dd 05010a83ah, 0028ach, 001d30h
     dd 0503275b9h, 04dc65h, 04cc94h
     dd 050327671h, 0149bfh, 011222h
+    dd 0506bc5e5h, 001d7bh, 00ae40h
+    dd 0506dbe4fh, 0149bfh, 011222h
     dd 0
 
 align FILEALIGN, db 0
@@ -154,11 +156,11 @@ align FILEALIGN, db 0
 ; fn = "c:\\windows\\system32\\kernel32.dll" if len(sys.argv) == 1 else sys.argv[1]
 
 ; for f in glob.glob(fn):
-; 	print f
-; 	pe = pefile.PE(f)
-; 	for sym in pe.DIRECTORY_ENTRY_EXPORT.symbols:
-; 		if sym.name == "GetProcAddress":
-; 			GPA = sym.address
-; 		if sym.name == "LoadLibraryA":
-; 			LLA = sym.address
-; 	print "    dd 0%08xh, 0%05xh, 0%05xh" % (pe.FILE_HEADER.TimeDateStamp, LLA, GPA)
+;   print f
+;   pe = pefile.PE(f)
+;   for sym in pe.DIRECTORY_ENTRY_EXPORT.symbols:
+;       if sym.name == "GetProcAddress":
+;           GPA = sym.address
+;       if sym.name == "LoadLibraryA":
+;           LLA = sym.address
+;   print "    dd 0%08xh, 0%05xh, 0%05xh" % (pe.FILE_HEADER.TimeDateStamp, LLA, GPA)
