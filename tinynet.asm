@@ -241,12 +241,12 @@ blob_end
 Metadata_end
 
 Imports: ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-istruc IMPORT_IMAGE_DESCRIPTOR
-    at IMPORT_IMAGE_DESCRIPTOR.INT,     dd mscoreeINT - CODEDELTA - IMAGEBASE
-    at IMPORT_IMAGE_DESCRIPTOR.DllName, dd aMscoree_dll - CODEDELTA - IMAGEBASE
-    at IMPORT_IMAGE_DESCRIPTOR.IAT,     dd _CorExeMain - CODEDELTA - IMAGEBASE
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk, dd mscoreeINT - CODEDELTA - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1,              dd aMscoree_dll - CODEDELTA - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk,         dd _CorExeMain - CODEDELTA - IMAGEBASE
 iend
-istruc IMPORT_IMAGE_DESCRIPTOR ;terminator
+istruc IMAGE_IMPORT_DESCRIPTOR ;terminator
 iend
 
 mscoreeINT dd hn_CoreExeMain - IMAGEBASE - CODEDELTA

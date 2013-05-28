@@ -211,11 +211,11 @@ EntryPoint:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 Import_Descriptor:
-istruc IMPORT_IMAGE_DESCRIPTOR
-    at IMPORT_IMAGE_DESCRIPTOR.DllName, dd aMscoree_dll  - IMAGEBASE
-    at IMPORT_IMAGE_DESCRIPTOR.IAT,     dd mscoree.dll_iat  - IMAGEBASE
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.Name1,      dd aMscoree_dll  - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk, dd mscoree.dll_iat  - IMAGEBASE
 iend
-istruc IMPORT_IMAGE_DESCRIPTOR ;terminator
+istruc IMAGE_IMPORT_DESCRIPTOR ;terminator
 iend
 
 
