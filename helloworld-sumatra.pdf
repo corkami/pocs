@@ -18,7 +18,7 @@
 >>
 % no endobj necessary
 
-2 0 obj
+2 0obj
 <<>>
 stream
 BT
@@ -29,7 +29,7 @@ Tr(Hello World!)Tj
 ET
 endstream
 
-trailer
+- % only a single character is required or the endobj - weird :p
 <<
 	/Root <<
 		/Pages 1 0 R
