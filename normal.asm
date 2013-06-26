@@ -1,6 +1,6 @@
 ; a 'normal' PE (fishy, I know)
 
-; Ange Albertini, BSD LICENCE 2009-2011
+; Ange Albertini, BSD LICENCE 2009-2013
 
 %include 'consts.inc'
 
@@ -74,44 +74,34 @@ Msg db " * a standard PE (imports, standard alignments)", 0ah, 0
 _d
 
 Import_Descriptor:
-;kernel32.dll_DESCRIPTOR:
-    dd kernel32.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd kernel32.dll - IMAGEBASE
-    dd kernel32.dll_iat - IMAGEBASE
-;msvcrt.dll_DESCRIPTOR:
-    dd msvcrt.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd msvcrt.dll - IMAGEBASE
-    dd msvcrt.dll_iat - IMAGEBASE
-;terminator
-    dd 0, 0, 0, 0, 0
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk, dd kernel32.dll_hintnames - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1,              dd kernel32.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk,         dd kernel32.dll_iat - IMAGEBASE
+iend
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk, dd msvcrt.dll_hintnames - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1,              dd msvcrt.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk,         dd msvcrt.dll_iat - IMAGEBASE
+iend
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
 _d
 
-kernel32.dll_hintnames:
-    dd hnExitProcess - IMAGEBASE
-    dd 0
-msvcrt.dll_hintnames:
-    dd hnprintf - IMAGEBASE
-    dd 0
+kernel32.dll_hintnames dd hnExitProcess - IMAGEBASE, 0
+msvcrt.dll_hintnames   dd hnprintf - IMAGEBASE, 0
 _d
 
-hnExitProcess:
-    dw 0
-    db 'ExitProcess', 0
-hnprintf:
-    dw 0
-    db 'printf', 0
+hnExitProcess db 0,0, 'ExitProcess', 0
+hnprintf      db 0,0, 'printf', 0
 _d
 
 kernel32.dll_iat:
-__imp__ExitProcess:
-    dd hnExitProcess - IMAGEBASE
+__imp__ExitProcess dd hnExitProcess - IMAGEBASE
     dd 0
 
 msvcrt.dll_iat:
-__imp__printf:
-    dd hnprintf - IMAGEBASE
+__imp__printf dd hnprintf - IMAGEBASE
     dd 0
 _d
 
