@@ -4,7 +4,8 @@
 
 ; => relocation is applied to e_lfanew in memory
 ; another PE header is then pointed to, 
-;   which contains the actual imports in the 2nd part of DataDirectories
+;   but on XP, imports are relocated before so this 2nd DD is not used for imports
+; this would fail under Windows 7
 
 ; trick suggested by Peter Ferrie
 
@@ -33,8 +34,8 @@ istruc IMAGE_NT_HEADERS
 iend
 istruc IMAGE_FILE_HEADER
     at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_I386
-    at IMAGE_FILE_HEADER.NumberOfSections,      dw 0
-    at IMAGE_FILE_HEADER.SizeOfOptionalHeader,  dw 0 ; necessary under win7 !
+    at IMAGE_FILE_HEADER.NumberOfSections,      dw NUMBEROFSECTIONS
+    at IMAGE_FILE_HEADER.SizeOfOptionalHeader,  dw SIZEOFOPTIONALHEADER
     at IMAGE_FILE_HEADER.Characteristics,       dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
 iend
 
@@ -55,23 +56,21 @@ iend
 DataDirectory:
 
 istruc IMAGE_DATA_DIRECTORY_16
-dd -1, -1
-    at IMAGE_DATA_DIRECTORY_16.ImportsVA,  dd FakeImports - IMAGEBASE, -1 ; not required
-dd  0, -1
-dd -1, -1
+    at IMAGE_DATA_DIRECTORY_16.ImportsVA,  dd RealImports - IMAGEBASE, -1 ; not required
     at IMAGE_DATA_DIRECTORY_16.FixupsVA,   dd Directory_Entry_Basereloc - IMAGEBASE
     at IMAGE_DATA_DIRECTORY_16.FixupsSize, dd DIRECTORY_ENTRY_BASERELOC_SIZE
-dd -1, -1
-dd -1, -1
-dd -1, -1
-dd -1, -1
-dd  0, -1
-dd -1, -1
-dd -1, -1
-dd -1, -1
-dd  0, -1
-dd -1, -1
+
 iend
+SIZEOFOPTIONALHEADER equ $ - OptionalHeader
+SectionHeader:
+istruc IMAGE_SECTION_HEADER
+    at IMAGE_SECTION_HEADER.VirtualSize,      dd 20000h
+    at IMAGE_SECTION_HEADER.VirtualAddress,   dd 1 * SECTIONALIGN
+    at IMAGE_SECTION_HEADER.SizeOfRawData,    dd 20000h
+    at IMAGE_SECTION_HEADER.PointerToRawData, dd 1 * FILEALIGN
+    at IMAGE_SECTION_HEADER.Characteristics,  dd IMAGE_SCN_MEM_EXECUTE | IMAGE_SCN_MEM_WRITE
+iend
+NUMBEROFSECTIONS equ ($ - SectionHeader) / IMAGE_SECTION_HEADER_size
 
 align FILEALIGN, db 0
 
@@ -89,7 +88,7 @@ reloc42:
     call [__imp__ExitProcess]
 _c
 
-msg db " * relocated e_lfanew with dual PE headers and split DataDirectories", 0ah, 0
+msg db " * relocated e_lfanew with dual (+unused) PE headers and DataDirectory (XP)", 0ah, 0
 _d
 
 FakeImports:
@@ -159,11 +158,6 @@ FAKE2.dll db 'MUM', 0
 _d
 
 Directory_Entry_Basereloc:
-block_start1:
-    .VirtualAddress dd lfanew - 4 - start
-    .SizeOfBlock dd BASE_RELOC_SIZE_OF_BLOCK1
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | 0
-BASE_RELOC_SIZE_OF_BLOCK1 equ $ - block_start1
 
 block_start0:
     .VirtualAddress dd reloc01 - IMAGEBASE
@@ -172,6 +166,11 @@ block_start0:
     dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc22 + 2 - reloc01)
     dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc42 + 2 - reloc01)
 BASE_RELOC_SIZE_OF_BLOCK0 equ $ - block_start0
+block_start1:
+    .VirtualAddress dd lfanew - 4 - start
+    .SizeOfBlock dd BASE_RELOC_SIZE_OF_BLOCK1
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | 0
+BASE_RELOC_SIZE_OF_BLOCK1 equ $ - block_start1
 
 DIRECTORY_ENTRY_BASERELOC_SIZE  equ $ - Directory_Entry_Basereloc
 
@@ -200,7 +199,6 @@ istruc IMAGE_OPTIONAL_HEADER32
 iend
 
 istruc IMAGE_DATA_DIRECTORY_16
-    at IMAGE_DATA_DIRECTORY_16.ImportsVA,  dd RealImports - IMAGEBASE ; our real imports
 iend
 
 align FILEALIGN, db 0
