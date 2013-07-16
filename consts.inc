@@ -473,3 +473,26 @@ istruc IMAGE_IMPORT_DESCRIPTOR
     at IMAGE_IMPORT_DESCRIPTOR.FirstThunk        , dd %1_iat - IMAGEBASE
 iend
 %endmacro
+
+struc IMAGE_LOAD_CONFIG_DIRECTORY32
+    .Size                           resd 1
+    .TimeDateStamp                  resd 1
+    .MajorVersion                   resw 1
+    .MinorVersion                   resw 1
+    .GlobalFlagsClear               resd 1
+    .GlobalFlagsSet                 resd 1
+    .CriticalSectionDefaultTimeout  resd 1
+    .DeCommitFreeBlockThreshold     resd 1
+    .DeCommitTotalFreeThreshold     resd 1
+    .LockPrefixTable                resd 1 ;VA
+    .MaximumAllocationSize          resd 1
+    .VirtualMemoryThreshold         resd 1
+    .ProcessHeapFlags               resd 1
+    .ProcessAffinityMask            resd 1
+    .CSDVersion                     resw 1
+    .Reserved1                      resw 1
+    .EditList                       resd 1 ;VA
+    .SecurityCookie                 resd 1
+    .SEHandlerTable                 resd 1
+    .SEHandlerCount                 resd 1
+endstruc

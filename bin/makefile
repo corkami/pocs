@@ -22,7 +22,8 @@ misc: normal.exe truncatedlast.exe pdf.exe tiny.exe bigsec.exe shuffledsect.exe 
     quine.exe bigalign.exe foldedhdr.exe compiled.exe duphead.exe \
     no0code.exe fakeregs.exe fakeregslib.dll gui.exe multiss.exe multiss_gui.exe no_dd.exe \
     maxvals.exe pdf_zip_pe.exe winver.exe weirdsord.exe hdrcode.exe mini.exe \
-	dump_imports.exe nullvirt.exe
+    dump_imports.exe nullvirt.exe safeseh.exe lfanew_relocW7.exe \
+    lfanew_relocXP.exe safeseh_fly.exe
 
 down: appendedsecttbl.exe appendedhdr.exe footer.exe bottomsecttbl.exe
 
