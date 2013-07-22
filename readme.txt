@@ -194,6 +194,9 @@ DataDirectory 2: Resource
  Resource type: RT_STRING
  *.. resource_string.exe      string resource
 
+ Resource type: RT_ICON and RT_GROUP_ICON
+ *.. resource_icon.exe        icon resource and group
+
  Resource type: RT_VERSION
  *.. version_std.exe          'standard' version information (with duplicate entries)
  **. version_cust.exe         a PE with version customized minimal info - only to make the version tab appear

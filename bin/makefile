@@ -39,7 +39,7 @@ delay: delayimports.exe delaycorrupt.exe delayfake.exe
 gaps: appendeddata.exe hiddenappdata1.exe hiddenappdata2.exe slackspace.exe virtgap.exe
 
 resource: manifest resource.exe resource2.exe reshdr.exe namedresource.exe resourceloop.exe \
-    resource_string.exe d_resource-ld.exe d_resource.dll version
+    resource_string.exe d_resource-ld.exe d_resource.dll version resource_icon.exe
 
 manifest: manifest.exe manifest_bsod.exe manifest_broken.exe
 version: version_mini.exe version_std.exe version_cust.exe

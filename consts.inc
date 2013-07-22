@@ -496,3 +496,23 @@ struc IMAGE_LOAD_CONFIG_DIRECTORY32
     .SEHandlerTable                 resd 1
     .SEHandlerCount                 resd 1
 endstruc
+
+RT_ICON       equ 3
+RT_GROUP_ICON equ 14
+
+struc GRPICONDIR
+    .idReserved resw 1 ; always 0 - enforced
+    .idType     resw 1 ; always 1 for icons
+    .idCount    resw 1
+endstruc
+
+struc GRPICONDIRENTRY
+    .bWidth       resb 1
+    .bHeight      resb 1
+    .bColorCount  resb 1
+    .bReserved    resb 1
+    .wPlanes      resw 1
+    .wBitCount    resw 1
+    .dwBytesInRes resd 1
+    .nId          resw 1
+endstruc
