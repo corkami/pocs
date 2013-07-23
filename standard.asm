@@ -68,8 +68,233 @@ SIZEOFHEADERS equ $ - IMAGEBASE
 
 section progbits vstart=IMAGEBASE + SECTIONALIGN align=FILEALIGN
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;******************************************************************************
 
+MYGROUPID equ 314h
+MYICONID equ 628h
+
+Directory_Entry_Resource:   ; root directory, type level
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 4
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd RT_ICON
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_icon_ID - Directory_Entry_Resource)
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd RT_GROUP_ICON
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_group_ID - Directory_Entry_Resource)
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd RT_VERSION
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_version_ID - Directory_Entry_Resource)
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd RT_MANIFEST
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (manifest_directory_type - Directory_Entry_Resource)
+iend
+
+resource_icon_ID:
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd MYICONID
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_icon_language - Directory_Entry_Resource)
+iend
+
+resource_icon_language:
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    ; language doesn't matter
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd icon_entry - Directory_Entry_Resource
+iend
+
+icon_entry:
+istruc IMAGE_RESOURCE_DATA_ENTRY
+    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd icon_data - IMAGEBASE
+    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd ICON_SIZE
+iend
+
+
+resource_group_ID:
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd MYGROUPID
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_group_language - Directory_Entry_Resource)
+iend
+
+resource_group_language:
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    ; language doesn't matter
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd group_entry - Directory_Entry_Resource
+iend
+
+group_entry:
+istruc IMAGE_RESOURCE_DATA_ENTRY
+    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd group_data - IMAGEBASE
+    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd GROUP_SIZE
+iend
+
+
+resource_version_ID:
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd 1 ; name of the underneath resource
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_version_language - Directory_Entry_Resource)
+iend
+
+resource_version_language:
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd resource_version_entry - Directory_Entry_Resource
+iend
+
+resource_version_entry:
+istruc IMAGE_RESOURCE_DATA_ENTRY
+    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd resource_version_data - IMAGEBASE
+    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd VERSION_SIZE
+iend
+
+
+manifest_directory_type:
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd MYMAN
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (manifest_directory_language - Directory_Entry_Resource)
+iend
+
+manifest_directory_language:
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd LANGUAGE ; name of the underneath resource
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd manifest_entry - Directory_Entry_Resource
+iend
+
+manifest_entry:
+istruc IMAGE_RESOURCE_DATA_ENTRY
+    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd manifest_data - IMAGEBASE
+    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd MANIFEST_SIZE
+iend
+
+;******************************************************************************
+
+icon_data:
+    incbin 'icon.bin' ; header-less ICON data
+ICON_SIZE equ $ - icon_data
+
+
+group_data:
+istruc GRPICONDIR
+    at GRPICONDIR.idType, dw 1
+    at GRPICONDIR.idCount, dw GRPDIRCOUNT
+iend
+GRPDIR:
+istruc GRPICONDIRENTRY
+    ; theoretically filled with Width, Height...
+    at GRPICONDIRENTRY.dwBytesInRes , dd ICON_SIZE
+    at GRPICONDIRENTRY.nId          , dw MYICONID
+iend
+GRPDIRCOUNT equ ($ - GRPDIR ) / GRPICONDIRENTRY_size
+
+GROUP_SIZE equ $ - group_data
+
+;*******************************************************************************
+
+resource_version_data:
+VS_VERSION_INFO:
+    .wLength dw VERSIONLENGTH
+    .wValueLength dw VALUELENGTH
+    .wType dw 0 ; 0 = bin, 1 = text
+    WIDE 'VS_VERSION_INFO'
+        align 4, db 0
+    Value:
+        istruc VS_FIXEDFILEINFO
+            at VS_FIXEDFILEINFO.dwSignature, dd 0FEEF04BDh
+            at VS_FIXEDFILEINFO.dwFileVersionMS, dd (1 << 16) | 2
+            at VS_FIXEDFILEINFO.dwFileVersionLS, dd (3 << 16) | 4
+        iend
+    VALUELENGTH equ $ - Value
+        align 4, db 0
+    ; children
+    StringFileInfo:
+        dw STRINGFILEINFOLEN
+        dw 0 ; no value
+        dw 0 ; type
+        WIDE 'StringFileInfo'
+            align 4, db 0
+        ; children
+        StringTable:
+            dw STRINGTABLELEN
+            dw 0 ; no value
+            dw 0
+            WIDE '040904b0' ; required correct
+                align 4, db 0
+            ;children
+                ; required or won't be displayed by explorer
+                __string 'FileDescription', 'a "standard" PE'
+                __string 'FileVersion', 'required for Tab display under XP'
+                __string 'LegalCopyright', 'corkami.com'
+                STRINGTABLELEN equ $ - StringTable
+    STRINGFILEINFOLEN equ $ - StringFileInfo
+
+    VarFileInfo:
+        dw VARFILEINFOLENGTH
+        dw 0 ; no value
+        dw 0 ; type
+        WIDE 'VarFileInfo'
+            align 4, db 0
+        ; children
+        Var1:
+            dw VAR1LEN
+            dw VAR1VALLEN
+            dw 0
+            WIDE 'Translation'
+                align 4, db 0
+            Var1Val:
+                dd 04b00h << 16 + 409h
+            VAR1VALLEN equ $ - Var1Val
+                align 4, db 0
+        VAR1LEN equ $ - Var1
+    VARFILEINFOLENGTH equ $ - VarFileInfo
+VERSIONLENGTH equ $ - VS_VERSION_INFO
+
+VERSION_SIZE equ $ - Directory_Entry_Resource
+
+;*******************************************************************************
+
+MYMAN equ CREATEPROCESS_MANIFEST_RESOURCE_ID
+LANGUAGE equ 0
+
+manifest_data:
+db "<assembly xmlns='urn:schemas-microsoft-com:asm.v1' manifestVersion='1.0'/>"
+MANIFEST_SIZE equ $ - manifest_data
+
+myactctx:
+istruc ACTCTX
+    at ACTCTX.cbSize, dd ACTCTX_size
+    at ACTCTX.dwFlags, dw ACTCTX_FLAG_HMODULE_VALID + ACTCTX_FLAG_APPLICATION_NAME_VALID + ACTCTX_FLAG_RESOURCE_NAME_VALID
+    at ACTCTX.lpSource, dd thisEXE ; required for XP
+    at ACTCTX.lpResourceName, dd MYMAN
+    at ACTCTX.hModule, dd IMAGEBASE
+iend
+
+;******************************************************************************
 
 tls:
     push tlsmsg
@@ -209,7 +434,7 @@ user32.dll   db 'user32.dll', 0
 thisEXE      db 'standard.exe', 0
 _d
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;******************************************************************************
 
 Exports_Directory:
   Characteristics       dd 0
@@ -235,236 +460,7 @@ address_of_names:
 
 address_of_ordinals dw 0
 
-;******************************************************************************
 
-MYGROUPID equ 314h
-MYICONID equ 628h
-
-Directory_Entry_Resource:   ; root directory, type level
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 4
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd RT_ICON
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_icon_ID - Directory_Entry_Resource)
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd RT_GROUP_ICON
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_group_ID - Directory_Entry_Resource)
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd RT_VERSION
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_version_ID - Directory_Entry_Resource)
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd RT_MANIFEST
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (manifest_directory_type - Directory_Entry_Resource)
-iend
-
-resource_icon_ID:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd MYICONID
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_icon_language - Directory_Entry_Resource)
-iend
-
-resource_icon_language:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    ; language doesn't matter
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd icon_entry - Directory_Entry_Resource
-iend
-
-icon_entry:
-istruc IMAGE_RESOURCE_DATA_ENTRY
-    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd icon_data - IMAGEBASE
-    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd ICON_SIZE
-iend
-
-
-resource_group_ID:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd MYGROUPID
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_group_language - Directory_Entry_Resource)
-iend
-
-resource_group_language:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    ; language doesn't matter
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd group_entry - Directory_Entry_Resource
-iend
-
-group_entry:
-istruc IMAGE_RESOURCE_DATA_ENTRY
-    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd group_data - IMAGEBASE
-    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd GROUP_SIZE
-iend
-
-
-resource_version_ID:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd 1 ; name of the underneath resource
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_version_language - Directory_Entry_Resource)
-iend
-
-resource_version_language:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd resource_version_entry - Directory_Entry_Resource
-iend
-
-resource_version_entry:
-istruc IMAGE_RESOURCE_DATA_ENTRY
-    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd resource_version_data - IMAGEBASE
-    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd VERSION_SIZE
-iend
-
-
-manifest_directory_type:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd MYMAN
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (manifest_directory_language - Directory_Entry_Resource)
-iend
-
-manifest_directory_language:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd LANGUAGE ; name of the underneath resource
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd manifest_entry - Directory_Entry_Resource
-iend
-
-manifest_entry:
-istruc IMAGE_RESOURCE_DATA_ENTRY
-    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd manifest_data - IMAGEBASE
-    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd MANIFEST_SIZE
-iend
-
-icon_data:
-    incbin 'icon.bin' ; header-less ICON data
-ICON_SIZE equ $ - icon_data
- 
-
-group_data:
-istruc GRPICONDIR
-    at GRPICONDIR.idType, dw 1
-    at GRPICONDIR.idCount, dw GRPDIRCOUNT
-iend
-GRPDIR:
-istruc GRPICONDIRENTRY
-    ; theoretically filled with Width, Height...
-    at GRPICONDIRENTRY.dwBytesInRes , dd ICON_SIZE
-    at GRPICONDIRENTRY.nId          , dw MYICONID
-iend
-GRPDIRCOUNT equ ($ - GRPDIR ) / GRPICONDIRENTRY_size
-
-GROUP_SIZE equ $ - group_data
-
-;*******************************************************************************
-
-resource_version_data:
-VS_VERSION_INFO:
-    .wLength dw VERSIONLENGTH
-    .wValueLength dw VALUELENGTH
-    .wType dw 0 ; 0 = bin, 1 = text
-    WIDE 'VS_VERSION_INFO'
-        align 4, db 0
-    Value:
-        istruc VS_FIXEDFILEINFO
-            at VS_FIXEDFILEINFO.dwSignature, dd 0FEEF04BDh
-            at VS_FIXEDFILEINFO.dwFileVersionMS, dd 1
-            at VS_FIXEDFILEINFO.dwFileVersionLS, dd 2
-            at VS_FIXEDFILEINFO.dwProductVersionMS, dd 3
-            at VS_FIXEDFILEINFO.dwProductVersionLS, dd 4
-
-        iend
-    VALUELENGTH equ $ - Value
-        align 4, db 0
-    ; children
-    StringFileInfo:
-        dw STRINGFILEINFOLEN
-        dw 0 ; no value
-        dw 0 ; type
-        WIDE 'StringFileInfo'
-            align 4, db 0
-        ; children
-        StringTable:
-            dw STRINGTABLELEN
-            dw 0 ; no value
-            dw 0
-            WIDE '040904b0' ; required correct
-                align 4, db 0
-            ;children
-                ; required or won't be displayed by explorer
-                __string 'FileDescription', 'a "standard" PE'
-                ;__string 'FileVersion', '1.0.0.0'
-                __string 'LegalCopyright', 'corkami.com'
-                __string 'OriginalFilename', 'standard.exe'
-
-                STRINGTABLELEN equ $ - StringTable
-    STRINGFILEINFOLEN equ $ - StringFileInfo
-
-    VarFileInfo:
-        dw VARFILEINFOLENGTH
-        dw 0 ; no value
-        dw 0 ; type
-        WIDE 'VarFileInfo'
-            align 4, db 0
-        ; children
-        Var1:
-            dw VAR1LEN
-            dw VAR1VALLEN
-            dw 0
-            WIDE 'Translation'
-                align 4, db 0
-            Var1Val:
-                dd 04b00h << 16 + 409h
-            VAR1VALLEN equ $ - Var1Val
-                align 4, db 0
-        VAR1LEN equ $ - Var1
-    VARFILEINFOLENGTH equ $ - VarFileInfo
-VERSIONLENGTH equ $ - VS_VERSION_INFO
-
-VERSION_SIZE equ $ - Directory_Entry_Resource
-
-;*******************************************************************************
-
-MYMAN equ CREATEPROCESS_MANIFEST_RESOURCE_ID
-LANGUAGE equ 0
-
-manifest_data:
-db "<assembly xmlns='urn:schemas-microsoft-com:asm.v1' manifestVersion='1.0'/>"
-MANIFEST_SIZE equ $ - manifest_data
-
-myactctx:
-istruc ACTCTX
-    at ACTCTX.cbSize, dd ACTCTX_size
-    at ACTCTX.dwFlags, dw ACTCTX_FLAG_HMODULE_VALID + ACTCTX_FLAG_APPLICATION_NAME_VALID + ACTCTX_FLAG_RESOURCE_NAME_VALID
-    at ACTCTX.lpSource, dd thisEXE ; required for XP
-    at ACTCTX.lpResourceName, dd MYMAN
-    at ACTCTX.hModule, dd IMAGEBASE
-iend
-
-;*******************************************************************************
 align 4, db 0
 
 Image_Tls_Directory32: ;********************************************************
@@ -503,7 +499,7 @@ HandlerTable:
 
 ;*******************************************************************************
 
-align FILEALIGN, db 0
+align FILEALIGN, db 0 ; end of virtual file here
 
 ;*******************************************************************************
 security:
