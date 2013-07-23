@@ -155,7 +155,9 @@ fba326742f645db3595ec891d22f066d8dd526fb *resource2.exe
 e7a1caebdd7d3ec194903876077078525f4d002f *secinsec.exe
 e2b8fc44a43609945fb87b6c8fd3cd9af6a2d5c5 *seh_change64.exe
 546f2ba091ff9be8b0c1f7fa74708ed43f4a1eab *shuffledsect.exe
+e2462a381cc60582efcf4dab129f4f08ff396bec *signature.exe
 97d70adb616d04510b7e5fb22da5cd792eace352 *slackspace.exe
+0cbfd6c4b32b30b007ee2953df0cc5b85cb5fd5f *standard.exe
 cbe369c1881dca7e0848754b999c8840b5706260 *tiny.exe
 8499a0bb33aeba8f59a172584abc7ca0ab82a78c *tinydllXP.dll
 5bb04a8b45e7bf2abfc9c19399cfafa2cbfd2728 *tinydllXP-ld.exe
