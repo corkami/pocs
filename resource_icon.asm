@@ -162,9 +162,7 @@ iend
 GRPDIR:
 istruc GRPICONDIRENTRY
     ; theoretically filled with Width, Height...
-    at GRPICONDIRENTRY.dwBytesInRes , dd ICON_SIZE
-    at GRPICONDIRENTRY.nId          , dw MYICONID
-iend
+    at GRPICONDIRENTRY.nId , dw MYICONID
 GRPDIRCOUNT equ ($ - GRPDIR ) / GRPICONDIRENTRY_size
 
 GROUP_SIZE equ $ - group_data
