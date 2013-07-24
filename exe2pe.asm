@@ -15,26 +15,16 @@ SECTIONALIGN EQU 1000h
 FILEALIGN EQU 200h
 
 DOS_HEADER:
-    .e_magic       dw 'MZ'
-    .e_cblp        dw 090h
-    .e_cp          dw 5
-    .e_crlc        dw 0
-    .e_cparhdr     dw (dos_stub - DOS_HEADER) >> 4 ; defines MZ stub entry point
-    .e_minalloc    dw 0
-    .e_maxalloc    dw -1 ;0e0h
-    .e_ss          dw 0
-    .e_sp          dw stub_end + 20h - dos_stub
-    .e_csum        dw 0
-    .e_ip          dw 0
-    .e_cs          dw 0
-    .e_lfarlc      dw 040h
-    .e_ovno        dw 0
-    .e_res         dw 0,0,0,0
-    .e_oemid       dw 0
-    .e_oeminfo     dw 0
-    .e_res2        times 10 dw 0
-        align 03ch, db 0    ; in case we change things in DOS_HEADER
-    .e_lfanew      dd NT_SIGNATURE - IMAGEBASE ; CRITICAL
+istruc IMAGE_DOS_HEADER
+    at IMAGE_DOS_HEADER.e_magic,    db 'MZ'
+    at IMAGE_DOS_HEADER.e_cblp,     dw 090h
+    at IMAGE_DOS_HEADER.e_cp,       dw 5
+    at IMAGE_DOS_HEADER.e_cparhdr,  dw (dos_stub - IMAGEBASE) >> 4
+    at IMAGE_DOS_HEADER.e_maxalloc, dw 0ffffh
+    at IMAGE_DOS_HEADER.e_sp,       dw stub_end + 20h - dos_stub
+    at IMAGE_DOS_HEADER.e_lfarlc,   dw 040h
+    at IMAGE_DOS_HEADER.e_lfanew,   dd NT_SIGNATURE - IMAGEBASE
+iend
 
 align 010h, db 0
 dos_stub:
@@ -153,7 +143,6 @@ align 16, db 0
 stub_end:
 
 RichHeader:
-RichKey EQU 092033d19h
 dd "DanS" ^ RichKey     , 0 ^ RichKey, 0 ^ RichKey       , 0 ^ RichKey
 dd 0131f8eh ^ RichKey   , 7 ^ RichKey, 01220fch ^ RichKey, 1 ^ RichKey
 dd "Rich", 0 ^ RichKey  , 0, 0

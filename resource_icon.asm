@@ -140,64 +140,15 @@ MYICONID equ 628h
 
 Directory_Entry_Resource:   ; root directory, type level
 istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 2
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw ENTRIES_COUNT
 iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd RT_ICON
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_icon_ID - Directory_Entry_Resource)
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd RT_GROUP_ICON
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_group_ID - Directory_Entry_Resource)
-iend
+directory_entries:
+    _resourceDirectoryEntry RT_ICON,           resource_icon_ID
+    _resourceDirectoryEntry RT_GROUP_ICON,    resource_group_ID
+ENTRIES_COUNT equ ($ - directory_entries) / IMAGE_RESOURCE_DIRECTORY_ENTRY_size
 
-resource_icon_ID:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd MYICONID
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_icon_language - Directory_Entry_Resource)
-iend
-
-resource_icon_language:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    ; language doesn't matter
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd icon_entry - Directory_Entry_Resource
-iend
-
-icon_entry:
-istruc IMAGE_RESOURCE_DATA_ENTRY
-    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd icon_data - IMAGEBASE
-    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd RESOURCE_SIZE
-iend
-
-resource_group_ID:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd MYGROUPID
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_group_language - Directory_Entry_Resource)
-iend
-
-resource_group_language:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    ; language doesn't matter
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd group_entry - Directory_Entry_Resource
-iend
-
-group_entry:
-istruc IMAGE_RESOURCE_DATA_ENTRY
-    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd group_data - IMAGEBASE
-    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd GROUP_SIZE
-iend
+resource_icon_ID     _resource_tree  MYICONID,     icon_data,     ICON_SIZE
+resource_group_ID    _resource_tree MYGROUPID,    group_data,    GROUP_SIZE
 
 icon_data:
 incbin 'icon.bin' ; header-less ICON data

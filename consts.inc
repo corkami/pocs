@@ -349,8 +349,6 @@ struc VS_FIXEDFILEINFO
   .dwFileDateLS          resd 1
 endstruc
 
-RT_VERSION 		equ 16
-RT_MANIFEST equ 24
 CREATEPROCESS_MANIFEST_RESOURCE_ID EQU 1
 ISOLATIONAWARE_MANIFEST_RESOURCE_ID EQU 2
 ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID EQU 3
@@ -497,8 +495,11 @@ struc IMAGE_LOAD_CONFIG_DIRECTORY32
     .SEHandlerCount                 resd 1
 endstruc
 
-RT_ICON       equ 3
+RT_ICON       equ  3
+RT_STRING     equ  6
 RT_GROUP_ICON equ 14
+RT_VERSION    equ 16
+RT_MANIFEST   equ 24
 
 struc GRPICONDIR
     .idReserved resw 1 ; always 0 - enforced
@@ -515,4 +516,65 @@ struc GRPICONDIRENTRY
     .wBitCount    resw 1
     .dwBytesInRes resd 1
     .nId          resw 1
+endstruc
+
+%macro _resourceDirectoryEntry 2
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd %1
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (%2 - Directory_Entry_Resource)
+iend
+%endmacro
+
+%macro _resource_tree 3 ; ID, Offset, Size
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd %1
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (%%language - Directory_Entry_Resource)
+iend
+
+%%language:
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
+iend
+istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
+    ; language doesn't matter
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd %%entry - Directory_Entry_Resource
+iend
+
+%%entry:
+istruc IMAGE_RESOURCE_DATA_ENTRY
+    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd %2 - IMAGEBASE
+    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd %3
+iend
+%endmacro
+
+RichKey EQU 092033d19h
+
+struc IMAGE_TLS_DIRECTORY32
+    .StartAddressOfRawData resd 1
+    .EndAddressOfRawData   resd 1
+    .AddressOfIndex        resd 1
+    .AddressOfCallBacks    resd 1
+    .SizeOfZeroFill        resd 1
+    .Characteristics       resd 1
+endstruc
+
+struc IMAGE_BOUND_IMPORT_DESCRIPTOR
+    .TimeDateStamp                resd 1
+    .OffsetModuleName             resw 1
+    .NumberOfModulesForwarderRefs resw 1
+endstruc
+
+struc WIN_CERTIFICATE
+    .dwLength         resd 1
+    .wRevision        resw 1
+    .wCertificateType resw 1
+   ;.bCertificate     resb 1
+endstruc
+
+struc IMAGE_BASE_RELOCATION
+    .VirtualAddress resd 1
+    .SizeOfBlock    resd 1
 endstruc

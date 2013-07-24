@@ -62,7 +62,6 @@ SIZEOFHEADERS equ $ - IMAGEBASE
 section progbits vstart=IMAGEBASE + SECTIONALIGN align=FILEALIGN
 
 uID equ 150
-RT_STRING equ 6
 
 EntryPoint:
     push strlen
