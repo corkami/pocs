@@ -52,7 +52,7 @@ SectionHeader:
 istruc IMAGE_SECTION_HEADER
     at IMAGE_SECTION_HEADER.VirtualSize,      dd 1 * SECTIONALIGN
     at IMAGE_SECTION_HEADER.VirtualAddress,   dd 1 * SECTIONALIGN
-    at IMAGE_SECTION_HEADER.SizeOfRawData,    dd 1 * FILEALIGN
+    at IMAGE_SECTION_HEADER.SizeOfRawData,    dd 2 * FILEALIGN
     at IMAGE_SECTION_HEADER.PointerToRawData, dd 1 * FILEALIGN
     at IMAGE_SECTION_HEADER.Characteristics,  dd IMAGE_SCN_MEM_EXECUTE | IMAGE_SCN_MEM_WRITE
 iend
@@ -64,7 +64,7 @@ section progbits vstart=IMAGEBASE + SECTIONALIGN align=FILEALIGN
 uID equ 150
 
 EntryPoint:
-    push strlen
+    push WSTRLEN
     push buffer
     push uID
     push 0
@@ -78,27 +78,59 @@ EntryPoint:
     call [__imp__ExitProcess]
 _c
 
-buffer:
-times strlen db 0
+buffer times WSTRLEN dw 0
+
+;*******************************************************************************
+
+MYSTRID equ (uID / 16) + 1
+
+Directory_Entry_Resource:
+; root directory
+istruc IMAGE_RESOURCE_DIRECTORY
+    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw ENTRIES_COUNT
+iend
+directory_entries:
+    _resourceDirectoryEntry RT_STRING,       resource_string_ID
+ENTRIES_COUNT equ ($ - directory_entries) / IMAGE_RESOURCE_DIRECTORY_ENTRY_size
+
+resource_string_ID   _resource_tree   MYSTRID,   string_data,   STRING_SIZE
+
+;*************************************
+
+string_data:
+
+resource_data:
+times (uID % 16) dw 0 ; a null string is the same as no string
+
+dw WSTRLEN
+widestring:
+    _widestr_no0 ' * a PE with RT_STRING resource loaded'
+    dw 0dh, 0ah
+    WSTRLEN equ (($ - widestring) / 2) + 1
+
+STRING_SIZE equ $ - string_data
+_d
+
+;*******************************************************************************
 
 Import_Descriptor:
-;kernel32.dll_DESCRIPTOR:
-    dd kernel32.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd kernel32.dll - IMAGEBASE
-    dd kernel32.dll_iat - IMAGEBASE
-;msvcrt.dll_DESCRIPTOR:
-    dd msvcrt.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd msvcrt.dll - IMAGEBASE
-    dd msvcrt.dll_iat - IMAGEBASE
-;user32.dll_DESCRIPTOR:
-    dd user32.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd user32.dll - IMAGEBASE
-    dd user32.dll_iat - IMAGEBASE
-;terminator
-    dd 0, 0, 0, 0, 0
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk, dd kernel32.dll_hintnames - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1,              dd kernel32.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk,         dd kernel32.dll_iat - IMAGEBASE
+iend
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk, dd msvcrt.dll_hintnames - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1,              dd msvcrt.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk,         dd msvcrt.dll_iat - IMAGEBASE
+iend
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk, dd user32.dll_hintnames - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1,              dd user32.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk,         dd user32.dll_iat - IMAGEBASE
+iend
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
 _d
 
 kernel32.dll_hintnames:
@@ -117,7 +149,7 @@ hnExitProcess:
     db 'ExitProcess', 0
 hnLoadStringA:
     dw 0
-    db 'LoadStringW', 0
+    db 'LoadStringA', 0
 hnprintf:
     dw 0
     db 'printf', 0
@@ -144,48 +176,5 @@ msvcrt.dll db 'msvcrt.dll', 0
 user32.dll db 'user32.dll', 0
 _d
 
-Directory_Entry_Resource:
-; root directory
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd RT_STRING ; .. resource type of that directory
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_directory_type - Directory_Entry_Resource)
-iend
-
-resource_directory_type:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd (uID / 16) + 1 ; name of the underneath resource
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_directory_language - Directory_Entry_Resource)
-iend
-
-resource_directory_language:
-istruc IMAGE_RESOURCE_DIRECTORY
-    at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
-iend
-istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd resource_entry - Directory_Entry_Resource
-iend
-
-resource_entry:
-istruc IMAGE_RESOURCE_DATA_ENTRY
-    at IMAGE_RESOURCE_DATA_ENTRY.OffsetToData, dd resource_data - IMAGEBASE
-    at IMAGE_RESOURCE_DATA_ENTRY.Size1, dd RESOURCE_SIZE
-iend
-
-resource_data:
-times (uID % 16) dw 0 ; a null string is the same as no string
-
-dw strlen
-stringresource db ' * PE with string resources', 0ah
-    strlen equ ($ - stringresource)
-
-RESOURCE_SIZE equ $ - resource_data
-_d
 
 align FILEALIGN, db 0

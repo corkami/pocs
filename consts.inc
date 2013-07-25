@@ -387,6 +387,16 @@ ACTCTX_FLAG_HMODULE_VALID equ 128
 	db 0, 0
 %endmacro
 
+%macro _widestr_no0 1
+%assign %%__i 1
+%strlen %%__len %1
+%rep %%__len
+	%substr %%__c %1 %%__i
+		db %%__c
+		db 0
+	%assign %%__i %%__i + 1
+%endrep
+%endmacro
 
 %macro __string 2
 %%string:

@@ -246,11 +246,14 @@ _d
 string_data:
     times (uID % 16) dw 0 ; a null string is the same as no string
 
-dw STRLEN
-stringresource db ' - RT_STRING resource loaded', 0ah, 0
-    STRLEN equ ($ - stringresource)
-
+dw WSTRLEN
+widestring:
+    _widestr_no0 ' - RT_STRING resource loaded'
+    dw 0dh, 0ah
+    WSTRLEN equ (($ - widestring) / 2) + 1
+align 4, db 0
 STRING_SIZE equ $ - string_data
+_d
 
 _d
 ;*******************************************************************************
@@ -302,7 +305,7 @@ _
     call [__imp__printf]
     add esp, 1 * 4
 _
-    push STRLEN
+    push WSTRLEN
     push stringMSG
     push uID
     push 0
@@ -344,7 +347,7 @@ iconMSG db " - RT_ICON resource loaded", 0dh, 0ah, 0
 safesehmsg db " - exception handler called", 0dh, 0ah, 0
 manifestMSG db " - RT_MANIFEST resource located", 0dh, 0ah, 0
 errorMsg db "*ERROR*", 0dh, 0ah, 0
-stringMSG times STRLEN db 0
+stringMSG times WSTRLEN dw 0
 _d
 
 ;*******************************************************************************
@@ -387,7 +390,7 @@ _d
 
 hnExitProcess db 0,0, 'ExitProcess', 0
 hnLoadIconA   db 0,0, 'LoadIconA', 0
-hnLoadStringA db 0,0, 'LoadStringW', 0
+hnLoadStringA db 0,0, 'LoadStringA', 0
 
 hnprintf      db 0,0, 'printf', 0
 hnexport      db 0,0, 'export', 0
