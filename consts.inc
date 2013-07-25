@@ -571,6 +571,15 @@ struc IMAGE_TLS_DIRECTORY32
     .Characteristics       resd 1
 endstruc
 
+struc IMAGE_TLS_DIRECTORY64
+    .StartAddressOfRawData resq 1
+    .EndAddressOfRawData   resq 1
+    .AddressOfIndex        resq 1
+    .AddressOfCallBacks    resq 1
+    .SizeOfZeroFill        resd 1
+    .Characteristics       resd 1
+endstruc
+
 struc IMAGE_BOUND_IMPORT_DESCRIPTOR
     .TimeDateStamp                resd 1
     .OffsetModuleName             resw 1
