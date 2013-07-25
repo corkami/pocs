@@ -230,6 +230,7 @@ DataDirectory 5: Relocations
 
 DataDirectory 9: Thread local storage
  *.. tls.exe                  standard Thread Local Storage callbacks
+ *.. tls64.exe                standard Thread Local Storage callbacks in 64 bits
  **. tls_noEP.exe             TLS PE with ExitProcess call, and no entrypoint at all
  **. tls_exiting.exe          TLS PE with ExitProcess call, and ignored EntryPoint code, even though the TLS is called again after...
  **. tls_import.exe           TLS using an import IAT entry as callbacks => API called with IMAGEBASE as param => WinExec can thus execute MZ.exe
@@ -275,6 +276,7 @@ DataFile DLLs (loaded via LoadLibraryEx with LOAD_LIBRARY_AS_DATAFILE parameter,
 
 Special
  **. maxvals.exe              a PE with a maximal values in the headers
+ **. standard.exe             a PE with a bit of everything, useful as a all-in-one tutorial PE 'crackme'.
 
  **. dosZMXP.exe              a non-PE EXE with ZM signature
  *** exe2pe.exe               a non-PE EXE whose DOS stubs patches itself back to PE and relaunch as PE
