@@ -146,7 +146,7 @@ ea42e2179a8e43b2f450b49d1927e46dad6106d3 *pdf.exe
 0f5f36845cb537c53251ab127c2b934a7c1dbae3 *reshdr.exe
 ada1a47f2a9bdaccdbef24e54fe26c6ed0cd4817 *resource.exe
 ce9becebb96d7aec80fbcfe18ebaba8cc434c95c *resource_icon.exe
-9c185a14c83ed85e0d1b334acb1c5d4e248e9a94 *resource_string.exe
+ed5d9473de528ba2049850de30332787ded36d5c *resource_string.exe
 fba326742f645db3595ec891d22f066d8dd526fb *resource2.exe
 8916eca8be278d1e43e67c4a90b5a6a870250c77 *resourceloop.exe
 0e6c8187125a909292d86064b2f7242a038f058f *safeseh.exe
@@ -157,7 +157,7 @@ e2b8fc44a43609945fb87b6c8fd3cd9af6a2d5c5 *seh_change64.exe
 546f2ba091ff9be8b0c1f7fa74708ed43f4a1eab *shuffledsect.exe
 e2462a381cc60582efcf4dab129f4f08ff396bec *signature.exe
 97d70adb616d04510b7e5fb22da5cd792eace352 *slackspace.exe
-63db3433aee9cc4fa7de99e7f0136d760b6c4f12 *standard.exe
+5ce9d32c165c133e8530bbe28d3f35489728ee62 *standard.exe
 cbe369c1881dca7e0848754b999c8840b5706260 *tiny.exe
 8499a0bb33aeba8f59a172584abc7ca0ab82a78c *tinydllXP.dll
 5bb04a8b45e7bf2abfc9c19399cfafa2cbfd2728 *tinydllXP-ld.exe
@@ -178,6 +178,7 @@ c415fbb5669cd68b1eb7fb2be282aed0f55c0446 *tls_obfuscation.exe
 140fc4723d0dcbf25429c5013901ecb1f7e297bf *tls_onthefly.exe
 7403b307dc1e978b76bdbfb98b3c0c168441c61f *tls_reloc.exe
 c0c49142efe5465137aae9c0a7cce74ccf04a116 *tls_virtEP.exe
+f93ee181f19d52be0355f99cc479a55aff3b0405 *tls64.exe
 946d7ee8f1fbbc82995275ebdb6720d2e8030d14 *truncatedlast.exe
 07faec677f3f0f35c11224b8b61bcfb37bd84b03 *truncsectbl.exe
 7a6b3b1dcde1facb9fb01d1cb8ed81ab03f5311e *version_cust.exe

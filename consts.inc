@@ -592,10 +592,16 @@ struc WIN_CERTIFICATE
     .dwLength         resd 1
     .wRevision        resw 1
     .wCertificateType resw 1
-   ;.bCertificate     resb 1
+    .bCertificate     resb 0
 endstruc
 
 struc IMAGE_BASE_RELOCATION
     .VirtualAddress resd 1
     .SizeOfBlock    resd 1
 endstruc
+
+; can't make a struct of that one with Yasm :(
+%macro _IMAGE_IMPORT_BY_NAME 1
+    .Hint   dw 0
+    .Name   db %1, 0
+%endmacro

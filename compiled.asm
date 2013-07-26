@@ -55,7 +55,7 @@ istruc IMAGE_FILE_HEADER
             IMAGE_FILE_LINE_NUMS_STRIPPED | IMAGE_FILE_LOCAL_SYMS_STRIPPED | IMAGE_FILE_32BIT_MACHINE
 iend
 
-OPTIONAL_HEADER:
+optional_header:
 istruc IMAGE_OPTIONAL_HEADER32
     at IMAGE_OPTIONAL_HEADER32.Magic,                       dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
     at IMAGE_OPTIONAL_HEADER32.MajorLinkerVersion,          db 05h
@@ -93,7 +93,7 @@ NUMBEROFRVAANDSIZES EQU ($ - data_directory) / (2 * 4)
 ; Independantly of NumberOfRvaAndSizes. thus, Dword at DATA_DIRECTORY + 34h
 
 section_header:
-SIZEOFOPTIONALHEADER EQU $ - OPTIONAL_HEADER
+SIZEOFOPTIONALHEADER EQU $ - optional_header
 istruc IMAGE_SECTION_HEADER
     at IMAGE_SECTION_HEADER.Name,             db '.text'
     at IMAGE_SECTION_HEADER.VirtualSize,      dd SECTION0VS
@@ -182,8 +182,9 @@ msvcrt.dll_hintnames:
     dd 0
 _d
 
-hnExitProcess db 0, 0, 'ExitProcess', 0
-hnprintf db 0, 0, 'printf', 0
+hnExitProcess _IMAGE_IMPORT_BY_NAME 'ExitProcess'
+hnprintf      _IMAGE_IMPORT_BY_NAME 'printf'
+
 _d
 
 ImportAddressTable:

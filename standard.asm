@@ -388,12 +388,11 @@ own_hintnames          dd hnexport - IMAGEBASE
     dd 0
 _d
 
-hnExitProcess db 0,0, 'ExitProcess', 0
-hnLoadIconA   db 0,0, 'LoadIconA', 0
-hnLoadStringA db 0,0, 'LoadStringA', 0
-
-hnprintf      db 0,0, 'printf', 0
-hnexport      db 0,0, 'export', 0
+hnExitProcess _IMAGE_IMPORT_BY_NAME 'ExitProcess'
+hnLoadIconA   _IMAGE_IMPORT_BY_NAME 'LoadIconA'
+hnLoadStringA _IMAGE_IMPORT_BY_NAME 'LoadStringA'
+hnprintf      _IMAGE_IMPORT_BY_NAME 'printf'
+hnexport      _IMAGE_IMPORT_BY_NAME 'export'
 hnCreateActCtx:
     dw 0
     db 'CreateActCtxA', 0
