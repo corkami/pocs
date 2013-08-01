@@ -145,6 +145,10 @@ Section table (PE Geometry):
 
  **. winver.exe               a PE using Win32VersionValue to override OS version numbers
 
+ *.. no_dep.exe               a PE executing code on the stack successfully
+ *.. dep.exe                  a PE executing code on the stack, and failing because of DEP
+ *.. no_seh.exe               a PE with DllCharacteristics set to NO_SEH, but using a Vectored Exception Handler
+
 DataDirectory 0: Export
  **. ownexports.exe           calling its own exports
  **. ownexports2.exe          calling its own virtual and header exports
