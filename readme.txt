@@ -98,6 +98,10 @@ Subsystems
       multiss_gui.exe          gui
       multiss_drv.sys          driver
 
+ *.. aslr.dll                 a DLL with DYNAMIC_BASE set and used
+      aslr-ld.exe              loader
+ **. skippeddynbase.exe       a PE with ignored DYNAMIC_BASE, because RELOCS_STRIPPED is set
+
 Section table (PE Geometry):
  **. duphead.exe              a PE with a section mapping the header
  **. dupsec.exe               a PE with several sections with the same physical space, and the header too
@@ -148,6 +152,9 @@ Section table (PE Geometry):
  *.. no_dep.exe               a PE executing code on the stack successfully
  *.. dep.exe                  a PE executing code on the stack, and failing because of DEP
  *.. no_seh.exe               a PE with DllCharacteristics set to NO_SEH, but using a Vectored Exception Handler
+
+ *.. memshared.dll            a DLL with a MEM_SHARED section
+      memshared-ld.exe         loader, waiting for X launches to terminate
 
 DataDirectory 0: Export
  **. ownexports.exe           calling its own exports
@@ -232,6 +239,9 @@ DataDirectory 5: Relocations
  *** lfanew_relocW7.exe       relocation is applied to e_lfanew in memory => another PE header is then pointed to, which contains the actual imports in the 2nd part of DataDirectories
  *** lfanew_relocXP.exe       XP version
 
+ **. relocsstripped.exe       a PE using relocations even if RELOCS_STRIPPED is set
+ **. relocsstripped64.exe     PE32+ version
+
 DataDirectory 9: Thread local storage
  *.. tls.exe                  standard Thread Local Storage callbacks
  *.. tls64.exe                standard Thread Local Storage callbacks in 64 bits
@@ -299,4 +309,3 @@ Special
 in progress:
      debug.exe                debug data directory
      no_dd64                  self-loading imports in 64 bits
-

@@ -1,3 +1,5 @@
+48087aa7220d6853e1739a1d3982fd5d80fa2bdc *aslr-ld.exe
+a033f407a401ce9304d7ddb0f20b8ecaeea50b58 *aslr.dll
 072adf2d6cb8104a44e8aef76ac846d5f4f45558 *65535sects.exe
 ad7080e554a225c60191f746a2f30317a91efc0e *96emptysections.exe
 d3053b1745a8e3997c77c7cfe075dc7243bb2ca6 *96workingsections.exe
@@ -23,13 +25,13 @@ a63281031607e290bdff10524d990501dd7618f5 *d_tiny-ld.exe
 5c3cfdce157d8c515ed212e2958ee733911133a2 *delaycorrupt.exe
 aef165cce96f33b9d1c5520a48e9a6e55ba3e790 *delayfake.exe
 ee509d34e50dd24392424405039df04f089aa730 *delayimports.exe
-8dad2c77a7e24e12a36baaed8b26287762bfc497 *dll.dll
+a2222e790f12f7ab2934c123bd998d734178be37 *dll.dll
 28aea3143b3b300ec45c7600cb04a9529f3b892b *dllbound.dll
 91088414e8e49f24099438b522952aad5c45baca *dllbound2.dll
 886a12487895b6d7e5250ee86648ba4d49dea978 *dllbound-ld.exe
 f6175ff419903d124ab315a170dfd805534ecc6a *dllbound-redirld.exe
 fa846852d561e997459272cf515328e544b89c5e *dllbound-redirldXP.exe
-ec1b98fdf9a44bb271556639a322f3b6b5e9cbe7 *dll-dynld.exe
+6efee74330fab0734dc3d6816bbb71fce3672eab *dll-dynld.exe
 05fc7d0baaa7a9f8f9a1a28e43fa0f417320425c *dll-dynunicld.exe
 5bac1e90a15a84509c05aa87ab6624d251b2f832 *dllemptyexp.dll
 2e4c712a5268b47eca1d5c103fb401ee227c6e24 *dllemptyexp-ld.exe
@@ -39,7 +41,7 @@ ec1b98fdf9a44bb271556639a322f3b6b5e9cbe7 *dll-dynld.exe
 d91f39d5fc8329d81035e4e9ea6d48c07cb1cfaf *dllfw-ld.exe
 097859e755e97314ce47614ae452067ea9059cc7 *dllfwloop.dll
 a9a2c41e5a53a90dc7ebd8f3472bbdf0271c8d00 *dllfwloop-ld.exe
-4b9e0869f52a4db3d9b05ebf534e53c86e1d9bac *dll-ld.exe
+52680d1558dfb08c3c842d6d9dc7b00e2cefbe42 *dll-ld.exe
 1b756d444b2c75977bfcaa08d34d29fc61dadaa7 *dllnegep.dll
 512db25b52fa75dd161e4fd5955fcec17ee0cf1d *dllnegep-ld.exe
 d4ad97d67014493438e83be7f1980e4ebdd940a1 *dllnoexp.dll
@@ -117,6 +119,8 @@ f03cda24a259eae690f3cfed1cec59c6f6984009 *lfanew_relocXP.exe
 d8e4499216c621da090a133bf4b6769c240651d7 *maxsecW7.exe
 97fab3bffc7060300b0ecdac66233d31323064ee *maxsecXP.exe
 a84b322a84baffccefef67d74665495f3e9c4084 *maxvals.exe
+8c4263db50a2105f4211b78c6ebb150c4f7082d0 *memshared-ld.exe
+c2d7187d57199344a45e1742152ecf9d5728ea07 *memshared.dll
 b394bd7a3915c6d131b9974c34ceae55881e1c57 *mini.exe
 85883720972497f1082ae166b486a28ebedd71b6 *mscoree.exe
 7e85a926af52f015c51b04a1af70601dd6db8415 *multiss.exe
@@ -143,6 +147,8 @@ ea42e2179a8e43b2f450b49d1927e46dad6106d3 *pdf.exe
 89f09855527f9ce55e3906f9d5496486ad5cbf7a *quine.exe
 4e39951423d3d774210e3006e67d005787cfbabd *reloccrypt.exe
 722b2dce27eeba8061f4b4bf5adf0b9b57121997 *reloccryptXP.exe
+a49fd5585719ca6fdf5f0510bea683b4fa8993a3 *relocsstripped64.exe
+b5006fe96361f2d0730c46db8bad2ffb60886845 *relocsstripped.exe
 0f5f36845cb537c53251ab127c2b934a7c1dbae3 *reshdr.exe
 ada1a47f2a9bdaccdbef24e54fe26c6ed0cd4817 *resource.exe
 ce9becebb96d7aec80fbcfe18ebaba8cc434c95c *resource_icon.exe
@@ -156,6 +162,7 @@ e7a1caebdd7d3ec194903876077078525f4d002f *secinsec.exe
 e2b8fc44a43609945fb87b6c8fd3cd9af6a2d5c5 *seh_change64.exe
 546f2ba091ff9be8b0c1f7fa74708ed43f4a1eab *shuffledsect.exe
 e2462a381cc60582efcf4dab129f4f08ff396bec *signature.exe
+d4d77a22dd9d63fd9d4d807ab55956bebb48a8db *skippeddynbase.exe
 97d70adb616d04510b7e5fb22da5cd792eace352 *slackspace.exe
 5ce9d32c165c133e8530bbe28d3f35489728ee62 *standard.exe
 cbe369c1881dca7e0848754b999c8840b5706260 *tiny.exe

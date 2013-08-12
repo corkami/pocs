@@ -16,7 +16,7 @@ dll: dll.dll dll-ld.exe dll-dynld.exe dllweirdexp.dll dllweirdexp-ld.exe dllempt
     dllnegep.dll dllnegep-ld.exe ctxt.dll ctxt-ld.exe
 
 relocs: ibkernel.exe reloccrypt.exe ibkmanual.exe ibreloc.exe fakerelocs.exe lfanew_relocW7.exe \
-    lfanew_relocXP.exe
+    lfanew_relocXP.exe relocsstripped.exe relocsstripped64.exe skippeddynbase.exe
 
 misc: normal.exe truncatedlast.exe pdf.exe tiny.exe bigsec.exe shuffledsect.exe truncsectbl.exe \
     quine.exe bigalign.exe foldedhdr.exe compiled.exe duphead.exe \
@@ -24,7 +24,7 @@ misc: normal.exe truncatedlast.exe pdf.exe tiny.exe bigsec.exe shuffledsect.exe 
     maxvals.exe pdf_zip_pe.exe winver.exe weirdsord.exe hdrcode.exe mini.exe \
     dump_imports.exe nullvirt.exe safeseh.exe lfanew_relocW7.exe \
     lfanew_relocXP.exe safeseh_fly.exe signature.exe standard.exe \
-    dep.exe no_dep.exe no_seh.exe
+    dep.exe no_dep.exe no_seh.exe memshared.dll memshared-ld.exe  aslr.dll aslr-ld.exe
 
 down: appendedsecttbl.exe appendedhdr.exe footer.exe bottomsecttbl.exe
 
