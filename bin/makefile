@@ -1,6 +1,6 @@
 all: common XP W7
 
-beta: no_dd64.exe debug.exe sfence.sys
+beta: no_dd64.exe debug.exe
 
 common: exports imports dll gaps tls bound entrypoint down many misc resource delay relocs dotnet
 
