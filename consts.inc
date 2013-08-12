@@ -35,45 +35,45 @@ SIZE_OF_80387_REGISTERS equ 80
 MAXIMUM_SUPPORTED_EXTENSION equ 512
 
 struc CONTEXT
-.ContextFlags  resd 1
-;CONTEXT_DEBUG_REGISTERS
-.iDr0          resd 1
-.iDr1          resd 1
-.iDr2          resd 1
-.iDr3          resd 1
-.iDr6          resd 1
-.iDr7          resd 1
-;CONTEXT_FLOATING_POINT
-.ControlWord   resd 1
-.StatusWord    resd 1
-.TagWord       resd 1
-.ErrorOffset   resd 1
-.ErrorSelector resd 1
-.DataOffset    resd 1
-.DataSelector  resd 1
-.RegisterArea  resb SIZE_OF_80387_REGISTERS
-.Cr0NpxState   resd 1
-;CONTEXT_SEGMENTS
-.regGs   resd 1
-.regFs   resd 1
-.regEs   resd 1
-.regDs   resd 1
-;CONTEXT_INTEGER
-.regEdi  resd 1
-.regEsi  resd 1
-.regEbx  resd 1
-.regEdx  resd 1
-.regEcx  resd 1
-.regEax  resd 1
-;CONTEXT_CONTROL
-.regEbp  resd 1
-.regEip  resd 1
-.regCs   resd 1
-.regFlag resd 1
-.regEsp  resd 1
-.regSs   resd 1
-;CONTEXT_EXTENDED_REGISTERS
-.ExtendedRegisters resb MAXIMUM_SUPPORTED_EXTENSION
+    .ContextFlags  resd 1
+    ;CONTEXT_DEBUG_REGISTERS
+    .iDr0          resd 1
+    .iDr1          resd 1
+    .iDr2          resd 1
+    .iDr3          resd 1
+    .iDr6          resd 1
+    .iDr7          resd 1
+    ;CONTEXT_FLOATING_POINT
+    .ControlWord   resd 1
+    .StatusWord    resd 1
+    .TagWord       resd 1
+    .ErrorOffset   resd 1
+    .ErrorSelector resd 1
+    .DataOffset    resd 1
+    .DataSelector  resd 1
+    .RegisterArea  resb SIZE_OF_80387_REGISTERS
+    .Cr0NpxState   resd 1
+    ;CONTEXT_SEGMENTS
+    .regGs   resd 1
+    .regFs   resd 1
+    .regEs   resd 1
+    .regDs   resd 1
+    ;CONTEXT_INTEGER
+    .regEdi  resd 1
+    .regEsi  resd 1
+    .regEbx  resd 1
+    .regEdx  resd 1
+    .regEcx  resd 1
+    .regEax  resd 1
+    ;CONTEXT_CONTROL
+    .regEbp  resd 1
+    .regEip  resd 1
+    .regCs   resd 1
+    .regFlag resd 1
+    .regEsp  resd 1
+    .regSs   resd 1
+    ;CONTEXT_EXTENDED_REGISTERS
+    .ExtendedRegisters resb MAXIMUM_SUPPORTED_EXTENSION
 endstruc
 
 IMAGE_SIZEOF_SHORT_NAME equ 8
@@ -607,6 +607,7 @@ endstruc
     .Name   db %1, 0
 %endmacro
 
+IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE    equ 0040h
 IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY equ 0080h
 IMAGE_DLLCHARACTERISTICS_NX_COMPAT       equ 0100h
 IMAGE_DLLCHARACTERISTICS_NO_SEH          equ 0400h

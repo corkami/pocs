@@ -100,18 +100,10 @@ exp dd 0
 _
 
 Import_Descriptor:
-;kernel32.dll_DESCRIPTOR:
-    dd kernel32.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd kernel32.dll - IMAGEBASE
-    dd kernel32.dll_iat - IMAGEBASE
-;msvcrt.dll_DESCRIPTOR:
-    dd msvcrt.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd msvcrt.dll - IMAGEBASE
-    dd msvcrt.dll_iat - IMAGEBASE
-;terminator
-    dd 0, 0, 0, 0, 0
+_import_descriptor kernel32.dll
+_import_descriptor msvcrt.dll
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
 _d
 
 kernel32.dll_hintnames:
@@ -127,33 +119,16 @@ msvcrt.dll_hintnames:
     dd 0
 _d
 
-hnExitProcess:
-    dw 0
-    db 'ExitProcess', 0
-_d
+hnExitProcess    _IMAGE_IMPORT_BY_NAME 'ExitProcess'
+hnLoadLibraryA   _IMAGE_IMPORT_BY_NAME 'LoadLibraryA'
+hnFreeLibrary    _IMAGE_IMPORT_BY_NAME 'FreeLibrary'
+hnGetProcAddress _IMAGE_IMPORT_BY_NAME 'GetProcAddress'
 
-hnLoadLibraryA:
-    dw 0
-    db 'LoadLibraryA', 0
-_d
-
-hnFreeLibrary:
-    dw 0
-    db 'FreeLibrary', 0
-_d
-
-hnGetProcAddress:
-    dw 0
-    db 'GetProcAddress', 0
-_d
 
 export db 'export', 0
 _d
 
-hnprintf:
-    dw 0
-    db 'printf', 0
-_d
+hnprintf _IMAGE_IMPORT_BY_NAME 'printf'
 
 kernel32.dll_iat:
 __imp__ExitProcess:

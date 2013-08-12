@@ -69,6 +69,7 @@ EntryPoint:
     cmp dword [esp + 8], DLL_PROCESS_ATTACH
     jz attached_
 
+relocbase:
 reloc01:
     push detach
     jmp print_
@@ -97,51 +98,42 @@ _c
 attach db "  # DLL EntryPoint called on attach", 0ah, 0
 detach db "  # DLL EntryPoint called on detach", 0ah, 0
 export db "  # DLL export called", 0ah, 0
+
+_d
+import_descriptor: ;************************************************************
+_import_descriptor msvcrt
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
 _d
 
-msvcrt.dll_iat:
+
+msvcrt_iat:
 __imp__printf:
     dd hnprintf - IMAGEBASE
     dd 0
 _d
 
-import_descriptor:
-;msvcrt.dll_DESCRIPTOR:
-    dd msvcrt.dll_hintnames - IMAGEBASE
-    dd 0
-    dd 0
-    dd msvcrt.dll - IMAGEBASE
-    dd msvcrt.dll_iat - IMAGEBASE
+hnprintf _IMAGE_IMPORT_BY_NAME 'printf'
 
-    times 5 dd 0
-
-msvcrt.dll_hintnames:
+msvcrt_hintnames:
     dd hnprintf - IMAGEBASE
     dd 0
 
-hnprintf:
-    dw 0
-    db 'printf', 0
+msvcrt db 'msvcrt.dll', 0
 
-msvcrt.dll db 'msvcrt.dll', 0
-
-Exports_Directory:
-  Characteristics       dd 0
-  TimeDateStamp         dd 0
-  MajorVersion          dw 0
-  MinorVersion          dw 0
-  Name                  dd aDllName - IMAGEBASE
-  Base                  dd 0
-  NumberOfFunctions     dd NUMBER_OF_FUNCTIONS
-  NumberOfNames         dd NUMBER_OF_NAMES
-  AddressOfFunctions    dd address_of_functions - IMAGEBASE
-  AddressOfNames        dd address_of_names - IMAGEBASE
-  AddressOfNameOrdinals dd address_of_name_ordinals - IMAGEBASE
 _d
+Exports_Directory: ;************************************************************
+istruc IMAGE_EXPORT_DIRECTORY
+  at IMAGE_EXPORT_DIRECTORY.nName,                 dd aDllName - IMAGEBASE
+  at IMAGE_EXPORT_DIRECTORY.NumberOfFunctions,     dd NUMBER_OF_FUNCTIONS
+  at IMAGE_EXPORT_DIRECTORY.NumberOfNames,         dd NUMBER_OF_NAMES
+  at IMAGE_EXPORT_DIRECTORY.AddressOfFunctions,    dd address_of_functions - IMAGEBASE
+  at IMAGE_EXPORT_DIRECTORY.AddressOfNames,        dd address_of_names - IMAGEBASE
+  at IMAGE_EXPORT_DIRECTORY.AddressOfNameOrdinals, dd address_of_name_ordinals - IMAGEBASE
+iend
 
 aDllName db 'dll.dll', 0
 _d
-
 
 address_of_functions:
     dd __exp__Export - IMAGEBASE
@@ -152,7 +144,6 @@ address_of_names:
     dd a__exp__Export - IMAGEBASE
 NUMBER_OF_NAMES equ ($ - address_of_names) / 4
 
-_d
 address_of_name_ordinals:
     dw 0
 _d
@@ -164,15 +155,15 @@ _d
 
 EXPORT_SIZE equ $ - Exports_Directory
 
-Directory_Entry_Basereloc:
+Directory_Entry_Basereloc: ;****************************************************
 block_start0:
-    .VirtualAddress dd reloc01 - IMAGEBASE
+    .VirtualAddress dd relocbase - IMAGEBASE
     .SizeOfBlock dd BASE_RELOC_SIZE_OF_BLOCK0
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc01 + 1 - reloc01)
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc11 + 1 - reloc01)
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc22 + 2 - reloc01)
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc31 + 1 - reloc01)
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc42 + 2 - reloc01)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc01 + 1 - relocbase)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc11 + 1 - relocbase)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc22 + 2 - relocbase)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc31 + 1 - relocbase)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc42 + 2 - relocbase)
 BASE_RELOC_SIZE_OF_BLOCK0 equ $ - block_start0
 
 DIRECTORY_ENTRY_BASERELOC_SIZE  equ $ - Directory_Entry_Basereloc

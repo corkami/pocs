@@ -29,16 +29,16 @@ iend
 
 OptionalHeader:
 istruc IMAGE_OPTIONAL_HEADER64
-    at IMAGE_OPTIONAL_HEADER64.Magic,                     dw IMAGE_NT_OPTIONAL_HDR64_MAGIC
-    at IMAGE_OPTIONAL_HEADER64.AddressOfEntryPoint,       dd EntryPoint - IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER64.ImageBase,                 dd IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER64.SectionAlignment,          dd SECTIONALIGN
-    at IMAGE_OPTIONAL_HEADER64.FileAlignment,             dd FILEALIGN
-    at IMAGE_OPTIONAL_HEADER64.MajorSubsystemVersion,     dw 4
-    at IMAGE_OPTIONAL_HEADER64.SizeOfImage,               dd 2 * SECTIONALIGN
-    at IMAGE_OPTIONAL_HEADER64.SizeOfHeaders,             dd SIZEOFHEADERS
-    at IMAGE_OPTIONAL_HEADER64.Subsystem,                 dw IMAGE_SUBSYSTEM_WINDOWS_CUI
-    at IMAGE_OPTIONAL_HEADER64.NumberOfRvaAndSizes,       dd 16
+    at IMAGE_OPTIONAL_HEADER64.Magic,                 dw IMAGE_NT_OPTIONAL_HDR64_MAGIC
+    at IMAGE_OPTIONAL_HEADER64.AddressOfEntryPoint,   dd EntryPoint - IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER64.ImageBase,             dd IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER64.SectionAlignment,      dd SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER64.FileAlignment,         dd FILEALIGN
+    at IMAGE_OPTIONAL_HEADER64.MajorSubsystemVersion, dw 4
+    at IMAGE_OPTIONAL_HEADER64.SizeOfImage,           dd 2 * SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER64.SizeOfHeaders,         dd SIZEOFHEADERS
+    at IMAGE_OPTIONAL_HEADER64.Subsystem,             dw IMAGE_SUBSYSTEM_WINDOWS_CUI
+    at IMAGE_OPTIONAL_HEADER64.NumberOfRvaAndSizes,   dd 16
 iend
 
 istruc IMAGE_DATA_DIRECTORY_16
@@ -71,18 +71,10 @@ Msg db " * a standard PE32+ (imports, standard alignments)", 0ah, 0
 _d
 
 Import_Descriptor:
-;kernel32.dll_DESCRIPTOR:
-    dd kernel32.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd kernel32.dll - IMAGEBASE
-    dd kernel32.dll_iat - IMAGEBASE
-;msvcrt.dll_DESCRIPTOR:
-    dd msvcrt.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd msvcrt.dll - IMAGEBASE
-    dd msvcrt.dll_iat - IMAGEBASE
-;terminator
-    dd 0, 0, 0, 0, 0
+_import_descriptor kernel32.dll
+_import_descriptor msvcrt.dll
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
 _d
 
 kernel32.dll_hintnames:

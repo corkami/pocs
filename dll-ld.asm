@@ -69,38 +69,18 @@ EntryPoint:
 _c
 
 Import_Descriptor:
-kernel32.dll_DESCRIPTOR:
-    dd kernel32.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd kernel32.dll - IMAGEBASE
-    dd kernel32.dll_iat - IMAGEBASE
-dll.dll_DESCRIPTOR:
-    dd dll.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd dll.dll - IMAGEBASE
-    dd dll.dll_iat - IMAGEBASE
-;terminator
-    dd 0, 0, 0, 0, 0
+_import_descriptor kernel32.dll
+_import_descriptor dll.dll
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
 _d
 
-kernel32.dll_hintnames:
-    dd hnExitProcess - IMAGEBASE
-    dd 0
+kernel32.dll_hintnames dd hnExitProcess - IMAGEBASE, 0
+dll.dll_hintnames      dd hndllexport - IMAGEBASE, 0
 _d
 
-dll.dll_hintnames:
-    dd hndllexport - IMAGEBASE
-    dd 0
-_d
-
-hnExitProcess:
-    dw 0
-    db 'ExitProcess', 0
-_d
-
-hndllexport:
-    dw 0
-    db 'export', 0
+hnExitProcess _IMAGE_IMPORT_BY_NAME 'ExitProcess'
+hndllexport   _IMAGE_IMPORT_BY_NAME 'export'
 _d
 
 kernel32.dll_iat:
@@ -108,6 +88,7 @@ __imp__ExitProcess:
     dd hnExitProcess - IMAGEBASE
     dd 0
 _d
+
 dll.dll_iat:
 __imp__export:
     dd hndllexport - IMAGEBASE
