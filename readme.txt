@@ -41,7 +41,7 @@ Ranking (YMMV)
  **. appendedhdr.exe          PE with NT headers in appended data (in extended header via SizeOfHeader)
  **. apphdrW7.exe             PE with NT headers in appended data (W7)
  **. appendedsecttbl.exe      section table outside the PE, in appended data (but in the header itself, for XP compatibility)
- **. appsectableW7.exe        unlike XP, the header doesn't need to be extended until the bottom of the file
+ **. appsectableW7.exe        unlike XP, the header doesn't need to be extended until the bottom of the file !W8
 
  **. footer.exe               NT Headers at the bottom of the file
 
@@ -91,11 +91,11 @@ DLL: (relocations, EntryPoint...)
 
 Subsystems
  **. driver.sys               a simple driver (section, relocation, imports, checksum)
- **. gui.exe                  universal+tiny+GUI, using MessageBox and ExitProcess with contiguous code
+ **. gui.exe                  universal+tiny+GUI, using MessageBox and ExitProcess with contiguous code !W8
 
  *** multiss.exe              a multi-subsystem PE (that displays a message) no matter what its subsystem is set to.
-      multiss_con.exe          console
-      multiss_gui.exe          gui
+      multiss_con.exe          console !W8
+      multiss_gui.exe          gui !W8
       multiss_drv.sys          driver
 
  *.. aslr.dll                 a DLL with DYNAMIC_BASE set and used
@@ -124,12 +124,12 @@ Section table (PE Geometry):
  **. maxsecW7.exe             PE with 8192 used code sections
  **.  maxsecXP.exe             Low Alignment PE for XP, with 96 sections
 
- **. no_dd.exe                a PE without any data directory (loading imports manually)
- **. no0code.exe              no null before code ends => headers are relocated far enough so that e_lfanew contains no 0
- **. nosectionW7.exe          Low Alignment PE for , with no section.
+ **. no_dd.exe                a PE without any data directory (loading imports manually) !W8
+ **. no0code.exe              no null before code ends => headers are relocated far enough so that e_lfanew contains no 0 !W8
+ **. nosectionW7.exe          Low Alignment PE for , with no section !W8
       nosectionXP.exe          XP version
 
- *** nothing.dll              a DLL with code and no sections, no EntryPoint, no imports
+ *** nothing.dll              a DLL with code and no sections, no EntryPoint, no imports (crashing w/W8)
       nothing-ld.exe           loader
 
  **. nullSOH-XP.exe           null SizeOfOptionalHeader which means the Section table is overlapping the Optional header (XP only)
@@ -140,10 +140,10 @@ Section table (PE Geometry):
       tinydllXP-ld.exe          loader
  **. tinydrivXP.sys           same thing, driver version
 
- **. tiny.exe                 a universal tiny PE, working from XP to W7 64b
+ **. tiny.exe                 a universal tiny PE, working from XP to W7 64b !W8
  **. tinyW7.exe               a tiny PE, W7 32b compatible. just need a full optional header, so padding until 252 bytes is required.
- **. tinyW7_3264.exe          a 32b tiny PE, W7 64b compatible (requires a bigger padding, 268 bytes)
- **. tinyW7x64.exe            a 64b tiny PE, in 268 bytes
+ **. tinyW7_3264.exe          a 32b tiny PE, W7 64b compatible (requires a bigger padding, 268 bytes) !W8
+ **. tinyW7x64.exe            a 64b tiny PE, in 268 bytes !W8
 
  *** weirdsord.exe            a PE where 4K is read from the section for no apparent reason
 
@@ -188,7 +188,7 @@ DataDirectory 1: Import
       dump_imports.exe         tool to extract data for hard_imports
 
  **. imports_iatindesc.exe    imports with IAT inside descriptors (smallest 'standard' imports structure)
- **. imports_tinyW7.exe       imports with all tricks to make it as small as possible
+ **. imports_tinyW7.exe       imports with all tricks to make it as small as possible !W8
  **. imports_tinyXP.exe        XP version
 
  **. imports_virtdesc.exe     PE with 1st import descriptor starting in virtual space
@@ -230,13 +230,13 @@ DataDirectory 5: Relocations
  **. ibknoreloc64.exe         a PE32+ with kernel imagebase and RIP-relative code (no relocations)
  *** ibkmanual.exe            kernel range IMAGEBASE, but no relocations, only manually-fixed in advance offsets
 
- *** reloccrypt.exe
- *** reloccryptXP.exe
+ *** reloccrypt.exe           a PE storing its code via relocations patch, with extra fake or rarely used relocations
+ *** reloccryptXP.exe          XP version
 
  *** ibreloc.exe              relocation is applied to ImageBase in memory, which corrects the wrong entrypoint
- *** ibrelocW7.exe            >XP version
+ *** ibrelocW7.exe            >XP version !W8
 
- *** lfanew_relocW7.exe       relocation is applied to e_lfanew in memory => another PE header is then pointed to, which contains the actual imports in the 2nd part of DataDirectories
+ *** lfanew_relocW7.exe       relocation is applied to e_lfanew in memory => another PE header is then pointed to, which contains the actual imports in the 2nd part of DataDirectories !W8
  *** lfanew_relocXP.exe       XP version
 
  **. relocsstripped.exe       a PE using relocations even if RELOCS_STRIPPED is set
@@ -289,12 +289,12 @@ DataFile DLLs (loaded via LoadLibraryEx with LOAD_LIBRARY_AS_DATAFILE parameter,
       d_resource-ld.exe           loader
 
 Special
- **. maxvals.exe              a PE with a maximal values in the headers
+ **. maxvals.exe              a PE with a maximal values in the headers !W8
  **. standard.exe             a PE with a bit of everything, useful as a all-in-one tutorial PE 'crackme'.
 
  **. dosZMXP.exe              a non-PE EXE with ZM signature
  *** exe2pe.exe               a non-PE EXE whose DOS stubs patches itself back to PE and relaunch as PE
- *** hdrcode.exe              a PE which header is completely executed (to calculate a fibonacci number via FPU) - NO jump over header data
+ *** hdrcode.exe              a PE which header is completely executed (to calculate a fibonacci number via FPU) - NO jump over header data !W8
 
  *** quine.exe                a working PE file, made entirely in assembly, with no need of a compiler, with its own source embedded, which it displays on execution, via 'typing' its own binary.
 
