@@ -146,6 +146,7 @@ table
     dd 050327671h, 0149bfh, 011222h
     dd 0506bc5e5h, 001d7bh, 00ae40h
     dd 0506dbe4fh, 0149bfh, 011222h
+    dd 051a7dbeah, 01f82bh, 024c0dh
     dd 0
 
 align FILEALIGN, db 0
