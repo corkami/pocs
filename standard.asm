@@ -341,12 +341,12 @@ Handler:
     jmp end_
 _c
 
-tlsmsg db " - Thread Local Storage callback executed", 0dh, 0ah, 0
-exportMSG db " - Export called", 0dh, 0ah, 0
-iconMSG db " - RT_ICON resource loaded", 0dh, 0ah, 0
-safesehmsg db " - exception handler called", 0dh, 0ah, 0
-manifestMSG db " - RT_MANIFEST resource located", 0dh, 0ah, 0
-errorMsg db "*ERROR*", 0dh, 0ah, 0
+tlsmsg db " - Thread Local Storage callback executed", 0ah, 0
+exportMSG db " - Export called", 0ah, 0
+iconMSG db " - RT_ICON resource loaded", 0ah, 0
+safesehmsg db " - exception handler called", 0ah, 0
+manifestMSG db " - RT_MANIFEST resource located", 0ah, 0
+errorMsg db "*ERROR*", 0ah, 0
 stringMSG times WSTRLEN dw 0
 _d
 
