@@ -1,25 +1,3 @@
-Low alignments:
+32b specific:
 tinyW7.exe:
  * tiny 252 bytes PE (W7 32b only)
-tinyW7_3264.exe:
- * tiny 268 bytes PE32 (W7 32b/64b)
-maxsec_lowaligW7.exe:
- * Low alignment PE with 6666 sections (W7)
-nosectionW7.exe:
- * Low alignment PE with no section (W7)
-maxsecW7.exe:
- * PE with 8192 code sections (W7)
-65535sects.exe:
- * 65535 physically identical, virtually executed sections
-appsectableW7.exe:
- * section table in appended data (W7)
-apphdrW7.exe:
- * NT headers in appended data (W7)
-foldedhdrW7.exe:
- * PE header overwritten on loading (W7)
-manyimportsW7.exe:
- * many fake imports, ignored by terminator set by TLS AoI (W7)
-
-OS Specific:
-tls_aoiOSDET.exe:
- * TLS AoI => W7

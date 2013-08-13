@@ -36,6 +36,9 @@ echo importshint.exe:& importshint.exe
 echo impbyord.exe:& impbyord.exe
 echo imports_iatindesc.exe:& imports_iatindesc.exe
 echo imports_virtdesc.exe:& imports_virtdesc.exe
+echo hard_imports.exe:& hard_imports.exe
+echo imports_corruptedIAT.exe:& imports_corruptedIAT.exe
+echo imports_bogusIAT.exe:& imports_bogusIAT.exe
 echo.
 echo DLL loading:
 echo  * statically loaded DLL and export call
@@ -107,6 +110,8 @@ echo namedresource.exe:& namedresource.exe
 echo reshdr.exe:& reshdr.exe
 echo resourceloop.exe:& resourceloop.exe
 echo resource_string.exe:& resource_string.exe
+echo resource_icon.exe:& resource_icon.exe
+
 echo.
 echo delay imports:
 echo delayimports.exe:& delayimports.exe
@@ -126,13 +131,23 @@ echo manifest:
 echo manifest.exe:& manifest.exe
 echo manifest_bsod.exe:& manifest_bsod.exe
 echo manifest_broken.exe:& manifest_broken.exe
-
+echo.
 echo misc:
 echo no_dd.exe:& no_dd.exe
 echo winver.exe:& winver.exe
 echo weirdsord.exe:& weirdsord.exe
+echo skippeddynbase.exe:& skippeddynbase.exe
+echo relocsstripped.exe:& relocsstripped.exe
+echo no_seh.exe:& no_seh.exe
+echo no_dep.exe:& no_dep.exe
+echo dep.exe:& dep.exe
+echo standard.exe:& standard.exe
+echo signature.exe:& signature.exe
+echo safeseh_fly.exe:& safeseh_fly.exe
 echo.
 rem echo multiss_gui.exe:& multiss_con.exe
 rem dll-webdavld.exe disabled until found a suitable host
 rem pdf.exe / pdf_zip_pe.exe disabled because of the non-console output
 rem quine.exe disabled because creates an extra window
+rem aslr-ld.exe non constant result
+rem echo memshared-ld.exe race condition

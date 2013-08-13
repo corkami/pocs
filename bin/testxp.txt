@@ -25,6 +25,12 @@ imports_tinyXP.exe:
  * tiny imports
 multiss_con.exe:
  * multisystem PE (console)nothing-ld.exe:
+lfanew_relocXP.exe:
+ * relocated e_lfanew with dual (+unused) PE headers and DataDirectory (XP)
+virtrelocXP.exe:
+ * (LA+manual reloc) fake virtual relocs (XP)
+importsdotXP.exe:
+ * a PE using trailing dots in its imports (XP only)
 
 DOS:
 dosZMXP.exe:

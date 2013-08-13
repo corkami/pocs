@@ -20,8 +20,8 @@ tls.exe:
   # EntryPoint executed
   # ExitProcess called
 tls_import.exe (displayed afterwards, but working):
-tls_onthefly.exe:
  * executed via imported TLS
+tls_onthefly.exe:
  * TLS on the fly update started
   # adding 2nd TLS to callbacks
   # 2nd TLS executed. removing all TLS from callbacks to prevent further executions
@@ -40,8 +40,7 @@ tls_virtEP.exe:
 tls_reloc.exe:
  * relocated TLS
 tls_k32.exe:
- * ignored TLS (only imports to kernel32)
-
+ * TLS with only kernel32 import (1 EP execution, 1 TLS execution(s))
 Exports:
 exportobf.exe:
  * fake exports to disrupt disassembly
@@ -71,6 +70,12 @@ imports_iatindesc.exe:
  * IAT inside descriptors
 imports_virtdesc.exe:
  * virtual 1st import descriptor
+hard_imports.exe:
+ * a PE using hardcoded imports calls
+imports_corruptedIAT.exe:
+ * a PE with an IAT with corrupted pointers
+imports_bogusIAT.exe:
+ * a PE with a bogus IAT
 
 DLL loading:
  * statically loaded DLL and export call
@@ -200,7 +205,9 @@ reshdr.exe:
 resourceloop.exe:
  * recursive resources directory
 resource_string.exe:
- * PE with string resources
+ * a PE with RT_STRING resource loaded
+resource_icon.exe:
+ * a PE with RT_ICON and RT_GROUP_ICON
 
 delay imports:
 delayimports.exe:
@@ -217,8 +224,8 @@ data PEs:
 d_tiny-ld.exe:
  * tiny data PE (61 bytes)
 d_nonnull-ld.exe:
- * executed by shellcode call
 d_resource-ld.exe:
+ * executed by shellcode call
  * resource-only data PE
 maxvals.exe:
  * a PE with a maximal values in the headers
@@ -227,7 +234,8 @@ manifest:
 manifest.exe:
  * a PE with a minimal MANIFEST resource (CreateActCtx successfull)manifest_bsod.exe:
  * a PE with a XP SP2 crash MANIFEST resource (CreateActCtx successfull)manifest_broken.exe:
- * a PE with an incorrect manifest type (ignored)misc:
+ * a PE with an incorrect manifest type (ignored)
+misc:
 no_dd.exe:
  * a PE with no DataDirectory (loading imports manually)
 winver.exe:
@@ -235,4 +243,26 @@ winver.exe:
 
 weirdsord.exe:
  * a PE with weird SORD (expected size found)
+skippeddynbase.exe:
+ * a PE with ignored DYNAMIC_BASE, because RELOCS_STRIPPED is set
+relocsstripped.exe:
+ * a PE using relocations, even if RELOCS_STRIPPED is set (Delta: 032f70000h)
+no_seh.exe:
+ * a PE with DllCharacteristics set to NO_SEH, but using a Vectored Exception Handler
+  # Vectored Exception handler triggered
+no_dep.exe:
+ * executing code on the stack successfully with no DEP
+dep.exe:
+ * executing code on the stack, and failing because of DEP
+standard.exe:
+ - Thread Local Storage callback executed
+ - Export called
+ - RT_ICON resource loaded
+ - RT_MANIFEST resource located
+ - RT_STRING resource loaded
+ - exception handler called
+signature.exe:
+ * a PE with an (incorrect) authenticode signature
+safeseh_fly.exe:
+ * Handler correctly added to SafeSEH table
 

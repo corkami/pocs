@@ -15,6 +15,9 @@ echo reloccryptXP.exe:& reloccryptXP.exe
 echo imports_tinyXP.exe:& imports_tinyXP.exe
 echo multiss_con.exe:& multiss_con.exe
 echo nothing-ld.exe:& nothing-ld.exe
+echo lfanew_relocXP.exe:& lfanew_relocXP.exe
+echo virtrelocXP.exe:& virtrelocXP.exe
+echo importsdotXP.exe:& importsdotXP.exe
 echo.
 echo DOS:
 echo dosZMXP.exe:& dosZMXP.exe
