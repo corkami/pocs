@@ -508,6 +508,29 @@ struc IMAGE_LOAD_CONFIG_DIRECTORY32
     .SEHandlerCount                 resd 1
 endstruc
 
+struc IMAGE_LOAD_CONFIG_DIRECTORY64
+    .Size                           resd 1
+    .TimeDateStamp                  resd 1
+    .MajorVersion                   resw 1
+    .MinorVersion                   resw 1
+    .GlobalFlagsClear               resd 1
+    .GlobalFlagsSet                 resd 1
+    .CriticalSectionDefaultTimeout  resd 1
+    .DeCommitFreeBlockThreshold     resq 1
+    .DeCommitTotalFreeThreshold     resq 1
+    .LockPrefixTable                resq 1 ;VA
+    .MaximumAllocationSize          resq 1
+    .VirtualMemoryThreshold         resq 1
+    .ProcessAffinityMask            resq 1
+    .ProcessHeapFlags               resd 1
+    .CSDVersion                     resw 1
+    .Reserved1                      resw 1
+    .EditList                       resq 1 ;VA
+    .SecurityCookie                 resq 1
+    .SEHandlerTable                 resq 1
+    .SEHandlerCount                 resq 1
+endstruc
+
 RT_ICON       equ  3
 RT_STRING     equ  6
 RT_GROUP_ICON equ 14
