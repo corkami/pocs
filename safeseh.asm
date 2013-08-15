@@ -79,7 +79,7 @@ EntryPoint:
     int3        ; trigger an exception
 _c
 
-Msg db "SafeSEH test: Exception handler called", 0ah, 0
+Msg db " * a PE with SafeSEH: Exception handler called", 0ah, 0
 _d
 
 LoadConfig: ;*******************************************************************
@@ -96,8 +96,8 @@ LOADCONFIGSIZE equ $ - LoadConfig
 cookie dd 0
 
 HandlerTable:
-    dd 1
-    ;dd Handler - IMAGEBASE ; add this to get the handler accepted
+    dd 0deadbeefh ; fake entry to make the table valid
+    dd Handler - IMAGEBASE ; removing this will reject our handler
     HANDLERCOUNT equ ($ - HandlerTable) / 4
     dd 0
 
