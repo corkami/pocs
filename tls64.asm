@@ -31,7 +31,7 @@ OptionalHeader:
 istruc IMAGE_OPTIONAL_HEADER64
     at IMAGE_OPTIONAL_HEADER64.Magic,                     dw IMAGE_NT_OPTIONAL_HDR64_MAGIC
     at IMAGE_OPTIONAL_HEADER64.AddressOfEntryPoint,       dd EntryPoint - IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER64.ImageBase,                 dd IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER64.ImageBase,                 dq IMAGEBASE
     at IMAGE_OPTIONAL_HEADER64.SectionAlignment,          dd SECTIONALIGN
     at IMAGE_OPTIONAL_HEADER64.FileAlignment,             dd FILEALIGN
     at IMAGE_OPTIONAL_HEADER64.MajorSubsystemVersion,     dw 4

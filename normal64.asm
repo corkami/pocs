@@ -13,25 +13,25 @@ FILEALIGN equ 200h
 
 istruc IMAGE_DOS_HEADER
     at IMAGE_DOS_HEADER.e_magic, db 'MZ'
-    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Signature - IMAGEBASE
+    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Headers - IMAGEBASE
 iend
 
-NT_Signature:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE', 0, 0
 iend
 istruc IMAGE_FILE_HEADER
-    at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_AMD64
-    at IMAGE_FILE_HEADER.NumberOfSections,      dw NUMBEROFSECTIONS
-    at IMAGE_FILE_HEADER.SizeOfOptionalHeader,  dw SIZEOFOPTIONALHEADER
-    at IMAGE_FILE_HEADER.Characteristics,       dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
+    at IMAGE_FILE_HEADER.Machine,              dw IMAGE_FILE_MACHINE_AMD64
+    at IMAGE_FILE_HEADER.NumberOfSections,     dw NUMBEROFSECTIONS
+    at IMAGE_FILE_HEADER.SizeOfOptionalHeader, dw SIZEOFOPTIONALHEADER
+    at IMAGE_FILE_HEADER.Characteristics,      dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
 iend
 
 OptionalHeader:
 istruc IMAGE_OPTIONAL_HEADER64
     at IMAGE_OPTIONAL_HEADER64.Magic,                 dw IMAGE_NT_OPTIONAL_HDR64_MAGIC
     at IMAGE_OPTIONAL_HEADER64.AddressOfEntryPoint,   dd EntryPoint - IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER64.ImageBase,             dd IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER64.ImageBase,             dq IMAGEBASE
     at IMAGE_OPTIONAL_HEADER64.SectionAlignment,      dd SECTIONALIGN
     at IMAGE_OPTIONAL_HEADER64.FileAlignment,         dd FILEALIGN
     at IMAGE_OPTIONAL_HEADER64.MajorSubsystemVersion, dw 4
