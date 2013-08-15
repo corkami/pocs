@@ -72,6 +72,7 @@ istruc IMAGE_OPTIONAL_HEADER32
     at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion,     dw 4
     at IMAGE_OPTIONAL_HEADER32.SizeOfImage,               dd 5 * SECTIONALIGN
     at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,             dd SIZEOFHEADERS
+    at IMAGE_OPTIONAL_HEADER32.CheckSum,                  dd 08221h
     at IMAGE_OPTIONAL_HEADER32.Subsystem,                 dw IMAGE_SUBSYSTEM_WINDOWS_CUI
     at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,       dd 16
 iend
@@ -248,8 +249,8 @@ string_data:
 
 dw WSTRLEN
 widestring:
-    _widestr_no0 ' - RT_STRING resource loaded'
-    dw 0dh, 0ah
+    _widestr_no0 '  - RT_STRING resource loaded'
+    dw 0ah
     WSTRLEN equ (($ - widestring) / 2) + 1
 align 4, db 0
 STRING_SIZE equ $ - string_data
@@ -341,11 +342,11 @@ Handler:
     jmp end_
 _c
 
-tlsmsg db " - Thread Local Storage callback executed", 0ah, 0
-exportMSG db " - Export called", 0ah, 0
-iconMSG db " - RT_ICON resource loaded", 0ah, 0
-safesehmsg db " - exception handler called", 0ah, 0
-manifestMSG db " - RT_MANIFEST resource located", 0ah, 0
+tlsmsg      db "  - Thread Local Storage callback executed", 0ah, 0
+exportMSG   db "  - Export called", 0ah, 0
+iconMSG     db "  - RT_ICON resource loaded", 0ah, 0
+safesehmsg  db "  - exception handler called", 0ah, 0
+manifestMSG db "  - RT_MANIFEST resource located", 0ah, 0
 errorMsg db "*ERROR*", 0ah, 0
 stringMSG times WSTRLEN dw 0
 _d

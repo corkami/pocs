@@ -77,7 +77,7 @@ no_msg:
     call [__imp__ExitProcess]
 _c
 
-msg db " * a PE with a minimal MANIFEST resource (CreateActCtx successfull)", 0
+msg db " * a PE with a minimal MANIFEST resource (CreateActCtx successfull)", 0ah, 0
 _d
 
 Import_Descriptor:
