@@ -14,6 +14,7 @@ db1f5c0fe32104212f6328b2bf27c60f0735eee2 *bigsec.exe
 3c9afc865f5e710f75e4df0f6c1002a9acfe43a3 *bigSoRD.exe
 5dc67a09804c363aa2d6248743849c455894921e *bottomsecttbl.exe
 be63a89313a2d7dbf524aa4333f896a287f41a20 *compiled.exe
+c330bfcbd9e97de83af11589bef60d91c1aa0df5 *copyright.exe
 2ecc21a98640ca4a3dcecf469c7f6daec5850fea *ctxt.dll
 8abc2f3b3fdddf8e6cc269b7d2ccb83658079f4a *ctxt-ld.exe
 ef606030706c987fd7bc0de13d84128aa480b6c9 *d_nonnull.dll
@@ -22,6 +23,7 @@ ef606030706c987fd7bc0de13d84128aa480b6c9 *d_nonnull.dll
 2e70ed1487a444bf76298d3b13c4979ee74260db *d_resource-ld.exe
 83bed09504a92aeac2c0f9f494314ee090d8b451 *d_tiny.dll
 a63281031607e290bdff10524d990501dd7618f5 *d_tiny-ld.exe
+9b90749291226276d46b0bcc1cd733b5818f9052 *debug.exe
 5c3cfdce157d8c515ed212e2958ee733911133a2 *delaycorrupt.exe
 aef165cce96f33b9d1c5520a48e9a6e55ba3e790 *delayfake.exe
 ee509d34e50dd24392424405039df04f089aa730 *delayimports.exe
@@ -82,6 +84,7 @@ cd83dc8a29063be6b5b532d394a45215e19b9c44 *fakerelocs.exe
 1458adaf773bf72e49f16cad9ba122f15b30ba57 *gui.exe
 6f3694cc382ea636d05d107d2dc73e37a19e0243 *hard_imports.exe
 4db7b36f63d5eeda26c750951711d179e92d0007 *hdrcode.exe
+18302afbce640c2473e58b50b15975f7876515d4 *hdrdata.exe
 719c8d65085c7ad8cf96638e08550a50dc659318 *hiddenappdata1.exe
 f4421d2d04508d0dfc2df9e755eea0599852864e *hiddenappdata2.exe
 1eca66d4654e7f4ad8bedc972ea93ddff1348707 *ibkernel.exe
@@ -111,9 +114,9 @@ d3d000035fe2a65a66f7c22d80719aad7781a5fd *importsdotXP.exe
 dc3977014027d86539bd6986b857c51da5a0ac5c *importshint.exe
 c098fe0024df0d43774b1dc5e06e332ee9567f93 *lfanew_relocW7.exe
 f03cda24a259eae690f3cfed1cec59c6f6984009 *lfanew_relocXP.exe
-1a509f315885f2b1f827671732901fe1706f781c *manifest.exe
+ee3ed6c48fd9302834a5cf2b624108dc06599f1b *manifest.exe
 41c54f56a0b092dcdb466902d2eaab56e57c186d *manifest_broken.exe
-9cc0235912e3f89ec6b55f327d5e6a697260a53a *manifest_bsod.exe
+234822ea88588848a3f6644f4cc4c25489635df4 *manifest_bsod.exe
 58596114b8cd3d9fdf3ed4dca000b3ff64dbba3d *manyimportsW7.exe
 596f786f7294d463c167a4705af3370040d812f6 *maxsec_lowaligW7.exe
 d8e4499216c621da090a133bf4b6769c240651d7 *maxsecW7.exe
@@ -130,8 +133,9 @@ b394bd7a3915c6d131b9974c34ceae55881e1c57 *mini.exe
 4b2cfe4f3869fdea0bda9624fbfa20341a3b543a *mz.exe
 cfeb2cd053b1e5a470bccbf1190cb26f10f42d60 *namedresource.exe
 8faafc7441c8668c7519adf5f085fb6584812404 *no_dd.exe
+ebfde539af5a87574916781725015db05ddbd6bf *no_dd64.exe
 de5c6fef019dfb8332d4c736c45632091841b722 *no0code.exe
-8f06da531f9c18b60c14d67a2067d4a0f0618374 *normal.exe
+1ffc91df9785ed9ca56a080d4541faaa23d60238 *normal.exe
 e55f71b59d363072038c2a0a9c76d0573d88b1d9 *normal64.exe
 aa0c81642bab232eb512d9c619d1f4d613e14918 *nosectionW7.exe
 a278c99c7cd0c6de535959c146a986e528015ff0 *nosectionXP.exe
@@ -155,7 +159,7 @@ ce9becebb96d7aec80fbcfe18ebaba8cc434c95c *resource_icon.exe
 ed5d9473de528ba2049850de30332787ded36d5c *resource_string.exe
 fba326742f645db3595ec891d22f066d8dd526fb *resource2.exe
 8916eca8be278d1e43e67c4a90b5a6a870250c77 *resourceloop.exe
-0e6c8187125a909292d86064b2f7242a038f058f *safeseh.exe
+adf098376b4944c77239489422f9223d18d4c51d *safeseh.exe
 8515f8d574ee2a35c8b39991a6aa406af309da52 *safeseh_fly.exe
 2c767d1da6b9d135c06c77bbc715fe48e31c41d2 *sc.exe
 e7a1caebdd7d3ec194903876077078525f4d002f *secinsec.exe
@@ -164,7 +168,7 @@ e2b8fc44a43609945fb87b6c8fd3cd9af6a2d5c5 *seh_change64.exe
 e2462a381cc60582efcf4dab129f4f08ff396bec *signature.exe
 d4d77a22dd9d63fd9d4d807ab55956bebb48a8db *skippeddynbase.exe
 97d70adb616d04510b7e5fb22da5cd792eace352 *slackspace.exe
-ffce5a292e81c80ac8b85320484d0453897f2819 *standard.exe
+88bce856608ae28e7e7629ecd69caba1d2167b92 *standard.exe
 cbe369c1881dca7e0848754b999c8840b5706260 *tiny.exe
 8499a0bb33aeba8f59a172584abc7ca0ab82a78c *tinydllXP.dll
 5bb04a8b45e7bf2abfc9c19399cfafa2cbfd2728 *tinydllXP-ld.exe

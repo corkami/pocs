@@ -125,6 +125,7 @@ Section table (PE Geometry):
  **.  maxsecXP.exe             Low Alignment PE for XP, with 96 sections
 
  **. no_dd.exe                a PE without any data directory (loading imports manually) !W8
+ **. no_dd64.exe               64b version
  **. no0code.exe              no null before code ends => headers are relocated far enough so that e_lfanew contains no 0 !W8
  **. nosectionW7.exe          Low Alignment PE for , with no section !W8
       nosectionXP.exe          XP version
@@ -242,6 +243,12 @@ DataDirectory 5: Relocations
  **. relocsstripped.exe       a PE using relocations even if RELOCS_STRIPPED is set
  **. relocsstripped64.exe     PE32+ version
 
+DataDirectory 6: Debug
+ *.. debug.exe                a PE with a Debug Directory (and missing symbols)
+
+DataDirectory 7: Architecture/Copyright
+ *.. copyright.exe            a PE with an Architecture DataDirectory entry used for Copyright/Description
+
 DataDirectory 9: Thread local storage
  *.. tls.exe                  standard Thread Local Storage callbacks
  *.. tls64.exe                standard Thread Local Storage callbacks in 64 bits
@@ -303,6 +310,8 @@ Special
 
  **. pdf.exe                  a tiny PE with a PDF, copying itself and launching itself under acrobat
  **. pdf_zip_pe.exe           see CorkaMiX
+
+ *.. hdrdata.exe              a PE with data between header and first section
 
  **. sc.exe                    simple shellcode target
 

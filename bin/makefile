@@ -1,7 +1,5 @@
 all: common XP W7
 
-beta: no_dd64.exe debug.exe
-
 common: exports imports dll gaps tls bound entrypoint down many misc resource delay relocs dotnet
 
 exports: ownexports.exe ownexports2.exe exportsdata.exe exportobf.exe exports_doc.exe exports_order.exe
@@ -24,7 +22,8 @@ misc: normal.exe truncatedlast.exe pdf.exe tiny.exe bigsec.exe shuffledsect.exe 
     maxvals.exe pdf_zip_pe.exe winver.exe weirdsord.exe hdrcode.exe mini.exe \
     dump_imports.exe nullvirt.exe safeseh.exe lfanew_relocW7.exe \
     lfanew_relocXP.exe safeseh_fly.exe signature.exe standard.exe \
-    dep.exe no_dep.exe no_seh.exe memshared.dll memshared-ld.exe  aslr.dll aslr-ld.exe
+    dep.exe no_dep.exe no_seh.exe memshared.dll memshared-ld.exe  aslr.dll aslr-ld.exe \
+    debug.exe copyright.exe hdrdata.exe no_dd64.exe
 
 down: appendedsecttbl.exe appendedhdr.exe footer.exe bottomsecttbl.exe
 
