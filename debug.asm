@@ -1,6 +1,4 @@
-; a PE with a debug directory
-
-; NOT WORKING ATM
+; a PE with a Debug Directory (and missing symbols)
 
 ; Ange Albertini, BSD LICENCE 2012
 
@@ -87,46 +85,28 @@ end_:
     call [__imp__ExitProcess]
 _c
 
-Msg db " * a PE with an empty Debug Directory", 0ah, 0
+Msg db " * a PE with a Debug Directory (and missing symbols)", 0ah, 0
 _d
 
 Debug: ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 istruc IMAGE_DEBUG_DIRECTORY
-    at IMAGE_DEBUG_DIRECTORY.Type, dd IMAGE_DEBUG_TYPE_MISC
-    at IMAGE_DEBUG_DIRECTORY.SizeOfData, dd DEBUGDATASIZE
-    at IMAGE_DEBUG_DIRECTORY.PointerToRawData, dd DebugData - IMAGEBASE
-iend
-istruc IMAGE_DEBUG_DIRECTORY
-    at IMAGE_DEBUG_DIRECTORY.Type, dd IMAGE_DEBUG_TYPE_COFF
-    at IMAGE_DEBUG_DIRECTORY.SizeOfData, dd DEBUGDATASIZE
-    at IMAGE_DEBUG_DIRECTORY.PointerToRawData, dd DebugData - IMAGEBASE
-iend
-istruc IMAGE_DEBUG_DIRECTORY
     at IMAGE_DEBUG_DIRECTORY.Type, dd IMAGE_DEBUG_TYPE_CODEVIEW
     at IMAGE_DEBUG_DIRECTORY.SizeOfData, dd CODEVIEWSIZE
-    at IMAGE_DEBUG_DIRECTORY.PointerToRawData, dd CodeView - IMAGEBASE
+    at IMAGE_DEBUG_DIRECTORY.AddressOfRawData, dd CodeView - IMAGEBASE
+    at IMAGE_DEBUG_DIRECTORY.PointerToRawData, dd CodeView - IMAGEBASE - SECTIONALIGN + FILEALIGN
 iend
 DEBUGSIZE equ $ - Debug
+_d
 
 CodeView:
-db 'NB11'
-dd 0
-dd 0 ; sig
-dd 0 ; age
-db 'CODEVIEW.pdb', 0
+SIG  db 'RSDS'
+GUID dd 0,0,0,0
+AGE  dd 00000060h
+db 'nosymbols.pdb', 0
     align 4, db 0
 CODEVIEWSIZE equ $ - CodeView
 
-IMAGE_DEBUG_MISC_EXENAME equ 1
-DebugData:
-dd IMAGE_DEBUG_MISC_EXENAME
-dd DEBUGDATASIZE
-db 0 ; unicode
-    times 3 db 0 ; f6, 20, 0?
-db 'misc.exe', 0
-    align 4, db 0
-DEBUGDATASIZE equ $ - DebugData
-
+_d
 Import_Descriptor: ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;kernel32.dll_DESCRIPTOR:
     dd kernel32.dll_hintnames - IMAGEBASE
