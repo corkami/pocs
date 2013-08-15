@@ -17,6 +17,7 @@ echo 64b specific:
 echo normal64.exe:& normal64.exe
 echo ibknoreloc64.exe:& ibknoreloc64.exe
 echo tls64.exe:& tls64.exe
+echo no_dd64.exe:& no_dd64.exe
 echo relocsstripped64.exe:& relocsstripped64.exe
 echo seh_change64.exe:& seh_change64.exe
 echo exceptions.exe:& exceptions.exe

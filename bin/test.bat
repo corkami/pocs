@@ -129,7 +129,7 @@ echo maxvals.exe:& maxvals.exe
 echo.
 echo manifest:
 echo manifest.exe:& manifest.exe
-echo manifest_bsod.exe:& manifest_bsod.exe
+rem echo manifest_bsod.exe:& manifest_bsod.exe triggers a warning
 echo manifest_broken.exe:& manifest_broken.exe
 echo.
 echo misc:
@@ -143,7 +143,11 @@ echo no_dep.exe:& no_dep.exe
 echo dep.exe:& dep.exe
 echo standard.exe:& standard.exe
 echo signature.exe:& signature.exe
+echo safeseh.exe:& safeseh.exe
 echo safeseh_fly.exe:& safeseh_fly.exe
+echo debug.exe:& debug.exe
+echo copyright.exe:& copyright.exe
+echo hdrdata.exe:& hdrdata.exe
 echo.
 rem echo multiss_gui.exe:& multiss_con.exe
 rem dll-webdavld.exe disabled until found a suitable host

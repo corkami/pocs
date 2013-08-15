@@ -1,13 +1,6 @@
-normal64.exe:
- * a standard PE32+ (imports, standard alignments)
-ibknoreloc64.exe:
- * kernel IB + RIP-relative code (PE32+)
-
 Low alignments:
 tinyW7_3264.exe:
  * tiny 268 bytes PE32 (W7 32b/64b)
-tinyW7x64.exe:
- * tiny 268 bytes PE32+ (W7 64b only)
 maxsec_lowaligW7.exe:
  * Low alignment PE with 6666 sections (W7)
 nosectionW7.exe:
@@ -28,6 +21,27 @@ imports_apimsW7.exe:
  * api-ms-* redirection (Windows7)
 imports_tinyW7.exe:
  * tiny imports (W7)
+lfanew_relocW7.exe:
+ * relocated e_lfanew with dual PE headers and split DataDirectories
+
+64b specific:
+normal64.exe:
+ * a standard PE32+ (imports, standard alignments)
+ibknoreloc64.exe:
+ * kernel IB + RIP-relative code (PE32+)
+tls64.exe:
+ - callback called
+ * a standard PE32+ with TLS
+no_dd64.exe:
+ * a PE32+ with no data directory, resolving imports manually
+relocsstripped64.exe:
+ * a PE32+ using relocations, even if RELOCS_STRIPPED is set (Delta: 0bc908d949e940000h)
+seh_change64.exe:
+ * a 64b PE with an exception handler address modified on the fly
+exceptions.exe:
+ * a 64b PE making use of an Exception DataDirectory
+tinyW7x64.exe:
+ * tiny 268 bytes PE32+ (W7 64b only)
 
 OS Specific:
 tls_aoiOSDET.exe:

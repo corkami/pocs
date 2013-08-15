@@ -41,6 +41,7 @@ tls_reloc.exe:
  * relocated TLS
 tls_k32.exe:
  * TLS with only kernel32 import (1 EP execution, 1 TLS execution(s))
+
 Exports:
 exportobf.exe:
  * fake exports to disrupt disassembly
@@ -232,8 +233,8 @@ maxvals.exe:
 
 manifest:
 manifest.exe:
- * a PE with a minimal MANIFEST resource (CreateActCtx successfull)manifest_bsod.exe:
- * a PE with a XP SP2 crash MANIFEST resource (CreateActCtx successfull)manifest_broken.exe:
+ * a PE with a minimal MANIFEST resource (CreateActCtx successfull)
+manifest_broken.exe:
  * a PE with an incorrect manifest type (ignored)
 misc:
 no_dd.exe:
@@ -255,14 +256,21 @@ no_dep.exe:
 dep.exe:
  * executing code on the stack, and failing because of DEP
 standard.exe:
- - Thread Local Storage callback executed
- - Export called
- - RT_ICON resource loaded
- - RT_MANIFEST resource located
- - RT_STRING resource loaded
- - exception handler called
+  - Thread Local Storage callback executed
+  - Export called
+  - RT_ICON resource loaded
+  - RT_MANIFEST resource located
+  - RT_STRING resource loaded  - exception handler called
 signature.exe:
  * a PE with an (incorrect) authenticode signature
+safeseh.exe:
+ * a PE with SafeSEH: Exception handler called
 safeseh_fly.exe:
  * Handler correctly added to SafeSEH table
+debug.exe:
+ * a PE with a Debug Directory (and missing symbols)
+copyright.exe:
+ * a PE with an Architecture DataDirectory entry used for Copyright/Description
+hdrdata.exe:
+ * a PE with data between header and first section
 
