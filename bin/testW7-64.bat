@@ -21,6 +21,7 @@ echo no_dd64.exe:& no_dd64.exe
 echo relocsstripped64.exe:& relocsstripped64.exe
 echo seh_change64.exe:& seh_change64.exe
 echo exceptions.exe:& exceptions.exe
+echo ldrsnaps64.exe:& ldrsnaps64.exe
 echo tinyW7x64.exe:& tinyW7x64.exe
 echo.
 echo OS Specific:

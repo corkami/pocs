@@ -112,6 +112,8 @@ ba73e31c739e8cd238e2a35fbac61b525112a1c9 *imports_tinyW7.exe
 bcb7a3e77e416d9527892a2941ce02864ff626e7 *imports_vterm.exe
 d3d000035fe2a65a66f7c22d80719aad7781a5fd *importsdotXP.exe
 dc3977014027d86539bd6986b857c51da5a0ac5c *importshint.exe
+ca31e8536e2809002e22096f566a564363f6561b *ldrsnaps.exe
+bd32cf80c8d1769db135baed68fb75548076e364 *ldrsnaps64.exe
 c098fe0024df0d43774b1dc5e06e332ee9567f93 *lfanew_relocW7.exe
 f03cda24a259eae690f3cfed1cec59c6f6984009 *lfanew_relocXP.exe
 ee3ed6c48fd9302834a5cf2b624108dc06599f1b *manifest.exe

@@ -40,6 +40,8 @@ seh_change64.exe:
  * a 64b PE with an exception handler address modified on the fly
 exceptions.exe:
  * a 64b PE making use of an Exception DataDirectory
+ldrsnaps64.exe:
+ * a PE32+ enabling LoaderSnaps via its LoadConfig DataDirectory (GlobalFlags: 00000402)
 tinyW7x64.exe:
  * tiny 268 bytes PE32+ (W7 64b only)
 

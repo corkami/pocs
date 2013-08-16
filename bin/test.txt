@@ -206,9 +206,11 @@ reshdr.exe:
 resourceloop.exe:
  * recursive resources directory
 resource_string.exe:
- * a PE with RT_STRING resource loaded
+ * a PE with RT_STRING resource loaded
+
 resource_icon.exe:
- * a PE with RT_ICON and RT_GROUP_ICON
+ * a PE with RT_ICON and RT_GROUP_ICON
+
 
 delay imports:
 delayimports.exe:
@@ -223,10 +225,12 @@ fakeregs.exe:
  * corrupted registers on TLS and Exit return
 data PEs:
 d_tiny-ld.exe:
- * tiny data PE (61 bytes)
+ * tiny data PE (61 bytes)
+
 d_nonnull-ld.exe:
 d_resource-ld.exe:
- * executed by shellcode call
+ * executed by shellcode call
+
  * resource-only data PE
 maxvals.exe:
  * a PE with a maximal values in the headers
@@ -260,13 +264,16 @@ standard.exe:
   - Export called
   - RT_ICON resource loaded
   - RT_MANIFEST resource located
-  - RT_STRING resource loaded  - exception handler called
+  - RT_STRING resource loaded
+  - exception handler called
 signature.exe:
  * a PE with an (incorrect) authenticode signature
 safeseh.exe:
  * a PE with SafeSEH: Exception handler called
 safeseh_fly.exe:
  * Handler correctly added to SafeSEH table
+ldrsnaps.exe:
+ * a PE enabling LoaderSnaps via its LoadConfig DataDirectory (GlobalFlags: 00000402)
 debug.exe:
  * a PE with a Debug Directory (and missing symbols)
 copyright.exe:

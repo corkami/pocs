@@ -268,6 +268,9 @@ DataDirectory 9: Thread local storage
 DataDirectory A: Load config
  *.. safeseh.exe              a PE making use of SafeSEH (succeeding or not)
  **. safeseh_fly.exe          a PE modifying its HandlerTable on the fly before triggering an exception
+ *.. ldrsnaps.exe             a PE enabling LoaderSnaps via its LoadConfig DataDirectory
+ *.. ldrsnaps64.exe            64b version
+ 
 
 DataDirectory B: Bound imports
  *.. dllbound-ld.exe          dll loader with bound imports

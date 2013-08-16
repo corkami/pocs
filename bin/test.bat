@@ -145,6 +145,7 @@ echo standard.exe:& standard.exe
 echo signature.exe:& signature.exe
 echo safeseh.exe:& safeseh.exe
 echo safeseh_fly.exe:& safeseh_fly.exe
+echo ldrsnaps.exe:& ldrsnaps.exe
 echo debug.exe:& debug.exe
 echo copyright.exe:& copyright.exe
 echo hdrdata.exe:& hdrdata.exe
