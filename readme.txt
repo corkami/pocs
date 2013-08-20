@@ -142,7 +142,7 @@ Section table (PE Geometry):
       tinydllXP-ld.exe          loader
  **. tinydrivXP.sys           same thing, driver version
 
- **. tiny.exe                 a universal tiny PE, working from XP to W7 64b !W8
+ **. tiny.exe                 a universal tiny PE, working from XP to W8 64b
  **. tinyW7.exe               a tiny PE, W7 32b compatible. just need a full optional header, so padding until 252 bytes is required.
  **. tinyW7_3264.exe          a 32b tiny PE, W7 64b compatible (requires a bigger padding, 268 bytes) !W8
  **. tinyW7x64.exe            a 64b tiny PE, in 268 bytes !W8
