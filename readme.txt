@@ -25,6 +25,7 @@ Ranking (YMMV)
  *.. normal64.exe              64b version
 
  **. mini.exe                 a PE defined with as few elements as possible (alignments = 1/1)
+ *.. miniW8.exe                Windows 8 version
 
  **. bigalign.exe             big alignments (10000h/20000000h)
  **. bigib.exe                IMAGEBASE equ 7efd0000h ; 7ffd0000h also works under XP
@@ -182,7 +183,7 @@ DataDirectory 1: Import
  **. imports_badterm.exe      PE with a 'bad' imports terminator, just the dll name is empty
  **. imports_bogusIAT.exe     bogus IAT but INT is correct
  **. imports_corruptedIAT.exe IAT with corrupted pointers but INT is correct
- **. importsdotXP.exe         a PE using trailing dots in its imports (XP only)
+ **. importsdotXP.exe         a PE using trailing dots in its imports (XP/W8 only)
  **. imports_nothunk.exe      imports with a bogus DLL with missing thunks in the tables
  *** imports_relocW7.exe      PE with a kernel range IMAGEBASE, and relocations to fix (manually pre-corrupted) imports
  *** hard_imports.exe         a PE that calls imports by comparing kernel32 timestamp with known list
@@ -233,6 +234,7 @@ DataDirectory 5: Relocations
 
  *** reloccrypt.exe           a PE storing its code via relocations patch, with extra fake or rarely used relocations
  *** reloccryptXP.exe          XP version
+ *** reloccryptW8.exe          W8 version
 
  *** ibreloc.exe              relocation is applied to ImageBase in memory, which corrects the wrong entrypoint
  *** ibrelocW7.exe            >XP version !W8
@@ -299,7 +301,7 @@ DataFile DLLs (loaded via LoadLibraryEx with LOAD_LIBRARY_AS_DATAFILE parameter,
       d_resource-ld.exe           loader
 
 Special
- **. maxvals.exe              a PE with a maximal values in the headers !W8
+ **. maxvals.exe              a PE with a maximal values in the headers
  **. standard.exe             a PE with a bit of everything, useful as a all-in-one tutorial PE 'crackme'.
 
  **. dosZMXP.exe              a non-PE EXE with ZM signature

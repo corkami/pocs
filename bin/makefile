@@ -1,4 +1,4 @@
-all: common XP W7
+all: common XP W7 W8
 
 common: exports imports dll gaps tls bound entrypoint down many misc resource delay relocs dotnet
 
@@ -60,6 +60,8 @@ W7: tinyW7.exe tinyW7x64.exe tinyW7_3264.exe maxsec_lowaligW7.exe nosectionW7.ex
     appsectableW7.exe apphdrW7.exe foldedhdrW7.exe normal64.exe 65535sects.exe imports_apimsW7.exe \
     ibrelocW7.exe ibknoreloc64.exe imports_tinyW7.exe manyimportsW7.exe imports_relocW7.exe \
 	exceptions.exe seh_change64.exe
+
+W8: miniw8.exe reloccryptW8.exe
 
 dotnet: tinynet.exe dotnet20.exe mscoree.exe fakenet.exe
 

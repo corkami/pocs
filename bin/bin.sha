@@ -110,7 +110,7 @@ ba73e31c739e8cd238e2a35fbac61b525112a1c9 *imports_tinyW7.exe
 967fc9a98006927047fabd2c39f576dedcbb45d1 *imports_tinyXP.exe
 17cf7ce88241b06ff89a7278a0199787d9574afa *imports_virtdesc.exe
 bcb7a3e77e416d9527892a2941ce02864ff626e7 *imports_vterm.exe
-d3d000035fe2a65a66f7c22d80719aad7781a5fd *importsdotXP.exe
+e84d7fef53bd730132527dd41d8e3196d8ca9492 *importsdotXP.exe
 dc3977014027d86539bd6986b857c51da5a0ac5c *importshint.exe
 ca31e8536e2809002e22096f566a564363f6561b *ldrsnaps.exe
 bd32cf80c8d1769db135baed68fb75548076e364 *ldrsnaps64.exe
@@ -123,10 +123,11 @@ ee3ed6c48fd9302834a5cf2b624108dc06599f1b *manifest.exe
 596f786f7294d463c167a4705af3370040d812f6 *maxsec_lowaligW7.exe
 d8e4499216c621da090a133bf4b6769c240651d7 *maxsecW7.exe
 97fab3bffc7060300b0ecdac66233d31323064ee *maxsecXP.exe
-a84b322a84baffccefef67d74665495f3e9c4084 *maxvals.exe
+0a7ade50ba399e8ceee51c6743c8b8f4fa7461db *maxvals.exe
 8c4263db50a2105f4211b78c6ebb150c4f7082d0 *memshared-ld.exe
 c2d7187d57199344a45e1742152ecf9d5728ea07 *memshared.dll
 b394bd7a3915c6d131b9974c34ceae55881e1c57 *mini.exe
+f356bed325b86807cbea881b15272d25df0c8f19 *miniW8.exe
 85883720972497f1082ae166b486a28ebedd71b6 *mscoree.exe
 7e85a926af52f015c51b04a1af70601dd6db8415 *multiss.exe
 6b8244baa5444c1b513fcfbf13f3b0348c2357ea *multiss_con.exe
@@ -153,6 +154,7 @@ ea42e2179a8e43b2f450b49d1927e46dad6106d3 *pdf.exe
 89f09855527f9ce55e3906f9d5496486ad5cbf7a *quine.exe
 4e39951423d3d774210e3006e67d005787cfbabd *reloccrypt.exe
 722b2dce27eeba8061f4b4bf5adf0b9b57121997 *reloccryptXP.exe
+ada2a89baabeefe5805e1dc4e68ebf5e8800728c *reloccryptW8.exe
 a49fd5585719ca6fdf5f0510bea683b4fa8993a3 *relocsstripped64.exe
 b5006fe96361f2d0730c46db8bad2ffb60886845 *relocsstripped.exe
 0f5f36845cb537c53251ab127c2b934a7c1dbae3 *reshdr.exe

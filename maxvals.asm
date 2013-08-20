@@ -57,7 +57,7 @@ istruc IMAGE_OPTIONAL_HEADER32
             at IMAGE_OPTIONAL_HEADER32.CheckSum,                      dd -1
     at IMAGE_OPTIONAL_HEADER32.Subsystem,                 dw IMAGE_SUBSYSTEM_WINDOWS_CUI
 
-       at IMAGE_OPTIONAL_HEADER32.DllCharacteristics,        dw 0fa7fh
+       at IMAGE_OPTIONAL_HEADER32.DllCharacteristics,        dw 00ea7fh ; 0fa7fh for XP, W7, ea7fh for W8
 
         at IMAGE_OPTIONAL_HEADER32.SizeOfStackReserve,        dd 0ffffffh
         at IMAGE_OPTIONAL_HEADER32.SizeOfStackCommit,         dd 1fffh
