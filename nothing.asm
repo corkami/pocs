@@ -1,6 +1,6 @@
 ; a PE with code and no sections, no EntryPoint, no imports
 
-;Ange Albertini, BSD Licence, 2012
+;Ange Albertini, BSD Licence, 2012-2013
 
 %include 'consts.inc'
 
@@ -18,43 +18,41 @@ istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE',0,0
 iend
 istruc IMAGE_FILE_HEADER
-    at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_I386
-    at IMAGE_FILE_HEADER.NumberOfSections,      dw 0
-    at IMAGE_FILE_HEADER.Characteristics,       dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE | IMAGE_FILE_DLL
-
+    at IMAGE_FILE_HEADER.Machine,          dw IMAGE_FILE_MACHINE_I386
+    at IMAGE_FILE_HEADER.NumberOfSections, dw 0
+    at IMAGE_FILE_HEADER.Characteristics,  dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE | IMAGE_FILE_DLL
 iend
 
 istruc IMAGE_OPTIONAL_HEADER32
-        at IMAGE_OPTIONAL_HEADER32.Magic,                     dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
-        at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,       dd 0F976543h
-        at IMAGE_OPTIONAL_HEADER32.BaseOfCode, dd 0 ; must be valid for W7
-        at IMAGE_OPTIONAL_HEADER32.ImageBase,                 dd IMAGEBASE
-        at IMAGE_OPTIONAL_HEADER32.SectionAlignment,          dd 4      ; also sets e_lfanew
-        at IMAGE_OPTIONAL_HEADER32.FileAlignment,             dd 4
-        at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion,     dw 4
-        at IMAGE_OPTIONAL_HEADER32.SizeOfImage,               dd SIZEOFIMAGE
-        at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,             dd SIZEOFIMAGE - 1
-        at IMAGE_OPTIONAL_HEADER32.Subsystem,                 db IMAGE_SUBSYSTEM_WINDOWS_CUI
-
-        at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,       dd 13
+    at IMAGE_OPTIONAL_HEADER32.Magic,                 dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
+    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,   dd 0F976543h
+    at IMAGE_OPTIONAL_HEADER32.BaseOfCode,            dd 0 ; must be valid for W7
+    at IMAGE_OPTIONAL_HEADER32.ImageBase,             dd IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,      dd 4 ; also sets e_lfanew
+    at IMAGE_OPTIONAL_HEADER32.FileAlignment,         dd 4
+    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion, dw 4
+    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,           dd SIZEOFIMAGE
+    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,         dd SIZEOFIMAGE - 1
+    at IMAGE_OPTIONAL_HEADER32.Subsystem,             db IMAGE_SUBSYSTEM_WINDOWS_CUI
+    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,   dd 13
 iend
 
 istruc IMAGE_DATA_DIRECTORY_16
-        at IMAGE_DATA_DIRECTORY_16.ExportsVA,   dd Exports_Directory - IMAGEBASE
-        at IMAGE_DATA_DIRECTORY_16.ImportsVA,   dd 0
-        at IMAGE_DATA_DIRECTORY_16.TLSVA, 		dd Image_Tls_Directory32 - IMAGEBASE
+    at IMAGE_DATA_DIRECTORY_16.ExportsVA, dd Exports_Directory - IMAGEBASE
+    at IMAGE_DATA_DIRECTORY_16.ImportsVA, dd 0
+    at IMAGE_DATA_DIRECTORY_16.TLSVA,     dd Image_Tls_Directory32 - IMAGEBASE
 iend
 
 
 Image_Tls_Directory32:
-    StartAddressOfRawData dd 0
-    EndAddressOfRawData   dd 0
-    AddressOfIndex        dd StartAddressOfRawData
-    AddressOfCallBacks    dd SizeOfZeroFill
-    SizeOfZeroFill        dd TLS
-    Characteristics       dd 0
+istruc IMAGE_TLS_DIRECTORY32
+    at IMAGE_TLS_DIRECTORY32.AddressOfIndex,     dd Image_Tls_Directory32
+    at IMAGE_TLS_DIRECTORY32.AddressOfCallBacks, dd $ + 4
+                                                 dd TLS
+iend
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;*******************************************************************************
+
 __exp__Export:
 	hlt
 TLS:
@@ -68,6 +66,7 @@ _c
 Msg db " * a PE with working code yet no sections, no EntryPoint, no imports", 0ah, 0
 _d
 
+;*******************************************************************************
 ;generated with api_hash.py
 LOADLIBRARYA equ 06FFFE488h
 EXITPROCESS equ 031678333h
@@ -117,101 +116,23 @@ hKernel32 dd 0
 
 ddLoadLibrary dd 0
 
-DOS_HEADER__e_lfanew equ 03ch
+%include 'gpa.inc'
 
-NT_SIGNATURE__IMAGE_DIRECTORY_ENTRY_EXPORT__RVA equ 78h
-
-Exports__NumberOfNames      EQU 018h
-Exports__AddressOfFunctions EQU 01ch
-Exports__AddressOfNames     EQU 020h
-Exports__AddressOfNamesOrdinal EQU 024h
-
-
-GetProcAddress_Hash:
-    mov [ImageBase], eax
-    mov [checksum], ebx
-    mov ebp, [ImageBase]
-    ; ebp = PE start / ImageBase
-    mov edx, [ebp + DOS_HEADER__e_lfanew] ; e_lfanew = RVA of NT_SIGNATURE
-    add edx, [ImageBase]    ; RVA to VA
-        ; => eax = NT_SIGNATURE VA
-
-    mov edx, [edx + NT_SIGNATURE__IMAGE_DIRECTORY_ENTRY_EXPORT__RVA]  ; IMAGE_DIRECTORY_ENTRY_EXPORT (.RVA) - NT_SIGNATURE
-    add edx, [ImageBase]    ; RVA to VA
-        ; => edx = IMAGE_DIRECTORY_ENTRY_EXPORT VA
-    mov [ExportDirectory], edx
-
-    mov ecx, [edx + Exports__NumberOfNames] ; NumberOfNames
-
-    mov ebx, [edx + Exports__AddressOfNames] ; AddressOfNames
-    add ebx, [ImageBase]    ; RVA to VA
-_
-next_name:
-    test ecx, ecx
-    jz no_more_exports
-    dec ecx
-
-    mov esi, [ebx + ecx * 4]
-    add esi, [ImageBase] ; RVA to VA
-
-    mov edi, 0
-_
-checksum_loop:
-    xor eax, eax
-    lodsb
-
-    rol edi, 7
-    add edi, eax
-
-    test al, al
-    jnz checksum_loop
-
-    cmp edi, [checksum]
-    jnz next_name
-
-    mov ebx, [edx + Exports__AddressOfNamesOrdinal] ; AddressOfNamesOrdinal RVA
-    add ebx, [ImageBase]
-
-    mov cx, [ebx + ecx * 2]
-
-    mov ebx, [edx + Exports__AddressOfFunctions] ; AddressOfFunctions RVA
-    add ebx, [ImageBase]
-    mov ebx, [ebx + ecx * 4] ; Functions RVA
-    add ebx, [ImageBase]
-
-    jmp _end
-_
-no_more_exports:
-    xor ebx, ebx
-_
-_end:
-    retn
-_c
-
-checksum dd 0
-ImageBase dd 0
-char db 0
-ExportDirectory dd 0
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;*******************************************************************************
 
 Exports_Directory:
-  .Characteristics       dd 0
-  .TimeDateStamp         dd 0
-  .MajorVersion          dw 0
-  .MinorVersion          dw 0
-  .Name                  dd aDllName - IMAGEBASE
-  .Base                  dd 0
-  .NumberOfFunctions     dd NUMBER_OF_FUNCTIONS
-  .NumberOfNames         dd NUMBER_OF_NAMES
-  .AddressOfFunctions    dd address_of_functions - IMAGEBASE
-  .AddressOfNames        dd address_of_names - IMAGEBASE
-  .AddressOfNameOrdinals dd address_of_name_ordinals - IMAGEBASE
+istruc IMAGE_EXPORT_DIRECTORY
+    at IMAGE_EXPORT_DIRECTORY.nName,                 dd aDllName - IMAGEBASE
+    at IMAGE_EXPORT_DIRECTORY.NumberOfFunctions,     dd NUMBER_OF_FUNCTIONS
+    at IMAGE_EXPORT_DIRECTORY.NumberOfNames,         dd NUMBER_OF_NAMES
+    at IMAGE_EXPORT_DIRECTORY.AddressOfFunctions,    dd address_of_functions - IMAGEBASE
+    at IMAGE_EXPORT_DIRECTORY.AddressOfNames,        dd address_of_names - IMAGEBASE
+    at IMAGE_EXPORT_DIRECTORY.AddressOfNameOrdinals, dd address_of_name_ordinals - IMAGEBASE
+iend
 _d
 
 aDllName db 'nothing.dll', 0
 _d
-
 
 address_of_functions:
     dd __exp__Export - IMAGEBASE
@@ -234,6 +155,6 @@ _d
 
 EXPORT_SIZE equ $ - Exports_Directory
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;*******************************************************************************
 
 SIZEOFIMAGE equ $ - IMAGEBASE

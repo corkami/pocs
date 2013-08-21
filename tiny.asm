@@ -2,6 +2,7 @@
 
 ; similar with the w7 x64 PE, but larger sizeofimage and IAT required. XP compat also requires Debug Size and TLS VA to be null
 ; a few extra tricks required for Windows 8 compatibility
+
 ;Ange Albertini, BSD Licence, 2010-2013
 
 %include 'consts.inc'

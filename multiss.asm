@@ -1,6 +1,6 @@
 ; a multi-subsystem PE (that displays a message) no matter what its subsystem is set to.
 
-; Ange Albertini, BSD LICENCE 2011
+; Ange Albertini, BSD LICENCE 2011-2013
 
 %include 'consts.inc'
 
@@ -12,33 +12,33 @@ SECTIONALIGN equ 200h
 FILEALIGN equ SECTIONALIGN
 
 istruc IMAGE_DOS_HEADER
-    at IMAGE_DOS_HEADER.e_magic, db 'MZ'
-    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Signature - IMAGEBASE
+    at IMAGE_DOS_HEADER.e_magic,  db 'MZ'
+    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Headers - IMAGEBASE
 iend
 
-NT_Signature:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE', 0, 0
 iend
 istruc IMAGE_FILE_HEADER
-    at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_I386
-    at IMAGE_FILE_HEADER.NumberOfSections,      dw NUMBEROFSECTIONS
-    at IMAGE_FILE_HEADER.SizeOfOptionalHeader,  dw SIZEOFOPTIONALHEADER
-    at IMAGE_FILE_HEADER.Characteristics,       dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
+    at IMAGE_FILE_HEADER.Machine,              dw IMAGE_FILE_MACHINE_I386
+    at IMAGE_FILE_HEADER.NumberOfSections,     dw NUMBEROFSECTIONS
+    at IMAGE_FILE_HEADER.SizeOfOptionalHeader, dw SIZEOFOPTIONALHEADER
+    at IMAGE_FILE_HEADER.Characteristics,      dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
 iend
 
 OptionalHeader:
 istruc IMAGE_OPTIONAL_HEADER32
-    at IMAGE_OPTIONAL_HEADER32.Magic,                     dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
-    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,       dd EntryPoint - IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.ImageBase,                 dd IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,          dd SECTIONALIGN
-    at IMAGE_OPTIONAL_HEADER32.FileAlignment,             dd FILEALIGN
-    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion,     dw 4
-    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,               dd 3 * SECTIONALIGN
-    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,             dd SIZEOFHEADERS
-    at IMAGE_OPTIONAL_HEADER32.Subsystem,                 dw 0 ; to make a neutral main file
-    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,       dd 16
+    at IMAGE_OPTIONAL_HEADER32.Magic,                 dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
+    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,   dd EntryPoint - IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.ImageBase,             dd IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,      dd SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER32.FileAlignment,         dd FILEALIGN
+    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion, dw 4
+    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,           dd 3 * SECTIONALIGN ;<=
+    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,         dd SIZEOFHEADERS
+    at IMAGE_OPTIONAL_HEADER32.Subsystem,             dw 0 ; to make a neutral main file
+    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,   dd 16
 iend
 
 istruc IMAGE_DATA_DIRECTORY_16
@@ -216,15 +216,16 @@ _d
 
 ;******************************************************************************
 
+; this GPA is relocated!
+
 DOS_HEADER__e_lfanew equ 03ch
 
-NT_SIGNATURE__IMAGE_DIRECTORY_ENTRY_EXPORT__RVA equ 78h
+NT_Headers__IMAGE_DIRECTORY_ENTRY_EXPORT__RVA equ 78h
 
 Exports__NumberOfNames      EQU 018h
 Exports__AddressOfFunctions EQU 01ch
 Exports__AddressOfNames     EQU 020h
 Exports__AddressOfNamesOrdinal EQU 024h
-
 
 GetProcAddress_Hash:
 reloc21:
@@ -234,12 +235,12 @@ reloc32:
 reloc42:
     mov ebp, [ImageBase]
     ; ebp = PE start / ImageBase
-    mov edx, [ebp + DOS_HEADER__e_lfanew] ; e_lfanew = RVA of NT_SIGNATURE
+    mov edx, [ebp + DOS_HEADER__e_lfanew] ; e_lfanew = RVA of NT_Headers
 reloc52:
     add edx, [ImageBase]    ; RVA to VA
-        ; => eax = NT_SIGNATURE VA
+        ; => eax = NT_Headers VA
 
-    mov edx, [edx + NT_SIGNATURE__IMAGE_DIRECTORY_ENTRY_EXPORT__RVA]  ; IMAGE_DIRECTORY_ENTRY_EXPORT (.RVA) - NT_SIGNATURE
+    mov edx, [edx + NT_Headers__IMAGE_DIRECTORY_ENTRY_EXPORT__RVA]  ; IMAGE_DIRECTORY_ENTRY_EXPORT (.RVA) - NT_Headers
 reloc62:
     add edx, [ImageBase]    ; RVA to VA
         ; => edx = IMAGE_DIRECTORY_ENTRY_EXPORT VA

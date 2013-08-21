@@ -149,6 +149,7 @@ echo ldrsnaps.exe:& ldrsnaps.exe
 echo debug.exe:& debug.exe
 echo copyright.exe:& copyright.exe
 echo hdrdata.exe:& hdrdata.exe
+echo lowsubsys.exe:& lowsubsys.exe
 echo.
 rem echo multiss_gui.exe:& multiss_con.exe
 rem dll-webdavld.exe disabled until found a suitable host

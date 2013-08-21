@@ -6,7 +6,7 @@
 
 ; ie, file formats starting beyond offset 0 are a bad idea
 
-;Ange Albertini, BSD Licence, 2012
+;Ange Albertini, BSD Licence, 2012-2013
 
 %include 'consts.inc'
 
@@ -23,7 +23,7 @@ times 30h - 34 db 0 ; so that ZIP's LASTMOD overlaps PE's e_lfanew
 ; ZIP start ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 CRC32_ equ 0c50d7871h
-LASTMOD equ NT_Signature - IMAGEBASE
+LASTMOD equ NT_Headers - IMAGEBASE
 
 %macro __filename 0
 db 'pdf_zip_pe.pdf'
@@ -81,26 +81,26 @@ end_central_directory:
 
 ; PE resumes here ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-NT_Signature:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE',0,0
 iend
 istruc IMAGE_FILE_HEADER
-    at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_I386
-    at IMAGE_FILE_HEADER.Characteristics,       dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
+    at IMAGE_FILE_HEADER.Machine,         dw IMAGE_FILE_MACHINE_I386
+    at IMAGE_FILE_HEADER.Characteristics, dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
 iend
 
 istruc IMAGE_OPTIONAL_HEADER32
-    at IMAGE_OPTIONAL_HEADER32.Magic,                     dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
-    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,       dd EntryPoint - IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.ImageBase,                 dd IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,          dd 4      ; also sets e_lfanew
-    at IMAGE_OPTIONAL_HEADER32.FileAlignment,             dd 4
-    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion,     dw 4
-    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,               dd SIZEOFIMAGE
-    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,             dd SIZEOFIMAGE - 1 ; 2ch <= SIZEOFHEADERS < SIZEOFIMAGE
-    at IMAGE_OPTIONAL_HEADER32.Subsystem,                 db IMAGE_SUBSYSTEM_WINDOWS_CUI
-    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,       dd 16
+    at IMAGE_OPTIONAL_HEADER32.Magic,                 dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
+    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,   dd EntryPoint - IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.ImageBase,             dd IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,      dd 4      ; also sets e_lfanew
+    at IMAGE_OPTIONAL_HEADER32.FileAlignment,         dd 4
+    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion, dw 4
+    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,           dd SIZEOFIMAGE
+    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,         dd SIZEOFIMAGE - 1 ; 2ch <= SIZEOFHEADERS < SIZEOFIMAGE
+    at IMAGE_OPTIONAL_HEADER32.Subsystem,             db IMAGE_SUBSYSTEM_WINDOWS_CUI
+    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,   dd 16
 iend
 
 istruc IMAGE_DATA_DIRECTORY_16
@@ -119,13 +119,9 @@ EntryPoint:
 msg  db 'Hello World! [PE]', 0
 
 Import_Descriptor:
-;msvcrt.dll_DESCRIPTOR
-    dd msvcrt.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd msvcrt.dll - IMAGEBASE
-    dd msvcrt.dll_iat - IMAGEBASE
-;terminator
-    dd 0, 0, 0, 0, 0
+_import_descriptor msvcrt.dll
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
 
 hnprintf:
     dw 0

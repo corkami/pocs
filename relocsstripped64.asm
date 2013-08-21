@@ -12,19 +12,19 @@ SECTIONALIGN equ 1000h
 FILEALIGN equ 200h
 
 istruc IMAGE_DOS_HEADER
-    at IMAGE_DOS_HEADER.e_magic, db 'MZ'
-    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Signature - IMAGEBASE
+    at IMAGE_DOS_HEADER.e_magic,  db 'MZ'
+    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Headers - IMAGEBASE
 iend
 
-NT_Signature:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE', 0, 0
 iend
 istruc IMAGE_FILE_HEADER
-    at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_AMD64
-    at IMAGE_FILE_HEADER.NumberOfSections,      dw NUMBEROFSECTIONS
-    at IMAGE_FILE_HEADER.SizeOfOptionalHeader,  dw SIZEOFOPTIONALHEADER
-    at IMAGE_FILE_HEADER.Characteristics,       dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE | IMAGE_FILE_RELOCS_STRIPPED
+    at IMAGE_FILE_HEADER.Machine,              dw IMAGE_FILE_MACHINE_AMD64
+    at IMAGE_FILE_HEADER.NumberOfSections,     dw NUMBEROFSECTIONS
+    at IMAGE_FILE_HEADER.SizeOfOptionalHeader, dw SIZEOFOPTIONALHEADER
+    at IMAGE_FILE_HEADER.Characteristics,      dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE | IMAGE_FILE_RELOCS_STRIPPED ;<=
 iend
 
 OptionalHeader:
@@ -41,27 +41,15 @@ istruc IMAGE_OPTIONAL_HEADER64
     at IMAGE_OPTIONAL_HEADER64.NumberOfRvaAndSizes,   dd 16
 iend
 
-DataDirectory:
 istruc IMAGE_DATA_DIRECTORY_16
     at IMAGE_DATA_DIRECTORY_16.ImportsVA,  dd Import_Descriptor - IMAGEBASE
     at IMAGE_DATA_DIRECTORY_16.FixupsVA,   dd Directory_Entry_Basereloc - IMAGEBASE
     at IMAGE_DATA_DIRECTORY_16.FixupsSize, dd DIRECTORY_ENTRY_BASERELOC_SIZE
 iend
 
-SIZEOFOPTIONALHEADER equ $ - OptionalHeader
-SectionHeader:
-istruc IMAGE_SECTION_HEADER
-    at IMAGE_SECTION_HEADER.VirtualSize,      dd 1 * SECTIONALIGN
-    at IMAGE_SECTION_HEADER.VirtualAddress,   dd 1 * SECTIONALIGN
-    at IMAGE_SECTION_HEADER.SizeOfRawData,    dd 1 * FILEALIGN
-    at IMAGE_SECTION_HEADER.PointerToRawData, dd 1 * FILEALIGN
-    at IMAGE_SECTION_HEADER.Characteristics,  dd IMAGE_SCN_MEM_EXECUTE | IMAGE_SCN_MEM_WRITE
-iend
-NUMBEROFSECTIONS equ ($ - SectionHeader) / IMAGE_SECTION_HEADER_size
+%include 'section_1fa.inc'
 
-SIZEOFHEADERS equ $ - IMAGEBASE
-Section0Start:
-section progbits vstart=IMAGEBASE + SECTIONALIGN align=FILEALIGN
+;*******************************************************************************
 
 EntryPoint:
 relocbase:
@@ -89,7 +77,7 @@ Msg db " * a PE32+ using relocations, even if RELOCS_STRIPPED is set (Delta: 0%0
 
 _d
 
-Import_Descriptor:
+Import_Descriptor: ;************************************************************
 _import_descriptor kernel32
 _import_descriptor msvcrt
 istruc IMAGE_IMPORT_DESCRIPTOR
@@ -115,19 +103,16 @@ kernel32 db 'kernel32.dll', 0
 msvcrt db 'msvcrt.dll', 0
 _d
 
-Directory_Entry_Basereloc:
+Directory_Entry_Basereloc: ;****************************************************
 block_start0:
     .VirtualAddress dd relocbase - IMAGEBASE
     .SizeOfBlock dd BASE_RELOC_SIZE_OF_BLOCK0
-     dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc03 + 3 - relocbase)
-     dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc13 + 3 - relocbase)
-     dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc23 + 3 - relocbase)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc03 + 3 - relocbase)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc13 + 3 - relocbase)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc23 + 3 - relocbase)
 BASE_RELOC_SIZE_OF_BLOCK0 equ $ - block_start0
 
 DIRECTORY_ENTRY_BASERELOC_SIZE  equ $ - Directory_Entry_Basereloc
 
 align FILEALIGN, db 0
 
-Section0Size EQU $ - Section0Start
-
-SIZEOFIMAGE EQU $ - IMAGEBASE

@@ -1,21 +1,11 @@
 ; PE with decryption via relocations
 ; relocations itself are fixed by relocations
+; a fake block uses do-nothing relocations on code
+; another fake block does all kinds of relocations on a dummy entry
+
 ; some relocations are not using the common HIGHLOW, such as MIPS_JMPADDR
 
-; Ange Albertini, BSD LICENCE 2009-2011
-
-;IMAGE_REL_BASED_ABSOLUTE equ 0
-IMAGE_REL_BASED_HIGH equ 1
-IMAGE_REL_BASED_LOW equ 2
-;IMAGE_REL_BASED_HIGHLOW equ 3
-IMAGE_REL_BASED_HIGHADJ equ 4
-IMAGE_REL_BASED_MIPS_JMPADDR equ 5
-IMAGE_REL_BASED_SECTION equ 6
-IMAGE_REL_BASED_REL32 equ 7
-IMAGE_REL_BASED_MIPS_JMPADDR16 equ 9
-IMAGE_REL_BASED_IA64_IMM64 equ 9
-IMAGE_REL_BASED_DIR64 equ 10
-IMAGE_REL_BASED_HIGH3ADJ equ 11
+; Ange Albertini, BSD LICENCE 2009-2013
 
 %include 'consts.inc'
 %define iround(n, r) (((n + (r - 1)) / r) * r)
@@ -28,11 +18,11 @@ SECTIONALIGN equ 1000h
 FILEALIGN equ 200h
 
 istruc IMAGE_DOS_HEADER
-    at IMAGE_DOS_HEADER.e_magic, db 'MZ'
-    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Signature - IMAGEBASE
+    at IMAGE_DOS_HEADER.e_magic,  db 'MZ'
+    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Headers - IMAGEBASE
 iend
 
-NT_Signature:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE', 0, 0
 iend
@@ -45,21 +35,20 @@ iend
 
 OptionalHeader:
 istruc IMAGE_OPTIONAL_HEADER32
-    at IMAGE_OPTIONAL_HEADER32.Magic,                     dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
-    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,       dd VDELTA + EntryPoint - IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.ImageBase,                 dd IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,          dd SECTIONALIGN
-    at IMAGE_OPTIONAL_HEADER32.FileAlignment,             dd FILEALIGN
-    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion,     dw 4
-    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,               dd VDELTA + SIZEOFIMAGE
-    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,             dd SIZEOFHEADERS
-    at IMAGE_OPTIONAL_HEADER32.Subsystem,                 dw IMAGE_SUBSYSTEM_WINDOWS_CUI
-    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,       dd 16
+    at IMAGE_OPTIONAL_HEADER32.Magic,                 dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
+    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,   dd VDELTA + EntryPoint - IMAGEBASE ;<===
+    at IMAGE_OPTIONAL_HEADER32.ImageBase,             dd IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,      dd SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER32.FileAlignment,         dd FILEALIGN
+    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion, dw 4
+    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,           dd VDELTA + SIZEOFIMAGE
+    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,         dd SIZEOFHEADERS
+    at IMAGE_OPTIONAL_HEADER32.Subsystem,             dw IMAGE_SUBSYSTEM_WINDOWS_CUI
+    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,   dd 16
 iend
 
-DataDirectory:
 istruc IMAGE_DATA_DIRECTORY_16
-    at IMAGE_DATA_DIRECTORY_16.ImportsVA,   dd VDELTA + Import_Descriptor - IMAGEBASE
+    at IMAGE_DATA_DIRECTORY_16.ImportsVA,  dd VDELTA + Import_Descriptor - IMAGEBASE
     at IMAGE_DATA_DIRECTORY_16.FixupsVA,   dd VDELTA + Directory_Entry_Basereloc - IMAGEBASE
     at IMAGE_DATA_DIRECTORY_16.FixupsSize, dd DIRECTORY_ENTRY_BASERELOC_SIZE
 iend
@@ -109,18 +98,18 @@ msg db " * decryption via relocations", 0ah, 0
 _d
 
 Import_Descriptor:
-;kernel32.dll_DESCRIPTOR:
-    dd VDELTA + kernel32.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd VDELTA + kernel32.dll - IMAGEBASE
-    dd VDELTA + kernel32.dll_iat - IMAGEBASE
-;msvcrt.dll_DESCRIPTOR:
-    dd VDELTA + msvcrt.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd VDELTA + msvcrt.dll - IMAGEBASE
-    dd VDELTA + msvcrt.dll_iat - IMAGEBASE
-;terminator
-    dd 0, 0, 0, 0, 0
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk, dd VDELTA + kernel32.dll_hintnames - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1             , dd VDELTA + kernel32.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk        , dd VDELTA + kernel32.dll_iat - IMAGEBASE
+iend                                             
+istruc IMAGE_IMPORT_DESCRIPTOR                   
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk, dd VDELTA + msvcrt.dll_hintnames - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1             , dd VDELTA + msvcrt.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk        , dd VDELTA + msvcrt.dll_iat - IMAGEBASE
+iend
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
 _d
 
 kernel32.dll_hintnames:
@@ -173,7 +162,7 @@ block_start_dummy: ; does something on a dummy entry
     dw IMAGE_REL_BASED_HIGH         << 12
     dw IMAGE_REL_BASED_LOW          << 12
     dw IMAGE_REL_BASED_HIGHLOW      << 12
-    dw IMAGE_REL_BASED_HIGHADJ      << 12, 8 << 12
+    dw IMAGE_REL_BASED_HIGHADJ      << 12, 8 << 12 ; outputting a fake type 8 for bad parsers
     dw IMAGE_REL_BASED_MIPS_JMPADDR << 12
     dw IMAGE_REL_BASED_SECTION      << 12
     dw IMAGE_REL_BASED_REL32        << 12

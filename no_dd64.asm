@@ -12,54 +12,49 @@ SECTIONALIGN equ 1000h
 FILEALIGN equ 200h
 
 istruc IMAGE_DOS_HEADER
-    at IMAGE_DOS_HEADER.e_magic, db 'MZ'
-    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Signature - IMAGEBASE
+    at IMAGE_DOS_HEADER.e_magic,  db 'MZ'
+    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Headers - IMAGEBASE
 iend
 
-NT_Signature:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE', 0, 0
 iend
 istruc IMAGE_FILE_HEADER
-    at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_AMD64
-    at IMAGE_FILE_HEADER.NumberOfSections,      dw NUMBEROFSECTIONS
-    at IMAGE_FILE_HEADER.SizeOfOptionalHeader,  dw SIZEOFOPTIONALHEADER
-    at IMAGE_FILE_HEADER.Characteristics,       dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
+    at IMAGE_FILE_HEADER.Machine,              dw IMAGE_FILE_MACHINE_AMD64
+    at IMAGE_FILE_HEADER.NumberOfSections,     dw NUMBEROFSECTIONS
+    at IMAGE_FILE_HEADER.SizeOfOptionalHeader, dw SIZEOFOPTIONALHEADER
+    at IMAGE_FILE_HEADER.Characteristics,      dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
 iend
 
 OptionalHeader:
 istruc IMAGE_OPTIONAL_HEADER64
-    at IMAGE_OPTIONAL_HEADER64.Magic,                     dw IMAGE_NT_OPTIONAL_HDR64_MAGIC
-    at IMAGE_OPTIONAL_HEADER64.AddressOfEntryPoint,       dd EntryPoint - IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER64.ImageBase,                 dq IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER64.SectionAlignment,          dd SECTIONALIGN
-    at IMAGE_OPTIONAL_HEADER64.FileAlignment,             dd FILEALIGN
-    at IMAGE_OPTIONAL_HEADER64.MajorSubsystemVersion,     dw 4
-    at IMAGE_OPTIONAL_HEADER64.SizeOfImage,               dd 2 * SECTIONALIGN
-    at IMAGE_OPTIONAL_HEADER64.SizeOfHeaders,             dd SIZEOFHEADERS
-    at IMAGE_OPTIONAL_HEADER64.Subsystem,                 dw IMAGE_SUBSYSTEM_WINDOWS_CUI
-    at IMAGE_OPTIONAL_HEADER64.NumberOfRvaAndSizes,       dd 0
+    at IMAGE_OPTIONAL_HEADER64.Magic,                 dw IMAGE_NT_OPTIONAL_HDR64_MAGIC
+    at IMAGE_OPTIONAL_HEADER64.AddressOfEntryPoint,   dd EntryPoint - IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER64.ImageBase,             dq IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER64.SectionAlignment,      dd SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER64.FileAlignment,         dd FILEALIGN
+    at IMAGE_OPTIONAL_HEADER64.MajorSubsystemVersion, dw 4
+    at IMAGE_OPTIONAL_HEADER64.SizeOfImage,           dd 2 * SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER64.SizeOfHeaders,         dd SIZEOFHEADERS
+    at IMAGE_OPTIONAL_HEADER64.Subsystem,             dw IMAGE_SUBSYSTEM_WINDOWS_CUI
+    at IMAGE_OPTIONAL_HEADER64.NumberOfRvaAndSizes,   dd 0 ; <===
 iend
 
 istruc IMAGE_DATA_DIRECTORY_16
 iend
 
-SIZEOFOPTIONALHEADER equ $ - OptionalHeader
-SectionHeader:
-istruc IMAGE_SECTION_HEADER
-    at IMAGE_SECTION_HEADER.VirtualSize,      dd 1 * SECTIONALIGN
-    at IMAGE_SECTION_HEADER.VirtualAddress,   dd 1 * SECTIONALIGN
-    at IMAGE_SECTION_HEADER.SizeOfRawData,    dd 1 * FILEALIGN
-    at IMAGE_SECTION_HEADER.PointerToRawData, dd 1 * FILEALIGN
-    at IMAGE_SECTION_HEADER.Characteristics,  dd IMAGE_SCN_MEM_EXECUTE | IMAGE_SCN_MEM_WRITE
-iend
-NUMBEROFSECTIONS equ ($ - SectionHeader) / IMAGE_SECTION_HEADER_size
-SIZEOFHEADERS equ $ - IMAGEBASE
-
-section progbits vstart=IMAGEBASE + SECTIONALIGN align=FILEALIGN
+%include 'section_1fa.inc'
 
 EntryPoint:
 ; adapted from http://blog.harmonysecurity.com/2009/08/calling-api-functions.html
+
+_TEB__ProcessEnvironmentBlock equ 60h
+_PEB__Ldr equ 18h
+_PEB_LDR_DATA__InMemoryOrderModuleList equ 20h
+_LDR_DATA_TABLE_ENTRY__DllBase equ 30h
+_LDR_DATA_TABLE_ENTRY__BaseDllName equ 58h
+_UNICODE_STRING__Buffer equ 8
 
     cld                        ; clear the direction flag
     and rsp, 0fffffff0h        ; Ensure RSP is 16 byte aligned
@@ -74,13 +69,14 @@ api_call:
     push rcx                   ; Save the 1st parameter
     push rsi                   ; Save RSI
     xor rdx, rdx               ; Zero rdx
-    mov rdx, [gs:rdx + 96]     ; Get a pointer to the PEB
-    mov rdx, [rdx + 24]        ; Get PEB->Ldr
-    mov rdx, [rdx + 32]        ; Get the first module from the InMemoryOrder module list
+    ; gs:0 = TEB
+    mov rdx, [gs:rdx + _TEB__ProcessEnvironmentBlock]     ; Get a pointer to the PEB
+    mov rdx, [rdx + _PEB__Ldr]        ; Get PEB->Ldr
+    mov rdx, [rdx + _PEB_LDR_DATA__InMemoryOrderModuleList]        ; Get the first module from the InMemoryOrder module list
 _
 next_mod:
-    mov rsi, [rdx + 80]        ; Get pointer to modules name (unicode string)
-    movzx rcx, word [rdx + 74] ; Set rcx to the length we want to check
+    mov rsi, [rdx + _LDR_DATA_TABLE_ENTRY__BaseDllName + _UNICODE_STRING__Buffer - 10h ]        ; Get pointer to modules name (unicode string)
+    movzx rcx, word [rdx + _LDR_DATA_TABLE_ENTRY__BaseDllName + 2 - 10h] ; Set rcx to the length we want to check
     xor r9, r9                 ; Clear r9 which will store the hash of the module name
 
 loop_modname:
@@ -89,7 +85,7 @@ loop_modname:
     cmp al, 'a'                ; Some versions of Windows use lower case module names
     jl not_lowercase
 _
-    sub al, 0x20               ; If so normalise to uppercase
+    sub al, 020h               ; If so normalise to uppercase
 
 not_lowercase:
     ror r9d, 13                ; Rotate right our hash value
@@ -99,17 +95,19 @@ not_lowercase:
     push rdx                   ; Save the current position in the module list for later
     push r9                    ; Save the current module hash for later
     ; Proceed to itterate the export address table,
-    mov rdx, [rdx + 32]        ; Get this modules base address
-    mov eax, dword [rdx + 60]  ; Get PE header
+    mov rdx, [rdx + _LDR_DATA_TABLE_ENTRY__DllBase - 10h]        ; Get this modules base address
+    mov eax, dword [rdx + IMAGE_DOS_HEADER.e_lfanew]  ; Get PE header
     add rax, rdx               ; Add the modules base address
-    mov eax, dword [rax + 136] ; Get export tables RVA
+    mov eax, dword [rax + \
+        IMAGE_NT_HEADERS_size + IMAGE_FILE_HEADER_size + \
+        IMAGE_OPTIONAL_HEADER64_size] ; Get export tables RVA
     test rax, rax              ; Test if no export address table is present
     jz get_next_mod1           ; If no EAT present, process the next module
 _
     add rax, rdx               ; Add the modules base address
     push rax                   ; Save the current modules EAT
-    mov ecx, dword [rax + 24]  ; Get the number of function names
-    mov r8d, dword [rax + 32]  ; Get the rva of the function names
+    mov ecx, dword [rax + IMAGE_EXPORT_DIRECTORY.NumberOfNames]  ; Get the number of function names
+    mov r8d, dword [rax + IMAGE_EXPORT_DIRECTORY.AddressOfNames]  ; Get the rva of the function names
     add r8, rdx                ; Add the modules base address
 
   ; Computing the module hash + function hash
@@ -134,10 +132,12 @@ loop_funcname:
 
     ; If found, fix up stack, call the function and then value else compute the next one...
     pop rax                       ; Restore the current modules EAT
-    mov r8d, dword [rax + 36]     ; Get the ordinal table rva
+                                  ; Get the ordinal table rva
+    mov r8d, dword [rax + IMAGE_EXPORT_DIRECTORY.AddressOfNameOrdinals]     
     add r8, rdx                   ; Add the modules base address
     mov cx, [r8 + 2 * rcx]        ; Get the desired functions ordinal
-    mov r8d, dword [rax + 28]     ; Get the function addresses table rva
+                                  ; Get the function addresses table rva
+    mov r8d, dword [rax + IMAGE_EXPORT_DIRECTORY.AddressOfFunctions]     
     add r8, rdx                   ; Add the modules base address
     mov eax, dword [r8 + 4 * rcx] ; Get the desired functions RVA
     add rax, rdx                  ; Add the modules base address to get the functions actual VA
@@ -152,7 +152,7 @@ finish:
     pop r8                        ; Restore the 3rd parameter
     pop r9                        ; Restore the 4th parameter
     pop r10                       ; pop off the return address
-    sub rsp, 32                   ; reserve space for the four register params (4 * sizeof(QWORD) = 32)
+    sub rsp, 4 * 8                ; reserve space for the four register params (4 * sizeof(QWORD) = 32)
     
    ; It is the callers responsibility to restore RSP if need be (or alloc more space or align RSP).
     push r10                      ; push back the return address

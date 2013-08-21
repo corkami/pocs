@@ -1,6 +1,6 @@
 ; tiny.asm renamed as shellcode target
 
-;Ange Albertini, BSD Licence, 2012
+;Ange Albertini, BSD Licence, 2012-2013
 
 %include 'consts.inc'
 
@@ -25,20 +25,20 @@ msvcrt.dll  db 'msvcrt.dll', 0 ; keeping the extension in case it'd work under W
 iend
 
 istruc IMAGE_OPTIONAL_HEADER32
-        at IMAGE_OPTIONAL_HEADER32.Magic,                     dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
+        at IMAGE_OPTIONAL_HEADER32.Magic,                 dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
 bits 32
 EntryPoint:
     push message
     call [__imp__printf]
     jmp _2
-        at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,       dd EntryPoint - IMAGEBASE
-        at IMAGE_OPTIONAL_HEADER32.BaseOfCode, dd 0 ; must be valid for W7
+        at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,   dd EntryPoint - IMAGEBASE
+        at IMAGE_OPTIONAL_HEADER32.BaseOfCode,            dd 0 ; must be valid for W7
 _2:
     add esp, 1 * 4
     retn
-        at IMAGE_OPTIONAL_HEADER32.ImageBase,                 dd IMAGEBASE
-        at IMAGE_OPTIONAL_HEADER32.SectionAlignment,          dd 4      ; also sets e_lfanew
-        at IMAGE_OPTIONAL_HEADER32.FileAlignment,             dd 4
+        at IMAGE_OPTIONAL_HEADER32.ImageBase,             dd IMAGEBASE
+        at IMAGE_OPTIONAL_HEADER32.SectionAlignment,      dd 4      ; also sets e_lfanew
+        at IMAGE_OPTIONAL_HEADER32.FileAlignment,         dd 4
 
 ImportsAddressTable:
 msvcrt.dll_iat:
@@ -47,32 +47,33 @@ __imp__printf:
     dd 0
 IMPORTSADDRESSTABLESIZE equ $ - ImportsAddressTable
 
-        at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion,     dw 4
-        at IMAGE_OPTIONAL_HEADER32.SizeOfImage,               dd SIZEOFIMAGE
-        at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,             dd SIZEOFIMAGE - 1
-        at IMAGE_OPTIONAL_HEADER32.Subsystem,                 db IMAGE_SUBSYSTEM_WINDOWS_CUI
+        at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion, dw 4
+        at IMAGE_OPTIONAL_HEADER32.SizeOfImage,           dd SIZEOFIMAGE
+        at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,         dd SIZEOFIMAGE - 1
+        at IMAGE_OPTIONAL_HEADER32.Subsystem,             db IMAGE_SUBSYSTEM_WINDOWS_CUI
 hnprintf:
     dw 0
     db 'printf', 0
 
-        at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,       dd 13
+        at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,   dd 13
 iend
 
 istruc IMAGE_DATA_DIRECTORY_13
 
-        at IMAGE_DATA_DIRECTORY_13.ImportsVA,   dd Import_Descriptor - IMAGEBASE
+        at IMAGE_DATA_DIRECTORY_13.ImportsVA, dd Import_Descriptor - IMAGEBASE
 
 Import_Descriptor:
-;msvcrt.dll_DESCRIPTOR
-    dd msvcrt.dll_iat - IMAGEBASE
-    dd 0, 0
-    dd msvcrt.dll - IMAGEBASE
-    dd msvcrt.dll_iat - IMAGEBASE
-;terminator
-    dd 0, 0, 0, 0
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk, dd msvcrt.dll_iat - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1,              dd msvcrt.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk,         dd msvcrt.dll_iat - IMAGEBASE
+iend
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
+
         at IMAGE_DATA_DIRECTORY_13.DebugSize, dd 0 ; required for safety under XP
 
-        at IMAGE_DATA_DIRECTORY_13.TLSVA, dd 0 ; required for safety under XP
+        at IMAGE_DATA_DIRECTORY_13.TLSVA,     dd 0 ; required for safety under XP
 
         at IMAGE_DATA_DIRECTORY_13.IATVA,     dd ImportsAddressTable - IMAGEBASE ; required under XP
         at IMAGE_DATA_DIRECTORY_13.IATSize,   dd IMPORTSADDRESSTABLESIZE    ; required under XP

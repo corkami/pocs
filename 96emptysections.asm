@@ -1,6 +1,6 @@
 ; PE with 96 sections (95 empty sections)
 
-; Ange Albertini, BSD LICENCE 2009-2011
+; Ange Albertini, BSD LICENCE 2009-2013
 
 %include 'consts.inc'
 %define iround(n, r) (((n + (r - 1)) / r) * r)
@@ -17,38 +17,37 @@ SECTIONALIGN equ 1000h
 FILEALIGN equ 200h
 
 istruc IMAGE_DOS_HEADER
-    at IMAGE_DOS_HEADER.e_magic, db 'MZ'
-    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Signature - IMAGEBASE
+    at IMAGE_DOS_HEADER.e_magic,  db 'MZ'
+    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Headers - IMAGEBASE
 iend
 
-NT_Signature:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE', 0, 0
 iend
 istruc IMAGE_FILE_HEADER
-    at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_I386
-    at IMAGE_FILE_HEADER.NumberOfSections,      dw NUMBEROFSECTIONS
-    at IMAGE_FILE_HEADER.SizeOfOptionalHeader,  dw SIZEOFOPTIONALHEADER
-    at IMAGE_FILE_HEADER.Characteristics,       dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
+    at IMAGE_FILE_HEADER.Machine,              dw IMAGE_FILE_MACHINE_I386
+    at IMAGE_FILE_HEADER.NumberOfSections,     dw NUMBEROFSECTIONS
+    at IMAGE_FILE_HEADER.SizeOfOptionalHeader, dw SIZEOFOPTIONALHEADER
+    at IMAGE_FILE_HEADER.Characteristics,      dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
 iend
 
 OptionalHeader:
 istruc IMAGE_OPTIONAL_HEADER32
-    at IMAGE_OPTIONAL_HEADER32.Magic,                     dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
-    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,       dd VDELTA + EntryPoint - IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.ImageBase,                 dd IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,          dd SECTIONALIGN
-    at IMAGE_OPTIONAL_HEADER32.FileAlignment,             dd FILEALIGN
-    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion,     dw 4
-    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,               dd VDELTA + SIZEOFIMAGE
-    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,             dd SIZEOFHEADERS
-    at IMAGE_OPTIONAL_HEADER32.Subsystem,                 dw IMAGE_SUBSYSTEM_WINDOWS_CUI
-    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,       dd 16
+    at IMAGE_OPTIONAL_HEADER32.Magic,                 dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
+    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,   dd VDELTA + EntryPoint - IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.ImageBase,             dd IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,      dd SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER32.FileAlignment,         dd FILEALIGN
+    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion, dw 4
+    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,           dd VDELTA + SIZEOFIMAGE
+    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,         dd SIZEOFHEADERS
+    at IMAGE_OPTIONAL_HEADER32.Subsystem,             dw IMAGE_SUBSYSTEM_WINDOWS_CUI
+    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,   dd 16
 iend
 
-DataDirectory:
 istruc IMAGE_DATA_DIRECTORY_16
-    at IMAGE_DATA_DIRECTORY_16.ImportsVA,   dd VDELTA + Import_Descriptor - IMAGEBASE
+    at IMAGE_DATA_DIRECTORY_16.ImportsVA, dd VDELTA + Import_Descriptor - IMAGEBASE
 iend
 
 SIZEOFOPTIONALHEADER equ $ - OptionalHeader
@@ -64,8 +63,8 @@ iend
 %assign i 1
 %rep    EXTRA
 istruc IMAGE_SECTION_HEADER
-    at IMAGE_SECTION_HEADER.VirtualSize,      dd Section0Size
-    at IMAGE_SECTION_HEADER.VirtualAddress,   dd VDELTA + Section0Start - IMAGEBASE + i * SECTIONALIGN
+    at IMAGE_SECTION_HEADER.VirtualSize,    dd Section0Size
+    at IMAGE_SECTION_HEADER.VirtualAddress, dd VDELTA + Section0Start - IMAGEBASE + i * SECTIONALIGN
 iend
 %assign i i+1
 %endrep
@@ -95,19 +94,19 @@ _c
 message db " * 96 sections (95 are empty)", 0ah, 0
 _d
 
-Import_Descriptor:
-;kernel32.dll_DESCRIPTOR:
-    dd VDELTA + kernel32.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd VDELTA + kernel32.dll - IMAGEBASE
-    dd VDELTA + kernel32.dll_iat - IMAGEBASE
-;msvcrt.dll_DESCRIPTOR:
-    dd VDELTA + msvcrt.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd VDELTA + msvcrt.dll - IMAGEBASE
-    dd VDELTA + msvcrt.dll_iat - IMAGEBASE
-;terminator
-    dd 0, 0, 0, 0, 0
+Import_Descriptor: ;************************************************************
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk, dd VDELTA + kernel32.dll_hintnames - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1             , dd VDELTA + kernel32.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk        , dd VDELTA + kernel32.dll_iat - IMAGEBASE
+iend
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk, dd VDELTA + msvcrt.dll_hintnames - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1             , dd VDELTA + msvcrt.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk        , dd VDELTA + msvcrt.dll_iat - IMAGEBASE
+iend
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
 _d
 
 kernel32.dll_hintnames:

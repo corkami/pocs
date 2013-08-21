@@ -13,9 +13,9 @@ FILEALIGN equ 200h
 
 istruc IMAGE_DOS_HEADER
     at IMAGE_DOS_HEADER.e_magic,  db 'MZ'
-    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Signature - IMAGEBASE
+    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Headers - IMAGEBASE
 iend
-NT_Signature:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE', 0, 0
 iend

@@ -62,7 +62,7 @@ imports_noext.exe:
 imports_mixed.exe:
  * mixed-case imported dlls
 imports_nothunk.exe:
- * imports with missing thunks
+ * imports with a bogus DLL descriptor with no thunk
 importshint.exe:
  * correct import called via hinting
 impbyord.exe:
@@ -134,7 +134,7 @@ dllbound-redirld.exe:
 
 tiny PE
 tiny.exe:
- * 268b universal tiny PE (XP-W7x64)
+ * 268b universal tiny PE
 
 ImageBase:
 ibkernel.exe:
@@ -150,7 +150,7 @@ fakerelocs.exe:
 
 EntryPoint:
 nullEP.exe:
- * null EntryPoint
+ * a PE with a null EntryPoint
 virtEP.exe:
  * virtual EntryPoint
 dllextep-ld.exe:
@@ -206,11 +206,9 @@ reshdr.exe:
 resourceloop.exe:
  * recursive resources directory
 resource_string.exe:
- * a PE with RT_STRING resource loaded
-
+ * a PE with RT_STRING resource loaded
 resource_icon.exe:
  * a PE with RT_ICON and RT_GROUP_ICON
-
 
 delay imports:
 delayimports.exe:
@@ -225,12 +223,10 @@ fakeregs.exe:
  * corrupted registers on TLS and Exit return
 data PEs:
 d_tiny-ld.exe:
- * tiny data PE (61 bytes)
-
+ * tiny data PE (61 bytes)
 d_nonnull-ld.exe:
 d_resource-ld.exe:
- * executed by shellcode call
-
+ * executed by shellcode call
  * resource-only data PE
 maxvals.exe:
  * a PE with a maximal values in the headers
@@ -240,6 +236,7 @@ manifest.exe:
  * a PE with a minimal MANIFEST resource (CreateActCtx successfull)
 manifest_broken.exe:
  * a PE with an incorrect manifest type (ignored)
+
 misc:
 no_dd.exe:
  * a PE with no DataDirectory (loading imports manually)
@@ -280,4 +277,6 @@ copyright.exe:
  * a PE with an Architecture DataDirectory entry used for Copyright/Description
 hdrdata.exe:
  * a PE with data between header and first section
+lowsubsys.exe:
+ * a PE with a Subsystem version of 3.10
 

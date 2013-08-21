@@ -1,6 +1,6 @@
 ; a PE with a maximal values in the headers
 
-; Ange Albertini, BSD LICENCE 2012
+; Ange Albertini, BSD LICENCE 2012-2013
 
 %include 'consts.inc'
 
@@ -14,19 +14,19 @@ FILEALIGN equ 200h
 istruc IMAGE_DOS_HEADER
     at IMAGE_DOS_HEADER.e_magic, db 'MZ'
   times 3Ah db -1
-    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Signature - IMAGEBASE
+    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Headers - IMAGEBASE
 iend
 
-NT_Signature:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE', 0, 0
 iend
 istruc IMAGE_FILE_HEADER
     at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_I386
     at IMAGE_FILE_HEADER.NumberOfSections,      dw NUMBEROFSECTIONS
-                at IMAGE_FILE_HEADER.TimeDateStamp        , dd -1
-                at IMAGE_FILE_HEADER.PointerToSymbolTable , dd -1
-                at IMAGE_FILE_HEADER.NumberOfSymbols      , dd -1
+                at IMAGE_FILE_HEADER.TimeDateStamp,         dd -1
+                at IMAGE_FILE_HEADER.PointerToSymbolTable,  dd -1
+                at IMAGE_FILE_HEADER.NumberOfSymbols,       dd -1
     at IMAGE_FILE_HEADER.SizeOfOptionalHeader,  dw SIZEOFOPTIONALHEADER
     at IMAGE_FILE_HEADER.Characteristics,       dw 0DFFFh
 iend
@@ -57,14 +57,14 @@ istruc IMAGE_OPTIONAL_HEADER32
             at IMAGE_OPTIONAL_HEADER32.CheckSum,                      dd -1
     at IMAGE_OPTIONAL_HEADER32.Subsystem,                 dw IMAGE_SUBSYSTEM_WINDOWS_CUI
 
-       at IMAGE_OPTIONAL_HEADER32.DllCharacteristics,        dw 00ea7fh ; 0fa7fh for XP, W7, ea7fh for W8
+       at IMAGE_OPTIONAL_HEADER32.DllCharacteristics,     dw 00ea7fh ; 0fa7fh for XP, W7, ea7fh for W8 (AppContainer)
 
-        at IMAGE_OPTIONAL_HEADER32.SizeOfStackReserve,        dd 0ffffffh
-        at IMAGE_OPTIONAL_HEADER32.SizeOfStackCommit,         dd 1fffh
-        at IMAGE_OPTIONAL_HEADER32.SizeOfHeapReserve,         dd 0ffffffh
-        at IMAGE_OPTIONAL_HEADER32.SizeOfHeapCommit,          dd 1fffh
-            at IMAGE_OPTIONAL_HEADER32.LoaderFlags,               dd -1
-            at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,       dd -1
+        at IMAGE_OPTIONAL_HEADER32.SizeOfStackReserve,    dd 0ffffffh
+        at IMAGE_OPTIONAL_HEADER32.SizeOfStackCommit,     dd 1fffh
+        at IMAGE_OPTIONAL_HEADER32.SizeOfHeapReserve,     dd 0ffffffh
+        at IMAGE_OPTIONAL_HEADER32.SizeOfHeapCommit,      dd 1fffh
+            at IMAGE_OPTIONAL_HEADER32.LoaderFlags,                   dd -1
+            at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,           dd -1
 iend
 
 istruc IMAGE_DATA_DIRECTORY_16
@@ -120,18 +120,10 @@ Msg db " * a PE with a maximal values in the headers", 0ah, 0
 _d
 
 Import_Descriptor:
-;kernel32.dll_DESCRIPTOR:
-    dd kernel32.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd kernel32.dll - IMAGEBASE
-    dd kernel32.dll_iat - IMAGEBASE
-;msvcrt.dll_DESCRIPTOR:
-    dd msvcrt.dll_hintnames - IMAGEBASE
-    dd 0, 0
-    dd msvcrt.dll - IMAGEBASE
-    dd msvcrt.dll_iat - IMAGEBASE
-;terminator
-    dd 0, 0, 0, 0, 0
+_import_descriptor kernel32.dll
+_import_descriptor msvcrt.dll
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
 _d
 
 kernel32.dll_hintnames:

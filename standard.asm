@@ -20,7 +20,7 @@ istruc IMAGE_DOS_HEADER
     at IMAGE_DOS_HEADER.e_maxalloc, dw 0ffffh
     at IMAGE_DOS_HEADER.e_sp,       dw 0b8h
     at IMAGE_DOS_HEADER.e_lfarlc,   dw 040h
-    at IMAGE_DOS_HEADER.e_lfanew,   dd NT_Signature - IMAGEBASE
+    at IMAGE_DOS_HEADER.e_lfanew,   dd NT_Headers - IMAGEBASE
 iend
 
 ;*****************************
@@ -50,7 +50,7 @@ align 16, db 0
 
 ;*****************************
 
-NT_Signature:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE', 0, 0
 iend
@@ -63,18 +63,18 @@ iend
 
 OptionalHeader:
 istruc IMAGE_OPTIONAL_HEADER32
-    at IMAGE_OPTIONAL_HEADER32.Magic,                     dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
-    at IMAGE_OPTIONAL_HEADER32.MajorLinkerVersion,        db 3 ; required for signature :(
-    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,       dd EntryPoint - IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.ImageBase,                 dd IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,          dd SECTIONALIGN
-    at IMAGE_OPTIONAL_HEADER32.FileAlignment,             dd FILEALIGN
-    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion,     dw 4
-    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,               dd 5 * SECTIONALIGN
-    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,             dd SIZEOFHEADERS
-    at IMAGE_OPTIONAL_HEADER32.CheckSum,                  dd 08221h
-    at IMAGE_OPTIONAL_HEADER32.Subsystem,                 dw IMAGE_SUBSYSTEM_WINDOWS_CUI
-    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,       dd 16
+    at IMAGE_OPTIONAL_HEADER32.Magic,                 dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
+    at IMAGE_OPTIONAL_HEADER32.MajorLinkerVersion,    db 3 ; required for signature :(
+    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,   dd EntryPoint - IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.ImageBase,             dd IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,      dd SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER32.FileAlignment,         dd FILEALIGN
+    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion, dw 4
+    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,           dd 5 * SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,         dd SIZEOFHEADERS
+    at IMAGE_OPTIONAL_HEADER32.CheckSum,              dd 08221h
+    at IMAGE_OPTIONAL_HEADER32.Subsystem,             dw IMAGE_SUBSYSTEM_WINDOWS_CUI
+    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,   dd 16
 iend
 
 istruc IMAGE_DATA_DIRECTORY_16
@@ -82,11 +82,11 @@ istruc IMAGE_DATA_DIRECTORY_16
                                                 dd EXPORTS_SIZE ; required for imports forwarding
     at IMAGE_DATA_DIRECTORY_16.ImportsVA,   dd Import_Descriptor - IMAGEBASE
     at IMAGE_DATA_DIRECTORY_16.ResourceVA,  dd Directory_Entry_Resource - IMAGEBASE
-    at IMAGE_DATA_DIRECTORY_16.Exception, dd Exception - IMAGEBASE, EXCEPTION_SIZE
+    at IMAGE_DATA_DIRECTORY_16.Exception,   dd Exception - IMAGEBASE, EXCEPTION_SIZE
     at IMAGE_DATA_DIRECTORY_16.Security,    dd security - IMAGEBASE - (SECTIONALIGN - FILEALIGN)
                                                 dd SECURITY_LENGTH
-    at IMAGE_DATA_DIRECTORY_16.FixupsVA,   dd Directory_Entry_Basereloc - IMAGEBASE
-    at IMAGE_DATA_DIRECTORY_16.FixupsSize, dd DIRECTORY_ENTRY_BASERELOC_SIZE
+    at IMAGE_DATA_DIRECTORY_16.FixupsVA,    dd Directory_Entry_Basereloc - IMAGEBASE
+    at IMAGE_DATA_DIRECTORY_16.FixupsSize,  dd DIRECTORY_ENTRY_BASERELOC_SIZE
     at IMAGE_DATA_DIRECTORY_16.Description, dd copyright_string - IMAGEBASE
                                                 dd COPYRIGHT_SIZE
     at IMAGE_DATA_DIRECTORY_16.TLSVA,       dd Image_Tls_Directory32 - IMAGEBASE

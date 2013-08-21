@@ -1,6 +1,6 @@
 ; a non-null data PE with executed code
 
-; Ange Albertini, BSD Licence, 2012
+; Ange Albertini, BSD Licence, 2012-2013
 
 db 'MZ'
 align 3bh, db 1

@@ -271,8 +271,20 @@ endstruc
 IMAGE_FILE_MACHINE_AMD64        equ 8664h
 IMAGE_NT_OPTIONAL_HDR64_MAGIC   equ 020bh
 
-IMAGE_REL_BASED_ABSOLUTE equ 0
-IMAGE_REL_BASED_HIGHLOW equ 3
+IMAGE_REL_BASED_ABSOLUTE       equ 0 ; used for padding
+IMAGE_REL_BASED_HIGH           equ 1
+IMAGE_REL_BASED_LOW            equ 2 ; does nothing
+IMAGE_REL_BASED_HIGHLOW        equ 3 ;
+IMAGE_REL_BASED_HIGHADJ        equ 4 ; takes an argument but actually does nothing
+IMAGE_REL_BASED_MIPS_JMPADDR   equ 5 ; until W7 only
+IMAGE_REL_BASED_SECTION        equ 6 ; until W7 only ; does nothing anyway
+IMAGE_REL_BASED_REL32          equ 7 ; until W7 only ; does nothing anyway
+; 8 is always rejected, historically
+IMAGE_REL_BASED_MIPS_JMPADDR16 equ 9
+IMAGE_REL_BASED_IA64_IMM64     equ 9
+IMAGE_REL_BASED_DIR64          equ 10
+IMAGE_REL_BASED_HIGH3ADJ       equ 11 ; Win2k only
+
 CR equ 0dh
 EOF equ 1ah
 LF equ 0ah
@@ -636,3 +648,10 @@ IMAGE_DLLCHARACTERISTICS_NX_COMPAT       equ 0100h
 IMAGE_DLLCHARACTERISTICS_NO_SEH          equ 0400h
 
 FLG_SHOW_LDR_SNAPS equ 2
+
+MB_OK           equ 00000000h
+MB_ICONASTERISK equ 00000040h
+MB_APPLMODAL    equ 00000000h
+
+LOAD_LIBRARY_AS_DATAFILE equ 0x00000002
+

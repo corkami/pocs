@@ -20,7 +20,7 @@ istruc IMAGE_DOS_HEADER
     at IMAGE_DOS_HEADER.e_maxalloc, dw 0ffffh
     at IMAGE_DOS_HEADER.e_sp,       dw stub_end + 20h - dos_stub
     at IMAGE_DOS_HEADER.e_lfarlc,   dw 040h
-    at IMAGE_DOS_HEADER.e_lfanew,   dd NT_SIGNATURE - IMAGEBASE
+    at IMAGE_DOS_HEADER.e_lfanew,   dd NT_Headers - IMAGEBASE
 iend
 
 align 010h, db 0
@@ -79,7 +79,7 @@ _
 
 ; fix the PE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     push    es
-    mov     di, NT_SIGNATURE - IMAGEBASE
+    mov     di, NT_Headers - IMAGEBASE
     mov     es, [hbuf - dos_stub]
     mov     al, 'P'
     stosb
@@ -145,7 +145,7 @@ dd 0131f8eh ^ RichKey   , 7 ^ RichKey, 01220fch ^ RichKey, 1 ^ RichKey
 dd "Rich", 0 ^ RichKey  , 0, 0
 align 16, db 0
 
-NT_SIGNATURE:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'NE', 0, 0
 iend

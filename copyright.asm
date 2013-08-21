@@ -12,7 +12,7 @@ SECTIONALIGN equ 1000h
 FILEALIGN equ 200h
 
 istruc IMAGE_DOS_HEADER
-    at IMAGE_DOS_HEADER.e_magic, db 'MZ'
+    at IMAGE_DOS_HEADER.e_magic,  db 'MZ'
     at IMAGE_DOS_HEADER.e_lfanew, dd NT_Headers - IMAGEBASE
 iend
 
@@ -35,7 +35,7 @@ istruc IMAGE_OPTIONAL_HEADER32
     at IMAGE_OPTIONAL_HEADER32.SectionAlignment,      dd SECTIONALIGN
     at IMAGE_OPTIONAL_HEADER32.FileAlignment,         dd FILEALIGN
     at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion, dw 4
-    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,           dd 3 * SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,           dd 3 * SECTIONALIGN ; <=
     at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,         dd SIZEOFHEADERS
     at IMAGE_OPTIONAL_HEADER32.Subsystem,             dw IMAGE_SUBSYSTEM_WINDOWS_CUI
     at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,   dd 16
@@ -77,33 +77,7 @@ _
     call [__imp__ExitProcess]
 _c
 
-Import_Descriptor: ;************************************************************
-_import_descriptor kernel32.dll
-_import_descriptor msvcrt.dll
-istruc IMAGE_IMPORT_DESCRIPTOR
-iend
-_d
-
-kernel32.dll_hintnames dd hnExitProcess - IMAGEBASE, 0
-msvcrt.dll_hintnames   dd hnprintf - IMAGEBASE, 0
-_d
-
-hnExitProcess _IMAGE_IMPORT_BY_NAME 'ExitProcess'
-hnprintf      _IMAGE_IMPORT_BY_NAME 'printf'
-_d
-
-kernel32.dll_iat:
-__imp__ExitProcess dd hnExitProcess - IMAGEBASE
-    dd 0
-
-msvcrt.dll_iat:
-__imp__printf dd hnprintf - IMAGEBASE
-    dd 0
-_d
-
-kernel32.dll db 'kernel32.dll', 0
-msvcrt.dll db 'msvcrt.dll', 0
-_d
+%include 'imports_printfexitprocess.inc'
 
 align FILEALIGN, db 0
 

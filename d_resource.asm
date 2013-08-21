@@ -1,6 +1,6 @@
 ; a resource only data-PE
 
-; Ange Albertini, BSD LICENCE 2012
+; Ange Albertini, BSD LICENCE 2012-2013
 
 %include 'consts.inc'
 
@@ -13,24 +13,24 @@ SECTIONALIGN equ 1000h
 FILEALIGN equ 200h
 
 istruc IMAGE_DOS_HEADER
-    at IMAGE_DOS_HEADER.e_magic, db 'MZ'
+    at IMAGE_DOS_HEADER.e_magic,  db 'MZ'
 times 3ch-2 db -1
-    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Signature
+    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Headers
 iend
 
-NT_Signature:
+NT_Headers:
 istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE', 0, 0
 iend
 istruc IMAGE_FILE_HEADER
 times 4 dd -1
-    at IMAGE_FILE_HEADER.SizeOfOptionalHeader,  dw SIZEOFOPTIONALHEADER
+    at IMAGE_FILE_HEADER.SizeOfOptionalHeader, dw SIZEOFOPTIONALHEADER
 dw -1
 iend
 
 OptionalHeader:
 istruc IMAGE_OPTIONAL_HEADER32
-    at IMAGE_OPTIONAL_HEADER32.Magic,                     dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
+    at IMAGE_OPTIONAL_HEADER32.Magic, dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
 times 58 db -1
 	at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders, dd 1000h
 times 32 db -1
@@ -56,13 +56,13 @@ SIZEOFHEADERS equ $
 
 section progbits vstart=SECTIONALIGN align=FILEALIGN
 
-Directory_Entry_Resource:
+Directory_Entry_Resource: ;*****************************************************
 ; root directory
 istruc IMAGE_RESOURCE_DIRECTORY
     at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
 iend
 istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd SOME_TYPE    ; .. resource type of that directory
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd SOME_TYPE
     at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_directory_type - Directory_Entry_Resource)
 iend
 
@@ -71,7 +71,7 @@ istruc IMAGE_RESOURCE_DIRECTORY
     at IMAGE_RESOURCE_DIRECTORY.NumberOfIdEntries, dw 1
 iend
 istruc IMAGE_RESOURCE_DIRECTORY_ENTRY
-    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd SOME_NAME ; name of the underneath resource
+    at IMAGE_RESOURCE_DIRECTORY_ENTRY.NameID, dd SOME_NAME
     at IMAGE_RESOURCE_DIRECTORY_ENTRY.OffsetToData, dd IMAGE_RESOURCE_DATA_IS_DIRECTORY | (resource_directory_language - Directory_Entry_Resource)
 iend
 

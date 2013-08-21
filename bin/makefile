@@ -1,4 +1,4 @@
-all: common XP W7 W8
+all: common XP W7 W8 gui
 
 common: exports imports dll gaps tls bound entrypoint down many misc resource delay relocs dotnet
 
@@ -18,14 +18,17 @@ relocs: ibkernel.exe reloccrypt.exe ibkmanual.exe ibreloc.exe fakerelocs.exe lfa
 
 misc: normal.exe truncatedlast.exe pdf.exe tiny.exe bigsec.exe shuffledsect.exe truncsectbl.exe \
     quine.exe bigalign.exe foldedhdr.exe compiled.exe duphead.exe \
-    no0code.exe fakeregs.exe fakeregslib.dll gui.exe multiss.exe multiss_gui.exe no_dd.exe \
+    no0code.exe fakeregs.exe fakeregslib.dll multiss.exe multiss_gui.exe no_dd.exe \
     maxvals.exe pdf_zip_pe.exe winver.exe weirdsord.exe hdrcode.exe mini.exe \
     dump_imports.exe nullvirt.exe safeseh.exe lfanew_relocW7.exe \
     lfanew_relocXP.exe safeseh_fly.exe signature.exe standard.exe \
     dep.exe no_dep.exe no_seh.exe memshared.dll memshared-ld.exe  aslr.dll aslr-ld.exe \
-    debug.exe copyright.exe hdrdata.exe no_dd64.exe ldrsnaps.exe ldrsnaps64.exe
+    debug.exe copyright.exe hdrdata.exe no_dd64.exe ldrsnaps.exe ldrsnaps64.exe \
+    lowsubsys.exe
 
 down: appendedsecttbl.exe appendedhdr.exe footer.exe bottomsecttbl.exe
+
+gui: gui.exe tinygui.exe
 
 entrypoint: virtEP.exe dllextep.dll dllextep-ld.exe nullEP.exe
 

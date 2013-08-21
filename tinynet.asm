@@ -1,6 +1,6 @@
 ; a tiny .NET PE
 
-; Ange Albertini BSD Licence 2012
+; Ange Albertini BSD Licence 2012-2013
 
 %include 'consts.inc'
 %include 'dotnet.inc'
@@ -14,34 +14,34 @@ bits 32
 
 IMAGEBASE
 istruc IMAGE_DOS_HEADER
-  at IMAGE_DOS_HEADER.e_magic  , dw 'MZ'
-  at IMAGE_DOS_HEADER.e_lfanew , dd PE_Header - IMAGEBASE
+  at IMAGE_DOS_HEADER.e_magic,  dw 'MZ'
+  at IMAGE_DOS_HEADER.e_lfanew, dd PE_Header - IMAGEBASE
 iend
 
 
 PE_Header
 istruc IMAGE_NT_HEADERS
-  at IMAGE_NT_HEADERS.Signature , db 'PE', 0, 0
+  at IMAGE_NT_HEADERS.Signature,  db 'PE', 0, 0
 iend
 istruc IMAGE_FILE_HEADER
-  at IMAGE_FILE_HEADER.Machine              , dw IMAGE_FILE_MACHINE_I386
-  at IMAGE_FILE_HEADER.NumberOfSections     , dw 1
-  at IMAGE_FILE_HEADER.SizeOfOptionalHeader , dw 0e0h
-  at IMAGE_FILE_HEADER.Characteristics      , dw 102h
+  at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_I386
+  at IMAGE_FILE_HEADER.NumberOfSections,      dw 1
+  at IMAGE_FILE_HEADER.SizeOfOptionalHeader,  dw 0e0h
+  at IMAGE_FILE_HEADER.Characteristics,       dw 102h
 iend
 istruc IMAGE_OPTIONAL_HEADER32
-  at IMAGE_OPTIONAL_HEADER32.Magic                 , dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
-  at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint   , dd EntryPoint - CODEDELTA - IMAGEBASE
-  at IMAGE_OPTIONAL_HEADER32.ImageBase             , dd IMAGEBASE
-  at IMAGE_OPTIONAL_HEADER32.SectionAlignment      , dd SECALIGN
-  at IMAGE_OPTIONAL_HEADER32.FileAlignment         , dd FILEALIGN
-  at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion , dw 4, 0
-  at IMAGE_OPTIONAL_HEADER32.SizeOfImage           , dd 2 * SECALIGN
-  at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders         , dd SIZEOFHEADERS
-  at IMAGE_OPTIONAL_HEADER32.Subsystem             , dw IMAGE_SUBSYSTEM_WINDOWS_CUI
-  at IMAGE_OPTIONAL_HEADER32.SizeOfStackReserve    , dd 100000h
-  at IMAGE_OPTIONAL_HEADER32.SizeOfHeapReserve     , dd 100000h
-  at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes   , dd 2 ; :D
+  at IMAGE_OPTIONAL_HEADER32.Magic,                  dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
+  at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,    dd EntryPoint - CODEDELTA - IMAGEBASE
+  at IMAGE_OPTIONAL_HEADER32.ImageBase,              dd IMAGEBASE
+  at IMAGE_OPTIONAL_HEADER32.SectionAlignment,       dd SECALIGN
+  at IMAGE_OPTIONAL_HEADER32.FileAlignment,          dd FILEALIGN
+  at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion,  dw 4, 0
+  at IMAGE_OPTIONAL_HEADER32.SizeOfImage,            dd 2 * SECALIGN
+  at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,          dd SIZEOFHEADERS
+  at IMAGE_OPTIONAL_HEADER32.Subsystem,              dw IMAGE_SUBSYSTEM_WINDOWS_CUI
+  at IMAGE_OPTIONAL_HEADER32.SizeOfStackReserve,     dd 100000h
+  at IMAGE_OPTIONAL_HEADER32.SizeOfHeapReserve,      dd 100000h
+  at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,    dd 2 ; :D
 iend
 
 istruc IMAGE_DATA_DIRECTORY_16
@@ -51,11 +51,11 @@ istruc IMAGE_DATA_DIRECTORY_16
 iend
 
 istruc IMAGE_SECTION_HEADER
-    at IMAGE_SECTION_HEADER.VirtualSize      , dd SECTIONSIZE
-    at IMAGE_SECTION_HEADER.VirtualAddress   , dd SECALIGN
-    at IMAGE_SECTION_HEADER.SizeOfRawData    , dd SECTIONSIZE
-    at IMAGE_SECTION_HEADER.PointerToRawData , dd SectionSart - IMAGEBASE
-    at IMAGE_SECTION_HEADER.Characteristics  , dd 40000000h
+    at IMAGE_SECTION_HEADER.VirtualSize,       dd SECTIONSIZE
+    at IMAGE_SECTION_HEADER.VirtualAddress,    dd SECALIGN
+    at IMAGE_SECTION_HEADER.SizeOfRawData,     dd SECTIONSIZE
+    at IMAGE_SECTION_HEADER.PointerToRawData,  dd SectionSart - IMAGEBASE
+    at IMAGE_SECTION_HEADER.Characteristics,   dd 40000000h
 iend
 
 align FILEALIGN, db 0
@@ -64,11 +64,11 @@ SIZEOFHEADERS equ $ - IMAGEBASE
 SectionSart:
 Cor20:
 istruc IMAGE_COR20_HEADER
-    at IMAGE_COR20_HEADER.cb                  , dd COR20SIZE
-    at IMAGE_COR20_HEADER.MajorRuntimeVersion , dw 2, 5
-    at IMAGE_COR20_HEADER.MetaData            , dd Metadata - CODEDELTA - IMAGEBASE, Metadata_end - Metadata
-    at IMAGE_COR20_HEADER.Flags               , dd COMIMAGE_FLAGS_ILONLY
-    at IMAGE_COR20_HEADER.EntryPointToken     , dd 6000001h
+    at IMAGE_COR20_HEADER.cb,                   dd COR20SIZE
+    at IMAGE_COR20_HEADER.MajorRuntimeVersion,  dw 2, 5
+    at IMAGE_COR20_HEADER.MetaData,             dd Metadata - CODEDELTA - IMAGEBASE, Metadata_end - Metadata
+    at IMAGE_COR20_HEADER.Flags,                dd COMIMAGE_FLAGS_ILONLY
+    at IMAGE_COR20_HEADER.EntryPointToken,      dd 6000001h
 iend
 COR20SIZE equ $ - Cor20
 
@@ -105,102 +105,102 @@ NumbersOfStreams dw 4
 
 MetaStream:
 istruc TablesHdr
-    at TablesHdr.MajorVersion , db 2
-    at TablesHdr.Reserved2    , db 1
-    at TablesHdr.MaskValid    , dd 1447h, 9
-    at TablesHdr.MaskSorted   , dd 3301FA00h, 1600h
+    at TablesHdr.MajorVersion,  db 2
+    at TablesHdr.Reserved2,     db 1
+    at TablesHdr.MaskValid,     dd 1447h, 9
+    at TablesHdr.MaskSorted,    dd 3301FA00h, 1600h
 iend
 
 istruc Tables
-    at Tables.ModuleCount      , dd 1
-    at Tables.TypeRefCount     , dd 4
-    at Tables.TypeDefCount     , dd 2
-    at Tables.MethodCount      , dd 2
-    at Tables.MemberRefCount   , dd 4
-    at Tables.AssemblyCount    , dd 1
-    at Tables.AssemblyRefCount , dd 1
+    at Tables.ModuleCount,       dd 1
+    at Tables.TypeRefCount,      dd 4
+    at Tables.TypeDefCount,      dd 2
+    at Tables.MethodCount,       dd 2
+    at Tables.MemberRefCount,    dd 4
+    at Tables.AssemblyCount,     dd 1
+    at Tables.AssemblyRefCount,  dd 1
 iend
 
 istruc sModule
-    at sModule.Name , dw Strings - String_start
+    at sModule.Name,  dw Strings - String_start
 iend
 
 istruc TypeRef
-    at TypeRef.ResolutionScope , dw 6
-    at TypeRef.Name            , dw aObject - String_start
-    at TypeRef.Namespace       , dw aSystem - String_start
+    at TypeRef.ResolutionScope,  dw 6
+    at TypeRef.Name,             dw aObject - String_start
+    at TypeRef.Namespace,        dw aSystem - String_start
 iend
 istruc TypeRef
-    at TypeRef.ResolutionScope , dw 6
-    at TypeRef.Name            , dw aCompilationrelaxations - String_start
-    at TypeRef.Namespace       , dw aSystem_runtime_compile - String_start
+    at TypeRef.ResolutionScope,  dw 6
+    at TypeRef.Name,             dw aCompilationrelaxations - String_start
+    at TypeRef.Namespace,        dw aSystem_runtime_compile - String_start
 iend
 istruc TypeRef
-    at TypeRef.ResolutionScope , dw 6
-    at TypeRef.Name            , dw aRuntimecompatibilityat - String_start
-    at TypeRef.Namespace       , dw aSystem_runtime_compile - String_start
+    at TypeRef.ResolutionScope,  dw 6
+    at TypeRef.Name,             dw aRuntimecompatibilityat - String_start
+    at TypeRef.Namespace,        dw aSystem_runtime_compile - String_start
 iend
 istruc TypeRef
-    at TypeRef.ResolutionScope , dw 6
-    at TypeRef.Name            , dw aConsole - String_start
-    at TypeRef.Namespace       , dw aSystem - String_start
+    at TypeRef.ResolutionScope,  dw 6
+    at TypeRef.Name,             dw aConsole - String_start
+    at TypeRef.Namespace,        dw aSystem - String_start
 iend
 
 istruc TypeDef
-    at TypeDef.Name       , dw Strings - String_start
-    at TypeDef.FieldList  , dw 1
-    at TypeDef.MethodList , dw 1
+    at TypeDef.Name,        dw Strings - String_start
+    at TypeDef.FieldList,   dw 1
+    at TypeDef.MethodList,  dw 1
 iend
 istruc TypeDef
-    at TypeDef.Flags      , dd 100001h
-    at TypeDef.Name       , dw Strings - String_start
-    at TypeDef.Extends    , dw 5
-    at TypeDef.FieldList  , dw 1
-    at TypeDef.MethodList , dw 1
+    at TypeDef.Flags,       dd 100001h
+    at TypeDef.Name,        dw Strings - String_start
+    at TypeDef.Extends,     dw 5
+    at TypeDef.FieldList,   dw 1
+    at TypeDef.MethodList,  dw 1
 iend
 
 istruc Method
-    at Method.RVA       , dd Method1 - CODEDELTA - IMAGEBASE
-    at Method.Flags     , dw 96h
-    at Method.Name      , dw Strings - String_start
-    at Method.Signature , dw 0ah
+    at Method.RVA,        dd Method1 - CODEDELTA - IMAGEBASE
+    at Method.Flags,      dw 96h
+    at Method.Name,       dw Strings - String_start
+    at Method.Signature,  dw 0ah
 iend
 istruc Method
-    at Method.RVA       , dd Method2 - CODEDELTA - IMAGEBASE
-    at Method.Flags     , dw 1886h
-    at Method.Name      , dw a_ctor -  String_start
-    at Method.Signature , dw 0eh
+    at Method.RVA,        dd Method2 - CODEDELTA - IMAGEBASE
+    at Method.Flags,      dw 1886h
+    at Method.Name,       dw a_ctor -  String_start
+    at Method.Signature,  dw 0eh
 iend
 
 istruc MemberRef
-    at MemberRef.Class     , dw 11h
-    at MemberRef.Name      , dw a_ctor -  String_start
-    at MemberRef.Signature , dw 12h
+    at MemberRef.Class,      dw 11h
+    at MemberRef.Name,       dw a_ctor -  String_start
+    at MemberRef.Signature,  dw 12h
 iend
 istruc MemberRef
-    at MemberRef.Class     , dw 19h
-    at MemberRef.Name      , dw a_ctor -  String_start
-    at MemberRef.Signature , dw 0eh
+    at MemberRef.Class,      dw 19h
+    at MemberRef.Name,       dw a_ctor -  String_start
+    at MemberRef.Signature,  dw 0eh
 iend
 istruc MemberRef
-    at MemberRef.Class     , dw 21h
-    at MemberRef.Name      , dw aWriteline -  String_start
-    at MemberRef.Signature , dw 17h
+    at MemberRef.Class,      dw 21h
+    at MemberRef.Name,       dw aWriteline -  String_start
+    at MemberRef.Signature,  dw 17h
 iend
 istruc MemberRef
-    at MemberRef.Class     , dw 9h
-    at MemberRef.Name      , dw a_ctor -  String_start
-    at MemberRef.Signature , dw 0eh
+    at MemberRef.Class,      dw 9h
+    at MemberRef.Name,       dw a_ctor -  String_start
+    at MemberRef.Signature,  dw 0eh
 iend
 
 istruc Assembly
-    at Assembly.HashAlgId , dd 8004h
-    at Assembly.Name      , dw aMscorlib - String_start
+    at Assembly.HashAlgId,  dd 8004h
+    at Assembly.Name,       dw aMscorlib - String_start
 iend
 
 istruc AssemblyRef
-	at AssemblyRef.MajorVersion , dw 2
-	at AssemblyRef.Name         , dw aMscorlib - String_start
+	at AssemblyRef.MajorVersion,  dw 2
+	at AssemblyRef.Name,          dw aMscorlib - String_start
 iend
 METALEN equ $ - MetaStream
 

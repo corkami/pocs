@@ -32,6 +32,8 @@ Ranking (YMMV)
  **. bigsec.exe               PE with virtually big section (0x10001000)
  **. bigSoRD.exe              PE with oversized SizeOfRawData (0xFFFF0200)
  **. bottomsecttbl.exe        section table at the bottom of the PE
+ 
+ *.. lowsubsys.exe            a PE with a subsystem version of 3.10
 
  **. 65535sects.exe           65536 physical sections, all executed
 
@@ -91,8 +93,8 @@ DLL: (relocations, EntryPoint...)
       dllnullep-dynld.exe      dynamic loader
 
 Subsystems
+ *.. gui.exe                  a simple GUI PE
  **. driver.sys               a simple driver (section, relocation, imports, checksum)
- **. gui.exe                  universal+tiny+GUI, using MessageBox and ExitProcess with contiguous code !W8
 
  *** multiss.exe              a multi-subsystem PE (that displays a message) no matter what its subsystem is set to.
       multiss_con.exe          console !W8
@@ -141,6 +143,7 @@ Section table (PE Geometry):
  **. tinydllXP.dll            same thing, DLL version
       tinydllXP-ld.exe          loader
  **. tinydrivXP.sys           same thing, driver version
+ **. tinygui.exe              GUI version, using MessageBox and ExitProcess with contiguous code !W8
 
  **. tiny.exe                 a universal tiny PE, working from XP to W8 64b
  **. tinyW7.exe               a tiny PE, W7 32b compatible. just need a full optional header, so padding until 252 bytes is required.

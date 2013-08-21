@@ -142,8 +142,10 @@ EntryPoint:
     add esp, 1 * 4
     push 0
     call ExitProcess
+
 printf:
     jmp [__imp__printf]
+
 ExitProcess:
     jmp [__imp__ExitProcess]
 

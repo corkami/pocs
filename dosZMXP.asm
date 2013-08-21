@@ -1,13 +1,13 @@
 ; non-PE EXE with with reversed signature
 
-; Ange Albertini, BSD Licence, 2010-2011
+; Ange Albertini, BSD Licence, 2010-2013
 
 %include 'consts.inc'
 
 istruc IMAGE_DOS_HEADER
-    at IMAGE_DOS_HEADER.e_magic, db 'ZM'
-;    at IMAGE_DOS_HEADER.e_cblp, db LAST_BYTE   ; not required
-    at IMAGE_DOS_HEADER.e_cp, dw PAGES
+    at IMAGE_DOS_HEADER.e_magic,   db 'ZM'
+;   at IMAGE_DOS_HEADER.e_cblp,    db LAST_BYTE   ; not required
+    at IMAGE_DOS_HEADER.e_cp,      dw PAGES
     at IMAGE_DOS_HEADER.e_cparhdr, dw dos_stub >> 4
 
 ; code start must be paragraph-aligned

@@ -2,7 +2,7 @@
 ;a working PE file, made entirely in assembly, with no need of a compiler, with its own source embedded, which it displays on execution, via 'typing' its own binary.
 ;you can do it manually via 'type quine.exe'.
 
-;Ange Albertini, BSD Licence, 2011
+;Ange Albertini, BSD Licence, 2011-2013
 
 IMAGEBASE equ 400000h
 
@@ -95,6 +95,8 @@ struc IMAGE_DATA_DIRECTORY_16
     .reserved         resd 2
 endstruc
 
+IMAGE_SIZEOF_SHORT_NAME       equ 8
+
 struc IMAGE_SECTION_HEADER
     .Name                    resb IMAGE_SIZEOF_SHORT_NAME
     .VirtualSize             resd 1
@@ -108,25 +110,29 @@ struc IMAGE_SECTION_HEADER
     .Characteristics         resd 1
 endstruc
 
-IMAGE_SIZEOF_SHORT_NAME equ 8
-IMAGE_SCN_MEM_EXECUTE            equ 020000000h
-IMAGE_SCN_MEM_WRITE              equ 080000000h
-
-IMAGE_FILE_MACHINE_I386         equ 014ch
+IMAGE_SCN_MEM_EXECUTE         equ 020000000h
+IMAGE_SCN_MEM_WRITE           equ 080000000h
+                              
 IMAGE_NT_OPTIONAL_HDR32_MAGIC equ 010bh
+                              
+IMAGE_FILE_MACHINE_I386       equ 014ch
+IMAGE_FILE_EXECUTABLE_IMAGE   equ 00002h
+IMAGE_FILE_32BIT_MACHINE      equ 00100h
 
-IMAGE_FILE_RELOCS_STRIPPED         equ 00001h
-IMAGE_FILE_EXECUTABLE_IMAGE        equ 00002h
-IMAGE_FILE_LINE_NUMS_STRIPPED      equ 00004h
-IMAGE_FILE_LOCAL_SYMS_STRIPPED     equ 00008h
-IMAGE_FILE_32BIT_MACHINE           equ 00100h
+struc IMAGE_IMPORT_DESCRIPTOR
+    .OriginalFirstThunk resd 1
+    .TimeDateStamp      resd 1
+    .ForwarderChain     resd 1
+    .Name1              resd 1
+    .FirstThunk         resd 1
+endstruc
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;*******************************************************************************
 
 FILEALIGN equ 4h
 SECTIONALIGN equ FILEALIGN
 org IMAGEBASE
+NUMBEROFRVAANDSIZES equ 16
 
 align 4, db 0
 nt_header:
@@ -134,58 +140,57 @@ istruc IMAGE_NT_HEADERS
     at IMAGE_NT_HEADERS.Signature, db 'PE',0,0
 iend
 istruc IMAGE_FILE_HEADER
-    at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_I386
-    at IMAGE_FILE_HEADER.NumberOfSections,      dw NUMBEROFSECTIONS
-    at IMAGE_FILE_HEADER.SizeOfOptionalHeader,  dw SIZEOFOPTIONALHEADER
-    at IMAGE_FILE_HEADER.Characteristics,       dw IMAGE_FILE_RELOCS_STRIPPED | IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_LINE_NUMS_STRIPPED | IMAGE_FILE_LOCAL_SYMS_STRIPPED | IMAGE_FILE_32BIT_MACHINE
+    at IMAGE_FILE_HEADER.Machine,              dw IMAGE_FILE_MACHINE_I386
+    at IMAGE_FILE_HEADER.NumberOfSections,     dw NUMBEROFSECTIONS
+    at IMAGE_FILE_HEADER.SizeOfOptionalHeader, dw SIZEOFOPTIONALHEADER
+    at IMAGE_FILE_HEADER.Characteristics,      dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE
 iend
 
 OptionalHeader:
 istruc IMAGE_OPTIONAL_HEADER32
-    at IMAGE_OPTIONAL_HEADER32.Magic                    , dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
-    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint      , dd EntryPoint - IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.ImageBase                , dd IMAGEBASE
-    at IMAGE_OPTIONAL_HEADER32.SectionAlignment         , dd SECTIONALIGN
-    at IMAGE_OPTIONAL_HEADER32.FileAlignment            , dd FILEALIGN
-    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion    , dw 4
-    at IMAGE_OPTIONAL_HEADER32.SizeOfImage              , dd SIZEOFIMAGE
-    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders            , dd SIZEOFHEADERS  ; can be 0 in some circumstances
-    at IMAGE_OPTIONAL_HEADER32.Subsystem                , dw 2
-    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes      , dd NUMBEROFRVAANDSIZES
+    at IMAGE_OPTIONAL_HEADER32.Magic                , dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
+    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint  , dd EntryPoint - IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.ImageBase            , dd IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.SectionAlignment     , dd SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER32.FileAlignment        , dd FILEALIGN
+    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion, dw 4
+    at IMAGE_OPTIONAL_HEADER32.SizeOfImage          , dd SIZEOFIMAGE
+    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders        , dd SIZEOFHEADERS  ; can be 0 in some circumstances
+    at IMAGE_OPTIONAL_HEADER32.Subsystem            , dw 2
+    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes  , dd NUMBEROFRVAANDSIZES
 iend
 
-DataDirectory:
 istruc IMAGE_DATA_DIRECTORY_16
     at IMAGE_DATA_DIRECTORY_16.ImportsVA,   dd IMPORT_DESCRIPTOR - IMAGEBASE
 iend
-
-NUMBEROFRVAANDSIZES equ 16
 
 SIZEOFOPTIONALHEADER equ $ - OptionalHeader
 
 SectionHeader:
 istruc IMAGE_SECTION_HEADER
-    at IMAGE_SECTION_HEADER.VirtualAddress, dd Section0Start - IMAGEBASE
-    at IMAGE_SECTION_HEADER.SizeOfRawData, dd SECTION0SIZE
+    at IMAGE_SECTION_HEADER.VirtualAddress,   dd Section0Start - IMAGEBASE
+    at IMAGE_SECTION_HEADER.SizeOfRawData,    dd SECTION0SIZE
     at IMAGE_SECTION_HEADER.PointerToRawData, dd Section0Start - IMAGEBASE
-    at IMAGE_SECTION_HEADER.Characteristics, dd IMAGE_SCN_MEM_EXECUTE + IMAGE_SCN_MEM_WRITE
+    at IMAGE_SECTION_HEADER.Characteristics,  dd IMAGE_SCN_MEM_EXECUTE + IMAGE_SCN_MEM_WRITE
 iend
 NUMBEROFSECTIONS equ ($ - SectionHeader) / IMAGE_SECTION_HEADER_size
 
 align FILEALIGN, db 0
-align 1000h, db 0           ; necessary under Win7
+
+; necessary under Win7
+align 1000h, db 0           
 SIZEOFHEADERS equ $ - IMAGEBASE
 
 bits 32
 Section0Start:
 
 EntryPoint:
-    push 1
-    push 0
-    push param
-    push fn
-    push op
-    push 0
+    push 1     ; nShowCmd
+    push 0     ; lpDirectory
+    push param ; lpParameters
+    push fn    ; lpFile
+    push op    ; lpOperation
+    push 0     ; hwnd
     call [ShellExecuteA]
 
     push 0
@@ -193,42 +198,40 @@ EntryPoint:
 
 kernel32.dll_iat:
 ExitProcess:
-    DD hnExitProcess - IMAGEBASE
-    DD 0
+    dd hnExitProcess - IMAGEBASE
+    dd 0
 
 shell32.dll_iat:
 ShellExecuteA:
-    DD hnShellExecuteA - IMAGEBASE
-    DD 0
+    dd hnShellExecuteA - IMAGEBASE
+    dd 0
 
 IMPORT_DESCRIPTOR:
 kernel32.dll_DESCRIPTOR:
-    dd kernel32.dll_hintnames - IMAGEBASE
-    dd 0
-    dd 0
-    dd kernel32.dll - IMAGEBASE
-    dd kernel32.dll_iat - IMAGEBASE
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk , dd kernel32.dll_hintnames - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1              , dd kernel32.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk         , dd kernel32.dll_iat - IMAGEBASE
+iend
+istruc IMAGE_IMPORT_DESCRIPTOR
+    at IMAGE_IMPORT_DESCRIPTOR.OriginalFirstThunk , dd shell32.dll_hintnames - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.Name1              , dd shell32.dll - IMAGEBASE
+    at IMAGE_IMPORT_DESCRIPTOR.FirstThunk         , dd shell32.dll_iat - IMAGEBASE
+iend
+istruc IMAGE_IMPORT_DESCRIPTOR
+iend
 
-shell32.dll_DESCRIPTOR:
-    dd shell32.dll_hintnames - IMAGEBASE
-    dd 0
-    dd 0
-    dd shell32.dll - IMAGEBASE
-    dd shell32.dll_iat - IMAGEBASE
-
-    times 5 dd 0
-
-HintNames:
+; HintNames
 kernel32.dll_hintnames:
-    DD hnExitProcess - IMAGEBASE
-    DD 0
+    dd hnExitProcess - IMAGEBASE
+    dd 0
 
 shell32.dll_hintnames:
-    DD hnShellExecuteA - IMAGEBASE
-    DD 0
+    dd hnShellExecuteA - IMAGEBASE
+    dd 0
 
-kernel32.dll  DB 'kernel32.dll',0
-shell32.dll  DB 'shell32.dll',0
+kernel32.dll db 'kernel32.dll',0
+shell32.dll  db 'shell32.dll',0
 
 hnShellExecuteA:
     dw 0
@@ -237,7 +240,6 @@ hnShellExecuteA:
 hnExitProcess:
     dw 0
     db 'ExitProcess',0
-
 
 SECTION0SIZE equ $ - Section0Start
 SIZEOFIMAGE equ $ - IMAGEBASE

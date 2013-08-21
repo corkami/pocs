@@ -2,7 +2,7 @@
 
 ; with the help of Peter Ferrie's "Maximum Possible Code Execution" http://pferrie.host22.com/misc/pehdr.htm
 
-;Ange Albertini, BSD Licence, 2012
+;Ange Albertini, BSD Licence, 2012-2013
 
 %include 'consts.inc'
 
@@ -20,8 +20,8 @@ istruc IMAGE_NT_HEADERS
 iend
 
 istruc IMAGE_FILE_HEADER
-	at IMAGE_FILE_HEADER.Machine,               dw IMAGE_FILE_MACHINE_I386
-	at IMAGE_FILE_HEADER.NumberOfSections,      dw 0
+	at IMAGE_FILE_HEADER.Machine,          dw IMAGE_FILE_MACHINE_I386
+	at IMAGE_FILE_HEADER.NumberOfSections, dw 0
 ; dd timestamp
 	db 0c0h
 	fninit
