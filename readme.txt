@@ -25,7 +25,6 @@ Ranking (YMMV)
  *.. normal64.exe              64b version
 
  **. mini.exe                 a PE defined with as few elements as possible (alignments = 1/1)
- *.. miniW8.exe                Windows 8 version
 
  **. bigalign.exe             big alignments (10000h/20000000h)
  **. bigib.exe                IMAGEBASE equ 7efd0000h ; 7ffd0000h also works under XP

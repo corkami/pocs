@@ -64,7 +64,7 @@ W7: tinyW7.exe tinyW7x64.exe tinyW7_3264.exe maxsec_lowaligW7.exe nosectionW7.ex
     ibrelocW7.exe ibknoreloc64.exe imports_tinyW7.exe manyimportsW7.exe imports_relocW7.exe \
 	exceptions.exe seh_change64.exe
 
-W8: miniw8.exe reloccryptW8.exe
+W8: reloccryptW8.exe
 
 dotnet: tinynet.exe dotnet20.exe mscoree.exe fakenet.exe
 
