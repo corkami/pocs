@@ -112,8 +112,8 @@ d5256c32d407ba2c6971332945545059720926dd *imports_tinyW7.exe
 bcb7a3e77e416d9527892a2941ce02864ff626e7 *imports_vterm.exe
 e84d7fef53bd730132527dd41d8e3196d8ca9492 *importsdotXP.exe
 dc3977014027d86539bd6986b857c51da5a0ac5c *importshint.exe
-ca31e8536e2809002e22096f566a564363f6561b *ldrsnaps.exe
-bd32cf80c8d1769db135baed68fb75548076e364 *ldrsnaps64.exe
+21a0855324b7e6146edf1c85f5d494e6882c6a3f *ldrsnaps.exe
+b9895c5cfa240b6b98bdaf7887eace236ba8bec7 *ldrsnaps64.exe
 c098fe0024df0d43774b1dc5e06e332ee9567f93 *lfanew_relocW7.exe
 f03cda24a259eae690f3cfed1cec59c6f6984009 *lfanew_relocXP.exe
 a9309e12282ed967ec9d4b05529d63c5eaecff19 *lowsubsys.exe
@@ -163,8 +163,8 @@ ada1a47f2a9bdaccdbef24e54fe26c6ed0cd4817 *resource.exe
 ed5d9473de528ba2049850de30332787ded36d5c *resource_string.exe
 fba326742f645db3595ec891d22f066d8dd526fb *resource2.exe
 8916eca8be278d1e43e67c4a90b5a6a870250c77 *resourceloop.exe
-adf098376b4944c77239489422f9223d18d4c51d *safeseh.exe
-8515f8d574ee2a35c8b39991a6aa406af309da52 *safeseh_fly.exe
+12b19b3c119677f43bc2836e997cda486c4c45dc *safeseh.exe
+26085906697704f1ec7152676980e4d3f4021b66 *safeseh_fly.exe
 2c767d1da6b9d135c06c77bbc715fe48e31c41d2 *sc.exe
 e7a1caebdd7d3ec194903876077078525f4d002f *secinsec.exe
 7d32f275acdcd1030b8f1c4899fcf725afda5d03 *seh_change64.exe
@@ -172,8 +172,10 @@ e7a1caebdd7d3ec194903876077078525f4d002f *secinsec.exe
 e2462a381cc60582efcf4dab129f4f08ff396bec *signature.exe
 d4d77a22dd9d63fd9d4d807ab55956bebb48a8db *skippeddynbase.exe
 97d70adb616d04510b7e5fb22da5cd792eace352 *slackspace.exe
-88bce856608ae28e7e7629ecd69caba1d2167b92 *standard.exe
+60dd58307ed356923246bba79ab99b874d66f9d7 *standard.exe
 79dd6a59177127fbd9e2f2525eba7d4a942e7edc *tiny.exe
+9e595d93f26d2b4d4e57efb5d12828dbd1c9b5eb *tinydll.dll
+e0334058db8e9e4088706b3d35b449752577d909 *tinydll-ld.exe
 8499a0bb33aeba8f59a172584abc7ca0ab82a78c *tinydllXP.dll
 5bb04a8b45e7bf2abfc9c19399cfafa2cbfd2728 *tinydllXP-ld.exe
 436fed5684a93d39220a1e4973541f10e98325e8 *tinydrivXP.sys

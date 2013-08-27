@@ -139,8 +139,10 @@ Section table (PE Geometry):
  *.. nullvirt.exe             a PE with a virtually null section
 
  **. tinyXP.exe               a tiny PE: sectionless, PE header overlapping dos headers, truncated optional header, 97 bytes XP only.
- **. tinydllXP.dll            same thing, DLL version
-      tinydllXP-ld.exe          loader
+ **. tinydll.dll              same thing, DLL version
+      tinydll-ld.exe            loader
+ **. tinydllXP.dll              same thing, XP version
+      tinydllXP-ld.exe            loader
  **. tinydrivXP.sys           same thing, driver version
  **. tinygui.exe              GUI version, using MessageBox and ExitProcess with contiguous code !W8
 
