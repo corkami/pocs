@@ -18,10 +18,11 @@ EntryPoint:
     and eax, 0ffff0000h
 
 scanMZ
-    sub eax, 10000h
     cmp dword [eax], 00905a4dh
-    jnz scanMZ
-
+    jz MZFound
+    sub eax, 10000h
+    jmp scanMZ
+MZFound
     mov [K32IB], eax
     mov ebx, eax
 
@@ -99,7 +100,9 @@ table
     dd 050327671h, 0149bfh, 011222h
     dd 0506bc5e5h, 001d7bh, 00ae40h
     dd 0506dbe4fh, 0149bfh, 011222h
+    dd 050b83c89h, 0149bfh, 011222h
     dd 051a7dbeah, 01f82bh, 024c0dh
+    dd 051bcf794h, 005403h, 0016b2h
     dd 0
 
 align FILEALIGN, db 0
