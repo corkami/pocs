@@ -507,17 +507,22 @@ struc IMAGE_LOAD_CONFIG_DIRECTORY32
     .CriticalSectionDefaultTimeout  resd 1
     .DeCommitFreeBlockThreshold     resd 1
     .DeCommitTotalFreeThreshold     resd 1
-    .LockPrefixTable                resd 1 ;VA
+    .LockPrefixTable                resd 1 ; VA
     .MaximumAllocationSize          resd 1
     .VirtualMemoryThreshold         resd 1
     .ProcessHeapFlags               resd 1
     .ProcessAffinityMask            resd 1
     .CSDVersion                     resw 1
     .Reserved1                      resw 1
-    .EditList                       resd 1 ;VA
-    .SecurityCookie                 resd 1
-    .SEHandlerTable                 resd 1
+    .EditList                       resd 1 ; VA
+    .SecurityCookie                 resd 1 ; VA
+    .SEHandlerTable                 resd 1 ; VA
     .SEHandlerCount                 resd 1
+    .GuardCFCheckFunctionPointer    resd 1 ; VA
+    .Reserved2                      resd 1
+    .GuardCFFunctionTable           resd 1 ; VA
+    .GuardCFFunctionCount           resd 1
+    .GuardFlags                     resd 1
 endstruc
 
 struc IMAGE_LOAD_CONFIG_DIRECTORY64
@@ -530,17 +535,22 @@ struc IMAGE_LOAD_CONFIG_DIRECTORY64
     .CriticalSectionDefaultTimeout  resd 1
     .DeCommitFreeBlockThreshold     resq 1
     .DeCommitTotalFreeThreshold     resq 1
-    .LockPrefixTable                resq 1 ;VA
+    .LockPrefixTable                resq 1 ; VA
     .MaximumAllocationSize          resq 1
     .VirtualMemoryThreshold         resq 1
     .ProcessAffinityMask            resq 1
     .ProcessHeapFlags               resd 1
     .CSDVersion                     resw 1
     .Reserved1                      resw 1
-    .EditList                       resq 1 ;VA
-    .SecurityCookie                 resq 1
-    .SEHandlerTable                 resq 1
+    .EditList                       resq 1 ; VA
+    .SecurityCookie                 resq 1 ; VA
+    .SEHandlerTable                 resq 1 ; VA
     .SEHandlerCount                 resq 1
+    .GuardCFCheckFunctionPointer    resq 1 ; VA
+    .Reserved2                      resq 1
+    .GuardCFFunctionTable           resq 1 ; VA
+    .GuardCFFunctionCount           resq 1
+    .GuardFlags                     resd 1
 endstruc
 
 RT_ICON       equ  3
@@ -646,6 +656,9 @@ IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE    equ 0040h
 IMAGE_DLLCHARACTERISTICS_FORCE_INTEGRITY equ 0080h
 IMAGE_DLLCHARACTERISTICS_NX_COMPAT       equ 0100h
 IMAGE_DLLCHARACTERISTICS_NO_SEH          equ 0400h
+IMAGE_DLLCHARACTERISTICS_APPCONTAINER    equ 1000h ; W8
+IMAGE_DLLCHARACTERISTICS_GUARD_CF        equ 4000h ; W8.1
+
 
 FLG_SHOW_LDR_SNAPS equ 2
 

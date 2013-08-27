@@ -345,7 +345,7 @@ _c
 tlsmsg      db "  - Thread Local Storage callback executed", 0ah, 0
 exportMSG   db "  - Export called", 0ah, 0
 iconMSG     db "  - RT_ICON resource loaded", 0ah, 0
-safesehmsg  db "  - exception handler called", 0ah, 0
+safesehmsg  db "  - Exception handler called", 0ah, 0
 manifestMSG db "  - RT_MANIFEST resource located", 0ah, 0
 errorMsg db "*ERROR*", 0ah, 0
 stringMSG times WSTRLEN dw 0
