@@ -33,6 +33,7 @@ istruc TRUNC_OPTIONAL_HEADER32
     at TRUNC_OPTIONAL_HEADER32.SizeOfHeaders,         dd SIZEOFHEADERS
     at TRUNC_OPTIONAL_HEADER32.Subsystem,             db IMAGE_SUBSYSTEM_WINDOWS_GUI
 iend
+    db 0 ; one byte delta to avoid setting DllCharacteristics to AppContainer
 
 SIZEOFHEADERS equ $ - IMAGEBASE
 

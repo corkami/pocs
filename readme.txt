@@ -31,7 +31,7 @@ Ranking (YMMV)
  **. bigsec.exe               PE with virtually big section (0x10001000)
  **. bigSoRD.exe              PE with oversized SizeOfRawData (0xFFFF0200)
  **. bottomsecttbl.exe        section table at the bottom of the PE
- 
+
  *.. lowsubsys.exe            a PE with a subsystem version of 3.10
 
  **. 65535sects.exe           65536 physical sections, all executed
@@ -90,6 +90,19 @@ DLL: (relocations, EntryPoint...)
  **. dllnullep.dll            DLL with a null entrypoint - that is *NOT* called
       dllnullep-ld.exe         static loader
       dllnullep-dynld.exe      dynamic loader
+
+ **. dllfakess.dll            a DLL with a fake subsystem
+      dllfakess-ld.exe         static loader
+      dllfakess-dynld.exe      dynamic loader
+
+ **. dllmaxvals.dll           a DLL with maximum values
+      dllmaxvals-ld.exe        static loader
+      dllmaxvals-dynld.exe     dynamic loader
+
+ **. dllcfgdup.dll            a DLL using Guard ControlFlow, but with duplicate entry
+      dllcfgdup-dynld.exe      dynamic loader
+
+ **. cfgbogus.exe             a PE with a bogus ControlFlow Guard table (Subsystem version too old)
 
 Subsystems
  *.. gui.exe                  a simple GUI PE
@@ -185,8 +198,9 @@ DataDirectory 1: Import
  *.. imports_multidesc.exe    a PE with multiple import descriptors for the same DLL
  *.. imports_noint.exe        imports with no INT
  **. imports_badterm.exe      PE with a 'bad' imports terminator, just the dll name is empty
- **. imports_bogusIAT.exe     bogus IAT but INT is correct
+ **. imports_bogusIAT.exe     bogus IAT content but INT is correct
  **. imports_corruptedIAT.exe IAT with corrupted pointers but INT is correct
+ **. imports_nnIAT.exe        IAT is not null-terminated but INT is correct
  **. importsdotXP.exe         a PE using trailing dots in its imports (XP/W8 only)
  **. imports_nothunk.exe      imports with a bogus DLL with missing thunks in the tables
  *** imports_relocW7.exe      PE with a kernel range IMAGEBASE, and relocations to fix (manually pre-corrupted) imports
@@ -274,9 +288,13 @@ DataDirectory 9: Thread local storage
 DataDirectory A: Load config
  *.. safeseh.exe              a PE making use of SafeSEH (succeeding or not)
  **. safeseh_fly.exe          a PE modifying its HandlerTable on the fly before triggering an exception
+
  *.. ldrsnaps.exe             a PE enabling LoaderSnaps via its LoadConfig DataDirectory
  *.. ldrsnaps64.exe            64b version
- 
+
+ *.. ss63.exe                 a PE with a Subsystem 6.3 (which enforces a LoadConfig directory and a valid cookie)
+ *.. ss63nocookie.exe         the same but with no cookie and GuardFlags set to IMAGE_GUARD_SECURITY_COOKIE_UNUSED
+
 
 DataDirectory B: Bound imports
  *.. dllbound-ld.exe          dll loader with bound imports

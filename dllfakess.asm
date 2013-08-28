@@ -1,23 +1,56 @@
-; DLL with minimal export table, and relocations
+; a DLL with corrupted subsystem
 
-; Ange Albertini, BSD LICENCE 2009-2013
+; Ange Albertini, BSD LICENCE 2013
 
 %include 'consts.inc'
 
-%include 'headers_dll.inc'
+IMAGEBASE equ 1000000h
+org IMAGEBASE
+bits 32
+
+SECTIONALIGN equ 1000h
+FILEALIGN equ 200h
+
+istruc IMAGE_DOS_HEADER
+    at IMAGE_DOS_HEADER.e_magic, db 'MZ'
+    at IMAGE_DOS_HEADER.e_lfanew, dd NT_Headers - IMAGEBASE
+iend
+
+NT_Headers:
+istruc IMAGE_NT_HEADERS
+    at IMAGE_NT_HEADERS.Signature, db 'PE', 0, 0
+iend
+istruc IMAGE_FILE_HEADER
+    at IMAGE_FILE_HEADER.Machine,              dw IMAGE_FILE_MACHINE_I386
+    at IMAGE_FILE_HEADER.NumberOfSections,     dw NUMBEROFSECTIONS
+    at IMAGE_FILE_HEADER.SizeOfOptionalHeader, dw SIZEOFOPTIONALHEADER
+    at IMAGE_FILE_HEADER.Characteristics,      dw IMAGE_FILE_EXECUTABLE_IMAGE | IMAGE_FILE_32BIT_MACHINE | IMAGE_FILE_DLL
+iend
+
+OptionalHeader:
+istruc IMAGE_OPTIONAL_HEADER32
+    at IMAGE_OPTIONAL_HEADER32.Magic,                 dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
+    at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,   dd EntryPoint - IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.ImageBase,             dd IMAGEBASE
+    at IMAGE_OPTIONAL_HEADER32.SectionAlignment,      dd SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER32.FileAlignment,         dd FILEALIGN
+    at IMAGE_OPTIONAL_HEADER32.MajorSubsystemVersion, dw 4
+    at IMAGE_OPTIONAL_HEADER32.SizeOfImage,           dd 2 * SECTIONALIGN
+    at IMAGE_OPTIONAL_HEADER32.SizeOfHeaders,         dd SIZEOFHEADERS
+    at IMAGE_OPTIONAL_HEADER32.Subsystem,             dw -1 ; <=========================
+    at IMAGE_OPTIONAL_HEADER32.NumberOfRvaAndSizes,   dd 16
+iend
 
 %include 'dd_dll.inc'
 
 %include 'section_1fa.inc'
 
-EntryPoint: ;*******************************************************************
+EntryPoint:
+relocbase:
     cmp dword [esp + 8], DLL_PROCESS_ATTACH
     jz attached_
 
-relocbase:
-reloc01:
-    push detach
-    jmp print_
+    retn 3 * 4
 
 attached_:
 reloc11:
@@ -40,9 +73,8 @@ reloc42:
     retn
 _c
 
-attach db "  # DLL EntryPoint called on attach", 0ah, 0
-detach db "  # DLL EntryPoint called on detach", 0ah, 0
-export db "  # DLL export called", 0ah, 0
+attach db "  # DLL attached", 0ah, 0
+export db "   # DLL export called", 0ah, 0
 
 _d
 import_descriptor: ;************************************************************
@@ -94,7 +126,7 @@ address_of_name_ordinals:
 _d
 
 a__exp__Export:
-db 'export'
+db 'exportfakeSS'
     db 0
 _d
 
@@ -104,7 +136,6 @@ Directory_Entry_Basereloc: ;****************************************************
 block_start0:
     .VirtualAddress dd relocbase - IMAGEBASE
     .SizeOfBlock dd BASE_RELOC_SIZE_OF_BLOCK0
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc01 + 1 - relocbase)
     dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc11 + 1 - relocbase)
     dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc22 + 2 - relocbase)
     dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc31 + 1 - relocbase)

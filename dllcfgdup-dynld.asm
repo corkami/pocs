@@ -1,6 +1,7 @@
-; dll dynamic loader
+; dll with CFG duplicate dynamic loader
+; IMAGE_DLLCHARACTERISTICS_GUARD_CF not set
 
-; Ange Albertini, BSD LICENCE 2009-2013
+; Ange Albertini, BSD LICENCE 2013
 
 %include 'consts.inc'
 
@@ -73,7 +74,7 @@ hnFreeLibrary    _IMAGE_IMPORT_BY_NAME 'FreeLibrary'
 hnGetProcAddress _IMAGE_IMPORT_BY_NAME 'GetProcAddress'
 
 
-export db 'export', 0
+export db 'cfgdup', 0
 _d
 
 hnprintf _IMAGE_IMPORT_BY_NAME 'printf'
@@ -97,7 +98,7 @@ __imp__printf:
 _d
 
 kernel32.dll db 'kernel32.dll', 0
-dll.dll db 'dll.dll', 0
+dll.dll db 'dllcfgdup.dll', 0
 msvcrt.dll db 'msvcrt.dll', 0
 _d
 

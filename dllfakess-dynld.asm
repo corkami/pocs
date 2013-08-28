@@ -1,6 +1,6 @@
-; dll dynamic loader
+; dll with fake subsystem dynamic loader
 
-; Ange Albertini, BSD LICENCE 2009-2013
+; Ange Albertini, BSD LICENCE 2013
 
 %include 'consts.inc'
 
@@ -14,10 +14,6 @@ EntryPoint:
     call [__imp__printf]
     add esp, 1 * 4
 _
-    push loading
-    call [__imp__printf]
-    add esp, 1 * 4
-_
     push dll.dll
     call [__imp__LoadLibraryA]
     mov [h], eax
@@ -27,10 +23,6 @@ _
     call [__imp__GetProcAddress]
     call eax
 _
-    push unloading
-    call [__imp__printf]
-    add esp, 1 * 4
-_
     push dword [h]
     call [__imp__FreeLibrary]
 _
@@ -38,9 +30,7 @@ _
     call [__imp__ExitProcess]
 _c
 
-start db ' * dynamically loaded DLL and export call', 0ah, 0
-loading db '  # loading dll', 0ah, 0
-unloading db '  # unloading dll', 0ah, 0
+start db ' * loading dynamically a DLL with fake subsystem', 0ah, 0
 _d
 
 h dd 0
@@ -73,7 +63,7 @@ hnFreeLibrary    _IMAGE_IMPORT_BY_NAME 'FreeLibrary'
 hnGetProcAddress _IMAGE_IMPORT_BY_NAME 'GetProcAddress'
 
 
-export db 'export', 0
+export db 'exportfakeSS', 0
 _d
 
 hnprintf _IMAGE_IMPORT_BY_NAME 'printf'
@@ -97,7 +87,7 @@ __imp__printf:
 _d
 
 kernel32.dll db 'kernel32.dll', 0
-dll.dll db 'dll.dll', 0
+dll.dll db 'dllfakess.dll', 0
 msvcrt.dll db 'msvcrt.dll', 0
 _d
 

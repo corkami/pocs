@@ -1,6 +1,6 @@
 all: common XP W7 W8 gui
 
-common: exports imports dll gaps tls bound entrypoint down many misc resource delay relocs dotnet
+common: exports imports dll gaps tls bound entrypoint down many misc resource delay relocs dotnet load_config
 
 exports: ownexports.exe ownexports2.exe exportsdata.exe exportobf.exe exports_doc.exe exports_order.exe
 
@@ -11,7 +11,9 @@ dll: dll.dll dll-ld.exe dll-dynld.exe dllweirdexp.dll dllweirdexp-ld.exe dllempt
     dllnoexp.dll dllnoexp-dynld.exe dllfw.dll dllfw-ld.exe dllfwloop.dll dllfwloop-ld.exe \
     dll-webdavld.exe dupsec.exe secinsec.exe bigib.exe dllnomain.dll dllnomain-ld.exe \
     dllnomain2.dll dllnomain2-dynld.exe dllnullep.dll dllnullep-ld.exe dllnullep-dynld.exe \
-    dllnegep.dll dllnegep-ld.exe ctxt.dll ctxt-ld.exe
+    dllnegep.dll dllnegep-ld.exe ctxt.dll ctxt-ld.exe \
+    dllfakess.dll dllfakess-ld.exe dllfakess-dynld.exe \
+    dllmaxvals.dll dllmaxvals-ld.exe dllmaxvals-dynld.exe
 
 relocs: ibkernel.exe reloccrypt.exe ibkmanual.exe ibreloc.exe fakerelocs.exe lfanew_relocW7.exe \
     lfanew_relocXP.exe relocsstripped.exe relocsstripped64.exe skippeddynbase.exe
@@ -23,7 +25,7 @@ misc: normal.exe truncatedlast.exe pdf.exe tiny.exe bigsec.exe shuffledsect.exe 
     dump_imports.exe nullvirt.exe safeseh.exe lfanew_relocW7.exe \
     lfanew_relocXP.exe safeseh_fly.exe signature.exe standard.exe \
     dep.exe no_dep.exe no_seh.exe memshared.dll memshared-ld.exe  aslr.dll aslr-ld.exe \
-    debug.exe copyright.exe hdrdata.exe no_dd64.exe ldrsnaps.exe ldrsnaps64.exe \
+    debug.exe copyright.exe hdrdata.exe no_dd64.exe \
     lowsubsys.exe tinydll.dll tinydll-ld.exe
 
 down: appendedsecttbl.exe appendedhdr.exe footer.exe bottomsecttbl.exe
@@ -46,13 +48,17 @@ resource: manifest resource.exe resource2.exe reshdr.exe namedresource.exe resou
     resource_string.exe d_resource-ld.exe d_resource.dll version resource_icon.exe
 
 manifest: manifest.exe manifest_bsod.exe manifest_broken.exe
+
 version: version_mini.exe version_std.exe version_cust.exe
+
+load_config: ldrsnaps.exe ldrsnaps64.exe cfgbogus.exe dllcfgdup.dll dllcfgdup-dynld.exe \
+    ss63.exe ss63nocookie.exe
 
 imports: imports.exe imports_noint.exe imports_noext.exe imports_mixed.exe impbyord.exe \
     imports_badterm.exe imports_vterm.exe imports_nothunk.exe imports_multidesc.exe \
     imports_iatindesc.exe imports_virtdesc.exe importshint.exe nothing.dll \
 	nothing-ld.exe d_tiny.dll d_tiny-ld.exe d_nonnull.dll d_nonnull-ld.exe sc.exe \
-	hard_imports.exe imports_corruptedIAT.exe imports_bogusIAT.exe
+	hard_imports.exe imports_corruptedIAT.exe imports_bogusIAT.exe imports_nnIAT.exe
 
 XP: tinyXP.exe maxsecXP.exe nosectionXP.exe nullSOH-XP.exe virtsectblXP.exe tinydllXP.dll \
     tinydllXP-ld.exe ibnullXP.exe dllbound-redirldXP.exe dllbound2.dll reloccryptXP.exe \

@@ -659,12 +659,17 @@ IMAGE_DLLCHARACTERISTICS_NO_SEH          equ 0400h
 IMAGE_DLLCHARACTERISTICS_APPCONTAINER    equ 1000h ; W8
 IMAGE_DLLCHARACTERISTICS_GUARD_CF        equ 4000h ; W8.1
 
-
 FLG_SHOW_LDR_SNAPS equ 2
 
 MB_OK           equ 00000000h
 MB_ICONASTERISK equ 00000040h
 MB_APPLMODAL    equ 00000000h
 
-LOAD_LIBRARY_AS_DATAFILE equ 0x00000002
+LOAD_LIBRARY_AS_DATAFILE equ 000000002h
 
+IMAGE_GUARD_CF_INSTRUMENTED           equ 000000100h ;Module performs control flow integrity checks using system-supplied support
+IMAGE_GUARD_CFW_INSTRUMENTED          equ 000000200h ;Module performs control flow and write integrity checks
+IMAGE_GUARD_CF_FUNCTION_TABLE_PRESENT equ 000000400h ;Module contains valid control flow target metadata
+IMAGE_GUARD_SECURITY_COOKIE_UNUSED    equ 000000800h ;Module does not make use of the /GS security cookie
+
+COOKIE_DEFAULT equ 0bb40e64eh
