@@ -177,7 +177,7 @@ Section table (PE Geometry):
 
 DataDirectory 0: Export
  **. ownexports.exe           calling its own exports
- **. ownexportsdot.exe        calling its own exports, but with a trailing dot in the import name (may generate crashes)
+ **. ownexportsdot.exe        calling its own exports, but with a trailing characters in the import name (may generate crashes)
  **. ownexports2.exe          calling its own virtual and header exports
  **. exportobf.exe            PE with fake exports to disrupt disassembly
  **. exports_doc.exe          PE with exports as internal documentation
@@ -202,7 +202,7 @@ DataDirectory 1: Import
  **. imports_bogusIAT.exe     bogus IAT content but INT is correct
  **. imports_corruptedIAT.exe IAT with corrupted pointers but INT is correct
  **. imports_nnIAT.exe        IAT is not null-terminated but INT is correct
- **. importsdotXP.exe         a PE using trailing dots in its imports (XP/W8 only)
+ **. importsdotXP.exe         a PE using trailing characters in its imports (XP/W8 only)
  **. imports_nothunk.exe      imports with a bogus DLL with missing thunks in the tables
  *** imports_relocW7.exe      PE with a kernel range IMAGEBASE, and relocations to fix (manually pre-corrupted) imports
  *** hard_imports.exe         a PE that calls imports by comparing kernel32 timestamp with known list

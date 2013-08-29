@@ -120,7 +120,7 @@ d5256c32d407ba2c6971332945545059720926dd *imports_tinyW7.exe
 36c5e700efa6ffb983be94dce975afaad492c727 *imports_tinyXP.exe
 17cf7ce88241b06ff89a7278a0199787d9574afa *imports_virtdesc.exe
 bcb7a3e77e416d9527892a2941ce02864ff626e7 *imports_vterm.exe
-e84d7fef53bd730132527dd41d8e3196d8ca9492 *importsdotXP.exe
+8df1164834f51234dc0820dc3b06c05a810dfb10 *importsdotXP.exe
 dc3977014027d86539bd6986b857c51da5a0ac5c *importshint.exe
 21a0855324b7e6146edf1c85f5d494e6882c6a3f *ldrsnaps.exe
 b9895c5cfa240b6b98bdaf7887eace236ba8bec7 *ldrsnaps64.exe
@@ -158,7 +158,7 @@ e5e35e600ec07f11504587aa9baa84f7a4316825 *nothing-ld.exe
 1594da1e9724ba55f49d6195c47cee4750b9c9d1 *nullSOH-XP.exe
 cde48c7b52f73e77c812864a32b695fc59fdbcb6 *nullvirt.exe
 175d0521661d28e3cf9dcabe8ddaa55578a1f0da *ownexports.exe
-f36a3e08ccd4dd932f135f191f7e947adb71c5fb *ownexportsdot.exe
+9dc2242050b528dc15816d8837d835aeb0119dda *ownexportsdot.exe
 fc88d459552a7aa323ca30e4a5ae460a786c5def *ownexports2.exe
 ea42e2179a8e43b2f450b49d1927e46dad6106d3 *pdf.exe
 5db0304aa5045b7c16e436b6ab86a9233691ccec *pdf_zip_pe.exe

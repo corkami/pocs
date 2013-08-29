@@ -58,7 +58,7 @@ hnexport:
     db 'export', 0
 
 msvcrt.dll db 'msvcrt.dll', 0
-ownexports.exe db 'ownexportsdot.exe..', 0
+ownexports.exe db 'ownexportsdot.exe.  ... ', 0
 
 
 Exports_Directory: ;************************************************************

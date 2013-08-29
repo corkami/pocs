@@ -39,8 +39,8 @@ __imp__printf dd hnprintf - IMAGEBASE
     dd 0
 _d
 
-kernel32.dll db 'kernel32.dll...', 0 ; <===
-msvcrt.dll db 'msvcrt.dll.', 0
+kernel32.dll db 'kernel32.dll .     ... . .', 0 ; <===
+msvcrt.dll db 'msvcrt.dll      .... ...', 0
 _d
 
 align FILEALIGN, db 0
