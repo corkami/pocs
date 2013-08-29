@@ -1,6 +1,6 @@
-; a PE importing its own exports
+; a PE importing its own exports, but with a trailing dot in the name
 
-; Ange Albertini, BSD LICENCE 2009-2013
+; Ange Albertini, BSD LICENCE 2013
 
 %include 'consts.inc'
 
@@ -58,7 +58,7 @@ hnexport:
     db 'export', 0
 
 msvcrt.dll db 'msvcrt.dll', 0
-ownexports.exe db 'ownexports.exe', 0
+ownexports.exe db 'ownexportsdot.exe..', 0
 
 
 Exports_Directory: ;************************************************************

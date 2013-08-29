@@ -2,7 +2,8 @@ all: common XP W7 W8 gui
 
 common: exports imports dll gaps tls bound entrypoint down many misc resource delay relocs dotnet load_config
 
-exports: ownexports.exe ownexports2.exe exportsdata.exe exportobf.exe exports_doc.exe exports_order.exe
+exports: ownexports.exe ownexports2.exe exportsdata.exe exportobf.exe exports_doc.exe exports_order.exe \
+    ownexportsdot.exe 
 
 many: 96emptysections.exe 96workingsections.exe bigSoRD.exe
 

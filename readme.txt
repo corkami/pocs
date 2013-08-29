@@ -177,6 +177,7 @@ Section table (PE Geometry):
 
 DataDirectory 0: Export
  **. ownexports.exe           calling its own exports
+ **. ownexportsdot.exe        calling its own exports, but with a trailing dot in the import name (may generate crashes)
  **. ownexports2.exe          calling its own virtual and header exports
  **. exportobf.exe            PE with fake exports to disrupt disassembly
  **. exports_doc.exe          PE with exports as internal documentation
