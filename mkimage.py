@@ -4,7 +4,7 @@
 
 # Ange Albertini, BSD Licence 2013
 
-# usage: mkimage.py <test.jpg> <height> <width> <output.pdf>
+# usage: mkimage.py <test.jpg> <width> <height> <output.pdf>
 
 template="""
 %% a minimal PDF with picture
@@ -33,6 +33,7 @@ endobj
 <<
     /Type /Page
     /Parent 2 0 R
+    /MediaBox [0 0 %(width)i %(height)i]
     /Contents 4 0 R
     /Resources
     <<
@@ -46,7 +47,7 @@ endobj
 <<>>
 stream
 q
-612 0 0 612 0 80 cm
+%(width)i 0 0 %(height)i 0 0 cm
 /Im0 Do
 Q
 endstream
@@ -55,8 +56,8 @@ endobj
 
 5 0 obj
 <<
-    /Height %(height)i
     /Width %(width)i
+    /Height %(height)i
 
     /ColorSpace /DeviceRGB
     /Subtype /Image
@@ -76,13 +77,15 @@ trailer
 """
 
 import sys
-with open(sys.argv[1], "rb") as s:
+jpgfn, width, height, pdffn = sys.argv[1:5]
+
+width, height = int(width), int(height)
+
+with open(jpgfn, "rb") as s:
     data = s.read()
 hex = ["%02x" % ord(c) for c in data]
 
 hex = " ".join(hex)
 
-with open(sys.argv[4], "wb") as t:
-    height = int(sys.argv[2])
-    width = int(sys.argv[3])
+with open(pdffn, "wb") as t:
     t.write(template % globals())
