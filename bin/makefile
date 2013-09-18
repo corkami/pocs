@@ -3,7 +3,7 @@ all: common XP W7 W8 gui
 common: exports imports dll gaps tls bound entrypoint down many misc resource delay relocs dotnet load_config
 
 exports: ownexports.exe ownexports2.exe exportsdata.exe exportobf.exe exports_doc.exe exports_order.exe \
-    ownexportsdot.exe 
+    ownexportsdot.exe
 
 many: 96emptysections.exe 96workingsections.exe bigSoRD.exe
 
@@ -17,7 +17,8 @@ dll: dll.dll dll-ld.exe dll-dynld.exe dllweirdexp.dll dllweirdexp-ld.exe dllempt
     dllmaxvals.dll dllmaxvals-ld.exe dllmaxvals-dynld.exe
 
 relocs: ibkernel.exe reloccrypt.exe ibkmanual.exe ibreloc.exe fakerelocs.exe lfanew_relocW7.exe \
-    lfanew_relocXP.exe relocsstripped.exe relocsstripped64.exe skippeddynbase.exe
+    lfanew_relocXP.exe relocsstripped.exe relocsstripped64.exe skippeddynbase.exe reloc9.exe \
+    reloc4.exe
 
 misc: normal.exe truncatedlast.exe pdf.exe tiny.exe bigsec.exe shuffledsect.exe truncsectbl.exe \
     quine.exe bigalign.exe foldedhdr.exe compiled.exe duphead.exe \

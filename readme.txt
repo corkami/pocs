@@ -251,6 +251,8 @@ DataDirectory 5: Relocations
  **. ibknoreloc64.exe         a PE32+ with kernel imagebase and RIP-relative code (no relocations)
  *** ibkmanual.exe            kernel range IMAGEBASE, but no relocations, only manually-fixed in advance offsets
 
+ **. reloc4.exe               a PE using relocation type 4 (parameter ignored from W2k to W7, used in W8)
+ **. reloc9.exe               a PE using relocation type 9 (different results under XP and W7, unsupported under W8)
  *** reloccrypt.exe           a PE storing its code via relocations patch, with extra fake or rarely used relocations
  *** reloccryptXP.exe          XP version
  *** reloccryptW8.exe          W8 version
