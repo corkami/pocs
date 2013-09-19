@@ -45,7 +45,7 @@ _c
 
 relocme1 dd 0
 relocme2 dd 0
-msg db " * relocation type 4 according to its parameter: 00:%08X ff:%08X", 0ah, 0
+msg db " * relocation type 4 according to its parameter: 0000:%08X ffff:%08X", 0ah, 0
 _d
 
 %include 'imports_printfexitprocess.inc'

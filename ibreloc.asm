@@ -9,7 +9,7 @@
 %include 'consts.inc'
 
 IMAGEBASE equ 0FFFF0000h ; <==
-DELTA equ 20000h
+DELTA equ 20202h
 org IMAGEBASE
 bits 32
 
@@ -36,7 +36,6 @@ OptionalHeader:
 istruc IMAGE_OPTIONAL_HEADER32
     at IMAGE_OPTIONAL_HEADER32.Magic,                 dw IMAGE_NT_OPTIONAL_HDR32_MAGIC
     at IMAGE_OPTIONAL_HEADER32.AddressOfEntryPoint,   dd EntryPoint - IMAGEBASE + DELTA ; <==
-reloc00:  ; <==
     at IMAGE_OPTIONAL_HEADER32.ImageBase,             dd IMAGEBASE
     at IMAGE_OPTIONAL_HEADER32.SectionAlignment,      dd SECTIONALIGN
     at IMAGE_OPTIONAL_HEADER32.FileAlignment,         dd FILEALIGN
@@ -72,11 +71,6 @@ _d
 %include 'imports_printfexitprocess.inc'
 
 Directory_Entry_Basereloc:
-block_start1:
-    .VirtualAddress dd 74h ; yasm will reach the start of the structure with a direct offset ?
-    .SizeOfBlock dd BASE_RELOC_SIZE_OF_BLOCK1
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | 0
-BASE_RELOC_SIZE_OF_BLOCK1 equ $ - block_start1
 
 block_start0:
     .VirtualAddress dd reloc01 - IMAGEBASE
@@ -85,6 +79,14 @@ block_start0:
     dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc22 + 2 - reloc01)
     dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc42 + 2 - reloc01)
 BASE_RELOC_SIZE_OF_BLOCK0 equ $ - block_start0
+
+block_start1:
+    .VirtualAddress dd OptionalHeader - IMAGEBASE + IMAGE_OPTIONAL_HEADER32.ImageBase - 2
+    .SizeOfBlock dd BASE_RELOC_SIZE_OF_BLOCK1
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | 0
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | 1
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | 2
+BASE_RELOC_SIZE_OF_BLOCK1 equ $ - block_start1
 
 DIRECTORY_ENTRY_BASERELOC_SIZE  equ $ - Directory_Entry_Basereloc
 
