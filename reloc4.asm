@@ -27,45 +27,71 @@ iend
 %include 'section_1fa.inc'
 
 ;*******************************************************************************
+
 EntryPoint:
+
 relocbase:
-reloc22:
-    push dword [relocme2]
-reloc32:
-    push dword [relocme1]
-reloc41:
+reloc11:
+    mov esi, tests + (TESTCOUNT * 4) - 4
+    mov ecx, TESTCOUNT
+    std
+_next:
+    lodsd
+    push eax
+    dec ecx
+    jnz _next
+
+reloc21:
     push msg
-reloc52:
+    cld
+reloc32:
     call [__imp__printf]
-    add esp, 3 * 4
+    add esp, (TESTCOUNT + 1) * 4
     push 0
-reloc62:
+reloc42:
     call [__imp__ExitProcess]
 _c
 
-relocme1 dd 0
-relocme2 dd 0
-msg db " * relocation type 4 according to its parameter: 0000:%08X ffff:%08X", 0ah, 0
+tests:
+    dd 0
+    dd 080000000h
+    dd 0ffffffffh
+    dd 0
+    dd 080000000h
+    dd 0ffffffffh
+TESTCOUNT equ ($ - tests) / 4
+
+msg db " * relocation type 4 (value/param)", 0ah
+db "  00000000/0000:%08x", 0ah
+db "  80000000/0000:%08x", 0ah
+db "  ffffffff/0000:%08x", 0ah
+db "  00000000/ffff:%08x", 0ah
+db "  80000000/ffff:%08x", 0ah
+db "  ffffffff/ffff:%08x", 0ah
+db 0
 _d
 
 %include 'imports_printfexitprocess.inc'
 
 Directory_Entry_Basereloc: ;****************************************************
 block_start0:
-    .VirtualAddress dd relocbase - IMAGEBASE
+    .VirtualAddress dd EntryPoint - IMAGEBASE
     .SizeOfBlock dd BASE_RELOC_SIZE_OF_BLOCK0
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc22 + 2 - relocbase)
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc32 + 2 - relocbase)
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc41 + 1 - relocbase)
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc52 + 2 - relocbase)
-    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc62 + 2 - relocbase)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc11 + 1 - EntryPoint)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc21 + 1 - EntryPoint)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc32 + 2 - EntryPoint)
+    dw (IMAGE_REL_BASED_HIGHLOW << 12) | (reloc42 + 2 - EntryPoint)
 BASE_RELOC_SIZE_OF_BLOCK0 equ $ - block_start0
 
 block_start1:
-    .VirtualAddress dd relocbase - IMAGEBASE
+    .VirtualAddress dd EntryPoint - IMAGEBASE
     .SizeOfBlock dd BASE_RELOC_SIZE_OF_BLOCK1
-    dw (IMAGE_REL_BASED_HIGHADJ << 12) | (relocme1 - relocbase),  0
-    dw (IMAGE_REL_BASED_HIGHADJ << 12) | (relocme2 - relocbase), -1
+    dw (IMAGE_REL_BASED_HIGHADJ << 12) | (tests + 0*4 - EntryPoint), 0
+    dw (IMAGE_REL_BASED_HIGHADJ << 12) | (tests + 1*4 - EntryPoint), 0
+    dw (IMAGE_REL_BASED_HIGHADJ << 12) | (tests + 2*4 - EntryPoint), 0
+    dw (IMAGE_REL_BASED_HIGHADJ << 12) | (tests + 3*4 - EntryPoint), -1
+    dw (IMAGE_REL_BASED_HIGHADJ << 12) | (tests + 4*4 - EntryPoint), -1
+    dw (IMAGE_REL_BASED_HIGHADJ << 12) | (tests + 5*4 - EntryPoint), -1
 BASE_RELOC_SIZE_OF_BLOCK1 equ $ - block_start1
 
 DIRECTORY_ENTRY_BASERELOC_SIZE  equ $ - Directory_Entry_Basereloc
