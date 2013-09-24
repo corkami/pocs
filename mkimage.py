@@ -1,16 +1,12 @@
-# simple script to generate
-# a minimal PDF with picture
+# generates a minimal PDF with picture (PNG/JPG)
 # Sumatra/Adobe/Chrome/Evince compatible
+# not pdf.js (Firefox)
 
 # Ange Albertini, BSD Licence 2013
 
-# usage: mkimage.py <test.jpg> <width> <height> <output.pdf>
+# usage: mkimage.py <test.[jpg/png]> <width> <height> <output.pdf>
 
-template="""
-%% a minimal PDF with picture
-%% Sumatra/Adobe/Chrome/Evince compatible
-
-%% Ange Albertini, BSD Licence 2013
+template="""%% generated with mkimage.py - Ange Albertini, BSD Licence 2013
 
 %%PDF-1.4
 
@@ -61,8 +57,7 @@ endobj
 
     /ColorSpace /DeviceRGB
     /Subtype /Image
-    /Filter [/ASCIIHexDecode /DCTDecode]
-    /Type /XObject
+    /Filter [/ASCIIHexDecode %(filter)s] /Type /XObject
     /BitsPerComponent 8
 >>
 stream
@@ -77,15 +72,38 @@ trailer
 """
 
 import sys
-jpgfn, width, height, pdffn = sys.argv[1:5]
+imgfn, width, height, pdffn = sys.argv[1:5]
 
 width, height = int(width), int(height)
 
-with open(jpgfn, "rb") as s:
+with open(imgfn, "rb") as s:
     data = s.read()
+
+if data.startswith("\x89PNG\r\n\x1a\n"):
+
+    # need to convert the PNG to RAW
+    print "filetype: PNG"
+    import png, zlib
+
+    data = png.Reader(open(imgfn, "rb")).asRGBA()[2]
+    raw = ""
+    # we need to remove every 4th element when converting to RAW - no alpha channel
+    CHUNKSIZE = 4
+    for arr in data:
+        for index in range(len(arr) / CHUNKSIZE):
+            sub = arr[index * CHUNKSIZE: (index + 1) * CHUNKSIZE]
+            raw += "".join(chr(i) for i in sub[:CHUNKSIZE - 1])
+
+    data = zlib.compress(raw)
+    filter = "/FlateDecode"
+else:
+    # JPG is imported as is
+    print "filetype: JPG (default)"
+    filter = "/DCTDecode"
+
 hex = ["%02x" % ord(c) for c in data]
 
-hex = " ".join(hex)
+hex = "".join(hex)
 
 with open(pdffn, "wb") as t:
     t.write(template % globals())
