@@ -18,7 +18,7 @@ dll: dll.dll dll-ld.exe dll-dynld.exe dllweirdexp.dll dllweirdexp-ld.exe dllempt
 
 relocs: ibkernel.exe reloccrypt.exe ibkmanual.exe ibreloc.exe fakerelocs.exe lfanew_relocW7.exe \
     lfanew_relocXP.exe relocsstripped.exe relocsstripped64.exe skippeddynbase.exe reloc9.exe \
-    reloc4.exe
+    reloc4.exe relocOSdet.exe
 
 misc: normal.exe truncatedlast.exe pdf.exe tiny.exe bigsec.exe shuffledsect.exe truncsectbl.exe \
     quine.exe bigalign.exe foldedhdr.exe compiled.exe duphead.exe \

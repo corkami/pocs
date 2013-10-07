@@ -266,6 +266,8 @@ DataDirectory 5: Relocations
  **. relocsstripped.exe       a PE using relocations even if RELOCS_STRIPPED is set
  **. relocsstripped64.exe     PE32+ version
 
+ *** relocOSdet.exe           combining relocations type 9 and 4 to detect OSes
+
 DataDirectory 6: Debug
  *.. debug.exe                a PE with a Debug Directory (and missing symbols)
 
