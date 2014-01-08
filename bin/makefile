@@ -28,7 +28,7 @@ misc: normal.exe truncatedlast.exe pdf.exe tiny.exe bigsec.exe shuffledsect.exe 
     lfanew_relocXP.exe safeseh_fly.exe signature.exe standard.exe \
     dep.exe no_dep.exe no_seh.exe memshared.dll memshared-ld.exe  aslr.dll aslr-ld.exe \
     debug.exe copyright.exe hdrdata.exe no_dd64.exe \
-    lowsubsys.exe tinydll.dll tinydll-ld.exe
+    lowsubsys.exe tinydll.dll tinydll-ld.exe ddsect.exe
 
 down: appendedsecttbl.exe appendedhdr.exe footer.exe bottomsecttbl.exe
 
