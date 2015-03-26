@@ -1,0 +1,22 @@
+% a pdf file where string is obfuscated by by junk characters
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.
+
+obj<<>>
+
+trailer
+<<
+/Root
+  <</Pages <<>>
+  /OpenAction
+      <<
+      /S/JavaScript
+      /JS(
+        app.alert(
+            ("zHzzezzlzlzozzzzz zWozrzldz!").replace(/z/g,"")
+            );
+        )
+      >>
+  >>
+>>

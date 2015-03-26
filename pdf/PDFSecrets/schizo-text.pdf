@@ -1,0 +1,182 @@
+%PDF-1.1
+
+1 0 obj
+<<
+  /Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+  /Type /Pages
+  /Count 1
+  /Kids [3 0 R]
+>>
+endobj
+
+3 0 obj
+<<
+  /Type /Page
+  /Contents 4 0 R
+  /Parent 2 0 R
+  /Resources <<
+    /Font <<
+      /F1 <<
+        /Type /Font
+        /Subtype /Type1
+        /BaseFont /Arial
+      >>
+    >>
+  >>
+>>
+endobj
+
+4 0 obj
+<< /Length 50>>
+stream
+BT
+  /F1 110 Tf
+  10 400 Td
+  (Hello World!) Tj
+ET
+endstream
+endobj
+
+16 0 obj
+<<
+    /Type /Catalog
+    /Pages 17 0 R
+>>
+endobj
+
+17 0 obj
+<<
+    /Type /Pages
+    /Count 2
+    /Kids[11 0 R 12 0 R]
+>>
+endobj
+
+11 0 obj
+<<
+    /Type /Page
+    /Parent 17 0 R
+    /Resources 13 0 R
+    /Contents 14 0 R
+    /MediaBox[0 0 400 300]
+>>
+endobj
+
+12 0 obj
+<<
+    /Type /Page
+    /Parent 17 0 R
+    /Resources 13 0 R
+    /Contents 15 0 R
+    /MediaBox[0 0 400 300]
+>>
+endobj
+
+13 0 obj
+<</Font
+    <</F
+        <<
+            /BaseFont/Arial
+            /Type /Font
+            /Subtype /Type1
+        >>
+    >>
+>>
+endobj
+
+14 0 obj
+<<>>
+stream
+BT
+/F 60
+Tf
+20 20 TL
+60 190 Td
+(Binary Art)' T*
+/F 20
+Tf 10 -40
+Td(Ange Albertini - 2014/03/21)'
+-40 -5 Td
+(Insomni`hack, Geneva, Switzerland)'
+ET
+endstream
+endobj
+
+15 0 obj
+<<>>
+stream
+BT
+/F 6 Tf 10 10 TL 40 270
+Td(author of corkami)'
+(* reverse engineering & visual documentations)'
+()'
+(file formats)'
+(supposed to be safe)'
+(* public specs)'
+(* open-source parsers)'
+(* {weirdness} == {exploits} ?)'
+(* software = parse, sanitize, recover)'
+(formats diversity:)'
+(* no header, magic signature, start offset)'
+(* obsolescence, directions, versions, scanning,)'
+(* no official names)'
+(study formats:)'
+(reproduce structure, mimick file, have fun)'
+(plenty of fun:)'(* small, big files)'
+(* quine (relay))'
+(* polyglot)'
+(* schizophren)'
+(* misc)'
+(* crypto (encryption, collision))'
+(conclusion)'
+10 10 TL
+200 200 
+Td(visual documentations)'
+(disclaimer)'
+(goal)'
+(why posters?)'
+(use common sense, and your own eyes)'
+(creativity = give yourself time (to fail))'
+(define your audience, your margins)'
+(remove the obvious)'
+(space: optimal separator)'
+(leave door closed, no unnecessary extras)'
+(requirements)'
+(links)'
+()'
+(conclusion)'
+()'
+(questions?)'
+()'
+(thank you)'
+( @angealbertini)'
+( ange@corkami.com)'
+ET
+endstream
+endobj
+
+xref
+0 5
+0000000000 65535 f 
+0000000010 00000 n 
+0000000047 00000 n 
+0000000111 00000 n 
+0000000313 00000 n 
+
+trailer
+<<
+  /Root 1 0 R
+>>
+
+<< /Root 16 0 R >>
+
+startxref
+824
+%%EOF
+
+

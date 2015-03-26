@@ -1,0 +1,28 @@
+% a pdf file showing the use of Streams and Filters
+% in particular, Adobe doesn't check that zlib decompression is perfect. 
+% even if the compressed block is corrupted, what is already decompressed until an error occurs is left as is, and executed.
+
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.
+
+1 0 obj
+<</Filter ()>>
+stream
+app.alert("Hello World!");
+//////////////// Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+// app.alert("Hello World!");app.alert("Hello World!");app.alert("Hello World!");app.alert("Hello World!");app.alert("Hello World!");
+endstream
+endobj
+
+trailer
+<<
+/Root
+  <</Pages <<>>
+  /OpenAction
+    <<
+    /S/JavaScript
+    /JS 1 0 R
+    >>
+  >>
+>>

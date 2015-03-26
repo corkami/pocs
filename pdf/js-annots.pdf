@@ -1,0 +1,35 @@
+% a pdf file where some data is taken by the javascript from a page annotation
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.
+%4
+
+1 0 obj
+<<
+/Kids
+  [<<
+  /Annots
+    [<<
+    /Subtype /Text
+    /Rect[0 0 0 0]
+    /Subj (Hello World!)
+    >>]
+  /Parent 1 0 R
+  >>]
+>>
+%endobj
+
+trailer
+<<
+  /Root <<
+    /Pages 1 0 R
+    /OpenAction <<
+    /S/JavaScript
+    /JS(
+      d = app.doc;
+      d.syncAnnotScan();
+      a = d.getAnnots({ nPage: 0 });
+      app.alert(a[0].subject);
+      )>>
+  >>
+>>

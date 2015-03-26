@@ -1,0 +1,37 @@
+%no signature at all!
+
+1 0 obj
+<<
+% count required (not for adobe)
+	/Count 1
+	/Kids [ <<
+		/Contents 2 0 R
+		/Resources <<
+			% font not required for adobe
+			/Font <<
+				/F <<
+					/BaseFont /Arial
+				>>
+			>>
+		>>
+	>> ]
+>>
+% no endobj necessary
+
+2 0obj
+<<>>
+stream
+BT
+/F 100
+% no Tf parameter required (required for Adobe)
+Tf
+Tr(Hello World!)Tj
+ET
+endstream
+
+- % only a single character is required or the endobj - weird :p
+<<
+	/Root <<
+		/Pages 1 0 R
+	>>
+>>

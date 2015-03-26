@@ -1,0 +1,36 @@
+% a PDF file where information is stored in a widget data
+
+% BSD Licence, Ange Albertini, 2011
+
+
+% we need one object or the file won't load :(
+%PDF-1.
+
+%needed (for v8, at least)
+obj<<>>
+
+trailer
+<<
+/Root
+  <<
+  /AcroForm
+  <<
+    /Fields
+      [<<
+        /Rect[0 0 0 0]
+        /Subtype/Widget
+        /T(mydata)        % this is the name
+        /V(Hello World!)  % this is the value
+        /FT/Tx
+      >>]
+  >>
+  /Pages <<>>
+  /OpenAction
+    <<
+    /S /JavaScript
+    /JS(
+      app.alert(this.getField('mydata').value);
+      )
+    >>
+  >>
+>>

@@ -1,0 +1,2 @@
+%PDF-1.4
+1 0 obj<</Kids[<</Parent 1 0 R>>]>>trailer<</Root<</Pages 1 0 R/OpenAction<</S/JavaScript/JS(i=0;hidden=i;app.alert("Trick on global variables:\\n\\ni=0;\\nhidden=i;\\n\\nResults\\ni: " + i + "\\nhidden: " + hidden + "\\n\\nReason: 'hidden' is a global variable, and Adobe Javascript is not standard.\\n\\nCredits to Sebastian Porst");)>>>>>>

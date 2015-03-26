@@ -1,0 +1,83 @@
+%PDF-1.5
+%‚„œ”
+
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<< /Kids [3 0 R] /Type /Pages /Count 1 >>
+endobj
+
+3 0 obj
+<<
+/Parent 2 0 R
+/Annots [ 7 0 R ]
+/MediaBox [0 0 612 792]
+/Resources << /Font << /F1 <<
+/BaseFont /Arial /Subtype /Type1 /Type /Font>>
+>> >> /Contents 4 0 R /Type /Page
+>>
+endobj
+
+4 0 obj
+<< /Length 53 >>
+stream
+BT
+  /F1 110
+  Tf
+  10 400 Td
+  (Hello World!) Tj
+ET
+endstream
+endobj
+
+5 0 obj
+<<
+/Length 12
+/Type /EmbeddedFile
+>>
+stream
+Hello World!
+endstream
+endobj
+
+6 0 obj
+<<
+    /Type /Filespec
+    /F (simple.txt)
+    /UF (simple.txt)
+    /EF <</F 5 0 R>>
+>>
+endobj
+
+7 0 obj
+<<
+/Type /Annot
+/Subtype /FileAttachment
+/F 2
+/FS 6 0 R
+/Rect [1 1 11 11]
+>>
+endobj
+
+
+xref
+0 8
+0000000000 65535 f 
+0000000016 00000 n 
+0000000066 00000 n 
+0000000124 00000 n 
+0000000313 00000 n 
+0000000416 00000 n 
+0000000499 00000 n 
+0000000603 00000 n 
+
+trailer << /Root 1 0 R /Size 8 >>
+
+startxref
+697
+%%EOF

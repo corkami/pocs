@@ -1,0 +1,34 @@
+% a pdf file where a javascript function is using its own code as a decryption key
+
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.4
+obj<<>>
+
+trailer
+<<
+/Root
+  <</Pages <<>>
+  /OpenAction
+      <<
+      /S/JavaScript
+      /JS(
+        // modifying a single character in the code might give incorrect decryption
+        function decrypt(cipher) 
+        {
+            var key;
+            var i;
+            key = arguments.callee.toString(); // note that the code is pretty-printed in memory
+            plaintext = "";
+            for (i=0; i < cipher.length; i++)
+                plaintext = plaintext + String.fromCharCode(key.charCodeAt(i) ^ cipher.charCodeAt(i));
+            return plaintext;
+        }
+
+        app.alert(
+            decrypt(unescape(".%10%02%0F%1BI8%01R%08%01B"))
+            );
+        )
+      >>
+  >>
+>>

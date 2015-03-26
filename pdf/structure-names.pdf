@@ -1,0 +1,39 @@
+% a PDF file showing how names tree can make it possible to split a script.
+% moreover, unlike /OpenAction, the trigger is not obvious in this case.
+
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.
+
+% we need one object or the file won't load :(
+1 0 obj
+<<>>
+
+trailer
+<<
+/Root
+  <<
+  /Pages <<>>
+  /Names
+    <<
+    /JavaScript
+       <<
+       /Names[
+            (1) <<
+                /S /JavaScript
+                /JS(
+                  msg = "Hello";
+                  )
+              >>
+            (2) <<
+                /S /JavaScript
+                /JS(
+                  msg = msg + " World!";
+                  app.alert(msg);
+                  )
+              >>
+           ]
+       >>
+    >>
+  >>
+>>

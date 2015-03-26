@@ -1,0 +1,23 @@
+% a pdf file where a string is made from different blocks then concatenated
+
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.
+
+obj<<>>
+
+trailer
+<<
+/Root
+  <</Pages <<>>
+  /OpenAction
+      <<
+      /S/JavaScript
+      /JS(
+           B="Hell";
+           on="o ";
+           jour="World!";
+           app.alert(B + on + jour);
+      )>>
+  >>
+>>

@@ -1,0 +1,21 @@
+% a pdf file where information is stored ('hidden') in specific Info tags
+
+% BSD Licence, Ange Albertini, 2011
+
+%PDF-1.
+
+obj<<>>
+
+trailer
+<<
+  /Info <</Author(Hello) /Title( World) /Producer( !)>>
+  /Root
+    <<
+    /Pages <<>>
+    /OpenAction<<
+      /S/JavaScript
+      /JS(
+          app.alert(info.author + info.title + info.producer);
+      )>>
+    >>
+>>
