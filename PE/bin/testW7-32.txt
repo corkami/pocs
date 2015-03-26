@@ -1,0 +1,3 @@
+32b specific:
+tinyW7.exe:
+ * tiny 252 bytes PE (W7 32b only)

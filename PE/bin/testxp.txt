@@ -1,0 +1,41 @@
+ibreloc.exe:
+ * relocated ImageBase (only affects EntryPoint)
+ibnullXP.exe:
+ * null IMAGEBASE with relocations (XP only)
+dllbound-redirldXP.exe:
+ * export of an unexpected DLL called (corrupted bound imports)
+
+Low alignments:
+nosectionXP.exe:
+ * Low alignment PE with no section (XP)
+virtsectblXP.exe:
+ * Low alignment PE with a virtual section table (XP)
+nullSOH-XP.exe:
+ * Low alignment PE with a null SizeOfOptionalHeader (XP)
+maxsecXP.exe:
+ * Low alignment PE with 96 fake sections (XP)
+
+misc:
+tinydllXP-ld.exe:
+ * dynamically loading minimal 97 bytes DLL
+  # dll loaded
+reloccryptXP.exe:
+ * decryption via relocations (from null imagebase, XP only)
+imports_tinyXP.exe:
+ * tiny imports
+multiss_con.exe:
+ * multisystem PE (console)nothing-ld.exe:
+lfanew_relocXP.exe:
+ * relocated e_lfanew with dual (+unused) PE headers and DataDirectory (XP)
+virtrelocXP.exe:
+ * (LA+manual reloc) fake virtual relocs (XP)
+importsdotXP.exe:
+ * a PE using trailing dots in its imports (XP only)
+
+DOS:
+dosZMXP.exe:
+ * EXE with ZM signature
+
+OS Specific:
+tls_aoiOSDET.exe:
+ * TLS AoI => XP
