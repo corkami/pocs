@@ -1,0 +1,19 @@
+a Super NES, Sega Megadrive and PDF polyglot 
+
+made from snes-sprite-tutorial.7z and titan-MD2048.zip (no music version, for size reasons?)
+
+- add a SMC header to get an extra 512 bytes in the SNES rom
+- modify the MD source:
+ - move the error handler before the align $1f0 to get space before, in header.68k
+ - add align $460 at the top of init.68k to get space after
+ - compile
+
+- merge:
+  data = md[0:0x200] + snes[0x200:0x460] + md[0x460:0x4CD8] + snes[0x4CD8:]
+
+the PDF is a classic single-image page.
+
+the bottom of the rom will be used for the PDF (it's not appended)
+because the exact rom size is critical for SMC
+
+Ange Albertini, 2014
