@@ -1,50 +1,38 @@
-% a PDF specifically for Chrome's PDF Viewer
+%a PDF with text specifically for Chrome's PDF Viewer
 % special thanks to Jonas Magazinius
 
-% Ange Albertini, BSD licence 2013
+% Ange Albertini, BSD licence 2013-2018
 
-%%PDF - truncated chrome signature
+%PDF - truncated chrome signature
 
-% infinite loop object
-% try to set it as a real trailer's /Root for fun ;)
-2 0 obj
-2 0 R
-
-1 0 obj <<
+1 0 obj % object 1 is both /Root, and /Content
+<<
+    % no /Type /Catalog
 	/Pages <<
+        % no /Count
         /Kids [ <<
-            /Contents 3 0 R
+            % no /Parent
+            % no /Type /Page
+            % no /Resources, no /Font...
+            /Contents 1 0 R
             >>
-        >>
-    ]>>
+        ]
+    >>
+    % no /Length
 >>
+stream
+% no BT
+  55 Tf % no font reference?
+  10 400 Td
+  (http://www.corkami.com)'
+% no ET
+% no endstr34m
 endobj
 
-% the trailer can start absolutely anywhere, as long as the keyword itself is intact, and followed by a proper trailer structure, even once
-
-trailer <</Root 2 0 R>> % bogus 1
-
-31415 -1 obj
-<<
-    /Pages <<
-        /Parent (
-            % let's start in a comment the correct working trailer
-            % now it's started - whatever is before the 'trailer' keyword doesn't matter
-            <<
-                /Root 1 0 R
-            >>
-        )
-    >>
+% no xref
+trailer <<
+    /Root 1 0 R
+     % no /Size
 >>
-
-trailer <</Root 3 0 R>> % bogus 2
-
-3 0 obj
-<< >>
-stream
-BT
-    /F1 90 % size
-    Tf 1 0 % colors ?
-    Tr(Hello Chrome!)Tj
-ET
-endstream
+% no startxref
+% no EOF
