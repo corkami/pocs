@@ -1,0 +1,24 @@
+%PDF-1.
+
+% a 'Hello World' PDF for Adobe Reader
+
+1 0 obj
+<< /Kids [<<
+    /Parent 1 0 R
+    /Resources <<>>
+    /Contents 2 0 R
+  >>]
+>>
+
+2 0 obj
+<<>>
+stream
+BT
+  /F1 55 Tf
+  10 400 Td
+  (http://www.corkami.com)'
+ET
+endstream
+endobj
+
+trailer << /Root << /Pages 1 0 R >> >>
