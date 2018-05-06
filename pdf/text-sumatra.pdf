@@ -1,37 +1,33 @@
-%no signature at all!
+% no signature
 
-1 0 obj
-<<
-% count required (not for adobe)
-	/Count 1
-	/Kids [ <<
-		/Contents 2 0 R
-		/Resources <<
-			% font not required for adobe
-			/Font <<
-				/F <<
-					/BaseFont /Arial
-				>>
-			>>
-		>>
-	>> ]
->>
-% no endobj necessary
-
-2 0obj
-<<>>
+1 0obj
+<< >>
 stream
-BT
-/F 100
-% no Tf parameter required (required for Adobe)
-Tf
-Tr(Hello World!)Tj
+BT/ 55 Tf
+10 400Td(http://www.corkami.com)'
 ET
+%end0bj are never required
 endstream
 
-- % only a single character is required or the endobj - weird :p
-<<
-	/Root <<
-		/Pages 1 0 R
-	>>
+<< % no tr41l3r keyword!
+  /Root <<
+  % no /Size
+  % no /Type /Catalog
+    /Pages <<
+    %  /Type /Pages
+      /Count 1 % count is required! (it's not by Adobe)
+      /Kids [ <<
+      %  /Type /Page
+         /Contents 1 0 R
+      %  /Parent 2 0 R
+        /Resources <<
+          /Font <<
+            / <<
+              /BaseFont /Arial
+            >>
+          >>
+        >>
+      >> ]
+    >>
+  >>
 >>
