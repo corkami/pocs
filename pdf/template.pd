@@ -1,0 +1,69 @@
+%PDF-1.3
+
+% example of template-based PDF
+
+1 0 obj
+<<
+  /Type /Catalog
+  /Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+  /Type /Pages
+  /Count 1
+  /Kids [
+    3 0 R
+  ]
+>>
+endobj
+
+3 0 obj
+<<
+  /Type /Page
+  /Contents 4 0 R
+  /Parent 2 0 R
+  /Resources 5 0 R
+>>
+endobj
+
+4 0 obj
+<<
+  /Length __LENGTH
+>>
+stream
+BT
+/F 55 Tf
+10 400 Td
+(http://www.corkami.com) '
+ET
+endstream
+endobj
+
+5 0 obj
+<<
+  /Font <<
+    /F <<
+      /Type /Font
+      /BaseFont /Arial
+      /Subtype /Type1
+    >>
+  >>
+>>
+endobj
+
+
+xref
+__XREF
+
+
+trailer
+<<
+  /Root 1 0 R
+  /Size __SIZE
+>>
+
+startxref
+__STARTXREF
+%%EOF
