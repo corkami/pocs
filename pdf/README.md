@@ -15,14 +15,11 @@ However:
 - it's not clear where characters can be different from SPACE `20`, as adding more of them lowers the compatibility (see `ws00`, `ws00max`, `ws00max2`)
 - while `0C` is official, it's not supported by Adobe.
 - for unclear reasons, Chrome supports `80` and `FF` as whitespace (cf PoC||GTFO 14:10).
-- new lines can also be mixed, which 
+- newlines types can also be used together in the same file.
 
 They can also be mixed interchangeably `text-mixedNL`.
 
-Since XREF entries are supposedly separated by 20 characters, including newlines, then newlines of 
-1 character have to be pre-pended with space.
-
-
+Since XREF entries are supposedly separated by 20 characters, including newlines, then newlines of 1 character have to be pre-pended with space.
 
 file | Adobe | Chrome | OS X | Firefox | Sumatra
 :-- | :-: | :-: | :-: | :-: | :-: |
@@ -43,7 +40,6 @@ text-ws0D     | W | Y | Y | Y | Y
  |  |  |  |  | 
 text-ws80     | N | Y | N | N | N
 text-wsFF     | N | Y | N | N | N
-       |  |  |  |  | 
 
 # Writing text
 
