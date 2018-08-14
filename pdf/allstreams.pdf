@@ -1,0 +1,59 @@
+%PDF-1.3
+%01234
+
+7 0 obj
+<< /Length 311>>
+stream
+
+1 0 obj << /Fake /A >> endobj
+%1 0 obj <</Type/Catalog/Pages 2 0 R>> endobj
+1 0 obj << /Fake /B >> endobj
+
+2 0 obj <</Count 1/Kids[3 0 R]/Type/Pages>> endobj
+
+3 0 obj <</Contents 5 0 R/Parent 2 0 R/Resources 4 0 R/Type/Page>> endobj
+
+4 0 obj <</Font<</F1<</BaseFont/Arial/Subtype/Type1/Type/Font>>>>>> endobj
+
+endstream
+endobj
+
+
+5 0 obj
+<</Length 57>>
+stream
+q
+BT
+/F1 55 Tf
+10 400 Td
+(http://www.corkami.com) '
+ET
+Q
+endstream
+endobj
+
+
+6 0 obj
+<</Length 203>>
+stream
+
+xref
+0 8
+0000000000 65536 f 
+0000000081 00000 n 
+0000000157 00000 n 
+0000000209 00000 n 
+0000000284 00000 n 
+0000000379 00000 n 
+0000000485 00000 n 
+0000000017 00000 n 
+
+trailer
+<</Size 8/Root 1 0 R>>
+
+endstream
+endobj
+
+startxref
+517
+%%EOF
