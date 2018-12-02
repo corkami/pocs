@@ -28,3 +28,4 @@
   2: 33-63, 0, 0;
   ```
 - `lossless.jpg`: a JPEG abused to store data losslessly (grayscale, 100%, with data padded and replicated 8 times).
+ - `lossless.pdf`: a PDF making use of that JPEG (non-browser compatible), referencing the image as (losslessly-stored) page content and as image.
