@@ -13,20 +13,20 @@ the same file format trick can be used on several hashes, as long as the collisi
 
 Current status - as of December 2018 - of known attacks:
 - get a file to get another file's hash or a given hash: **impossible**
- - it's still even [not practical](https://eprint.iacr.org/2008/089.pdf) with MD2.
- - works for simpler hashes(\*) <!-- Thanks Sven! -->
+  - it's still even [not practical](https://eprint.iacr.org/2008/089.pdf) with MD2.
+  - works for simpler hashes(\*) <!-- Thanks Sven! -->
 
 - get 2 different files with the same MD5: **instant**
- - examples: [1](examples/single-ipc1.bin) & [2](examples/single-ipc2.bin)
+  - examples: [1](examples/single-ipc1.bin) & [2](examples/single-ipc2.bin)
 
 - make 2 arbitrary files get the same MD5: **a few hours** (72 hours.core)
- - examples: [1](examples/single-cpc1.bin) & [2](examples/single-cpc2.bin)
+  - examples: [1](examples/single-cpc1.bin) & [2](examples/single-cpc2.bin)
 
 - make 2 arbitrary files of specific file formats (PNG, JPG, PE...) get the same MD5: **instant**
- - read below
+  - read below
 
 - get two different files with the same SHA1: 6500 years.core
- - get two different PDFs with the same SHA-1 to show a different picture: [instant](https://github.com/nneonneo/sha1collider) (the prefixes are already computed)
+  - get two different PDFs with the same SHA-1 to show a different picture: [instant](https://github.com/nneonneo/sha1collider) (the prefixes are already computed)
 
 
 (\*) example with [crypt](https://docs.python.org/3/library/crypt.html) - thanks [Sven](https://twitter.com/svblxyz)!
