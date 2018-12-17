@@ -7,6 +7,8 @@ This is a collaboration with [Marc Stevens](https://marc-stevens.nl/research/).
 The idea is to explore existing attacks, also to show how weak MD5 is (instant collisions of any JPG, PNG, PDF, MP4, PE...), and also explore file formats landscape to determine how they can be exploited with present or with future attacks:
 the same file format trick can be used on several hashes, as long as the collisions follow the same byte patterns.
 
+This is not about new attacks (the most recent one was documented in 2012),
+but about new forms of exploitations of existing attacks.
 
 # Status
 
@@ -87,6 +89,8 @@ will show either A or B.
 
 ### [FastColl](https://www.win.tue.nl/hashclash/) (MD5)
 
+Final version in 2009.
+
 - time: a few seconds of computation
 - space: 2 blocks
 - differences: no control before, no control after.
@@ -137,6 +141,8 @@ Variant: there is a [single-block MD5 collision](https://marc-stevens.nl/researc
 
 ### [UniColl](unicoll.md) (MD5)
 
+Documented in [2012](https://www.cwi.nl/system/files/PhD-Thesis-Marc-Stevens-Attacks-on-Hash-Functions-and-Applications.pdf#page=199), implemented in [2017](https://github.com/cr-marcstevens/hashclash/blob/95c2619a8078990056beb7aaa59104021714ee3c/scripts/poc_no.sh)
+
 [UniColl](https://github.com/cr-marcstevens/hashclash#create-you-own-identical-prefix-collision) lets you control a few bytes in the collision blocks, before and after the first difference, which makes it an identical-prefix collision with some controllable differences, almost like a chosen prefix collision. This is very handy, and even better the difference can be very predictable: in the case of `m2+= 2^8` (a.k.a. `N=1` / `m2 9` in HashClash [poc_no.sh](https://github.com/cr-marcstevens/hashclash/blob/master/scripts/poc_no.sh#L30) script), the difference is +1 on the 9th byte, which makes it very exploitable, as you can even think about the collision in your head: the 9th character of that sentence will be replaced with the next one: `0` replaced by `1`, `a` replaced by `b`..
 
 - time: a few minutes (depends on the amount of byte you want to control )
@@ -179,7 +185,7 @@ It was used in the [Google CTF 2018](https://github.com/google/google-ctf/tree/m
 
 ### [Shattered](http://shattered.io) (SHA1)
 
-It was computed only once to our knowledge.
+Documented in [2013](https://marc-stevens.nl/research/papers/EC13-S.pdf), computed in [2017](http://shattered.io).
 
 - time: 6500 years.CPU and 110 year.GPU
 - space: 2 blocks
@@ -218,6 +224,7 @@ Chosen prefix collisions are almighty, but they can take a long time just for a 
 
 ### [HashClash](https://github.com/cr-marcstevens/hashclash) (MD5)
 
+Final version in [2009](https://www.win.tue.nl/hashclash/ChosenPrefixCollisions/).
 
 Examples: let's collide `yes` and `no`. It took 3 hours on 24 cores.
 
