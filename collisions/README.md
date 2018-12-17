@@ -65,7 +65,7 @@ hash(A) = hash(B) -> hash(A + C) = hash(B + C)
 Both files are almost identical (their content have only a few bits of differences)
 
 
-### Exploitation
+**Exploitation**: 
 
 Bundle 2 contents, then either:
 - Data exploit: run code that checks for differences and displays one or the other (typically trivial since differences are known in advance).
@@ -89,12 +89,16 @@ will show either A or B.
 
 - time: a few seconds of computation
 - space: 2 blocks
+- differences: no control before, no control after.
+   ```
+   ?? ?? ?? DD ?? ?? ??
+   ```
 - exploitation: hard
 
 The differences aren't near the start/end of the blocks, so it's very hard to exploit since you don't control any nearby byte. A potential solution is to bruteforce the surrounding bytes - cf [PoCGTFO 14:10](https://github.com/angea/pocorgtfo#0x14).
 
 
-#### examples
+**Examples**:
 
 With an empty prefix:
 ```
@@ -133,11 +137,17 @@ Variant: there is a [single-block MD5 collision](https://marc-stevens.nl/researc
 
 ### [UniColl](unicoll.md) (MD5)
 
-[UniColl](https://github.com/cr-marcstevens/hashclash#create-you-own-identical-prefix-collision) let you control a few bytes in the collision blocks, before and after the first difference, which makes it an identical-prefix collision with some controllable differences, almost like a chosen prefix collision. This is very handy, and even better the difference can be very predictable: in the case of [`m2 9`](https://github.com/cr-marcstevens/hashclash/blob/master/scripts/poc_no.sh#L30), the difference is +1 on the 9th byte, which makes it very exploitable.
+[UniColl](https://github.com/cr-marcstevens/hashclash#create-you-own-identical-prefix-collision) let you control a few bytes in the collision blocks, before and after the first difference, which makes it an identical-prefix collision with some controllable differences, almost like a chosen prefix collision. This is very handy, and even better the difference can be very predictable: in the case of `m2+= 2^8` (`N=1` or `m2 9` in [HashClash](https://github.com/cr-marcstevens/hashclash/blob/master/scripts/poc_no.sh#L30)), the difference is +1 on the 9th byte, which makes it very exploitable, as you can even think about the collision in your head: the 9th character of that sentence will be replaced with the next one: `0` replaced by `1`, `a` replaced by `b`..
 
 - time: a few minutes (depends on the amount of byte you want to control )
 - space: 2 blocks
-- exploitation: very easy.
+- differences:
+   ```
+   .. .. .. .. DD .. .. .. ..
+   .. .. .. .. +1 .. .. .. ..
+   ```
+- exploitation: very easy - controlled bytes before and after the difference, predictable difference
+
 
 Examples with `m2 9` (`n=1` in the [script](https://github.com/cr-marcstevens/hashclash/blob/master/scripts/poc_no.sh)) with 20 bytes of set text in the hash:
 ```
@@ -173,6 +183,12 @@ It was computed only once to our knowledge.
 
 - time: 6500 years.CPU and 110 year.GPU
 - space: 2 blocks
+- differences:
+  ```
+  .. .. .. DD ?? ?? ?? ??
+  or
+  ?? ?? ?? DD .. .. .. ..
+  ```
 - exploitation: easy. The differences are right at the start of the collision blocks.
 
 Examples: [PoC||GTFO 0x18](https://github.com/angea/pocorgtfo#0x18)
@@ -302,7 +318,7 @@ Once the prefix pair has been computed, it makes colliding 2 contents instant:
 it's just a matter of massaging file data (according to specific file formats) so that it fits the file formats specifications and the pre-computed prefix requirements.
 
 
-## standard collisions
+## Standard strategy
 
 Classic collisions of 2 valid files with the same filetype.
 
@@ -390,6 +406,7 @@ So in the end, the current GIF limitations for *instant* MD5 collisions are:
 
 The Portable Executable has a peculiar structure:
 - the old DOS header is almost useless, and points to the next structure, the PE header. The DOS headers has no other role. DOS headers can be exchanged between executables.
+- the DOS header has to be at offset 0, and has a fixed length of a full block, and the pointer is at the end of the structure, beyond UniColl's reach: so only Chosen Prefix collision is useful to collide PE files thisd way.
 - The PE header and what follows defines the whole file. 
 
 So the strategy is:
@@ -404,7 +421,7 @@ While executables collisions is usually trivial via any loader, this kind of exp
 Examples: [tweakPNG.exe](examples/collision1.exe) (GUI) & [fastcoll.exe](examples/collision2.exe) (CLI)
 
 
-## MP4
+### MP4
 
 The format is quite permissive. Just use `free` atoms, abuse a length with UniColl, then jump over the first video.
 
@@ -417,58 +434,64 @@ Examples: [collision1.mp4](examples/collision1.mp4) & [collision2.mp4](examples/
 This should be extendable to any MP4-like format (in terms of Atom/Box structures), such as HEIF or JP2.
 
 
-## PDF
+### PDF
 
 PDF can store foreign data in two ways: 
-- as a line comment, in which the only forbidden characters are new lines. This can be used inside a dictionary object, to modify for example an object reference, via UniColl.
-- as a stream object, in which case any data is possible, but since we're inside an object, we can't alter the whole PDF structure, so it requires a chosen prefix collision.
+- as a line comment, in which the only forbidden characters are newline (`\r` and `\n`). This can be used inside a dictionary object, to modify for example an object reference, via UniColl.
+  So this is a valid PDF object even if it contains binary collision blocks - just retry until you have no newline characters:
+  ```
+  1 0 obj
+  << /Type /Catalog /MD5_is /REALLY_dead_now__ /Pages 2 0 R
+  %¥┬•σe╕█╙X₧_~π▌╒εX∟■φe♦%τ8╞■[...]p╛╬ûFZ»‼v◘Åp↑╝%▓% ▼σφj╔◄dZ▀c²aU≤╨╩[├└─yNΓ5╔+▀╪yδ☻ß⌐░¼à(☺z₧
+  >>
+  endobj
+  ```
+- as a stream object, in which case any data is possible, but since we're inside an object, we can't alter the whole PDF structure, so it requires a chosen prefix collision to modify the structure outside the containing stream object.
 
-The first case enables to highlight the beauty of UniColl, a collision where differences are predictable, so you can write poetry over colliding data!
+The first case makes it possible to highlight the beauty of UniColl, a collision where differences are predictable, so you can write poetry over colliding data - thanks [Jurph](https://github.com/Jurph/word-decrementer)!
 
-[poeMD5 A](examples/poeMD5_A.pdf)
-```
-         V
-Now he hash MD5,
-No enemy cares!
- Only he gave
- the shards.
-Can’t be owned &
-his true gold,
-like One Frail,
-sound as fold.
-         ^
-```
-
-[poeMD5 B](examples/poeMD5_B.pdf)
-```
-         V
-Now he hath MD5,
-No enemy dares!
- Only he have
- the shares.
-Can’t be pwned &
-his true hold,
-like One Grail,
-sound as gold.
-         ^
-```
+- [poeMD5 A](examples/poeMD5_A.pdf)
+  ```
+           V
+  Now he hash MD5,
+  No enemy cares!
+   Only he gave
+   the shards.
+  Can’t be owned &
+  his true gold,
+  like One Frail,
+  sound as fold.
+           ^
+  ```
+- [poeMD5 B](examples/poeMD5_B.pdf)
+  ```
+           V
+  Now he hath MD5,
+  No enemy dares!
+   Only he have
+   the shares.
+  Can’t be pwned &
+  his true hold,
+  like One Grail,
+  sound as gold.
+           ^
+  ```
 
 (Note I screwed up with Adobe compatibility, but that's my fault, not UniColl's)
 
-Of course another use is that you alter the Root object, which enables to instantly collide any arbitrary pair of PDF.
+Whether you use UniColl as inline comment or Chosen Prefix in a dummy stream object, the strategy is similar: shuffle objects numbers around, then make Root object point to different objects, so unlike Shattered, this means instant collision of any arbitrary pair of PDF, at document level.
 
-A useful trick is that `mutool clean` output is reliably predictable, so it can be used to normalize PDFs as input, and fix your merged PDF while keeping the important parts of the file unmodified.
+A useful trick is that [`mutool clean`](https://mupdf.com/docs/manual-mutool-clean.html) output is reliably predictable, so it can be used to normalize PDFs as input, and fix your merged PDF while keeping the important parts of the file unmodified. MuTool doesn't discard bogus key/values - unless asked, and keep them in the same order, so using fake dictionary entries such as `/MD5_is /REALLY_dead_now__` is perfect to align things predicatbly. However it won't keep comments in dictionaries (so no inline-comment trick)
 
 Examples: [spectre.pdf](examples/collision1.pdf) & [meltdown.pdf](examples/collision2.pdf)
 
 <img alt='identical prefix PDF collisions' src=pics/specdown.png width=500/>
 
 
-
-
-## Uncommon collisions
+## Uncommon strategies
 
 Collisions are usually about 2 valid files of the same type.
+
 
 ### MultiColls: multiple collisions chain
 Nothing prevents to chain several collision blocks, and have more than 2 contents with the same hash value. An example of that are Hashquines - that shows their own MD5 value. The [PoCGTFO 14](https://github.com/angea/pocorgtfo#0x14) file contains 609 FastColl collisions, to do that through 2 file types in the same file.
@@ -535,7 +558,7 @@ Some examples of polycoll layouts:
 *PE/PNG polycoll*
 
 
-### Portable Executable - JPG
+#### Portable Executable - JPG
 
 Since a PE header is usually smaller than 0x500 bytes, it's a perfect fit for a JPG comment:
 1. start with DOS/JPG headers
@@ -548,7 +571,7 @@ Once again, the collision is instant.
 Examples: [fastcoll.exe](examples/jpg-pe.exe) & [Marc.jpg](examples/jpg-pe.jpg) 
 
 
-### PDF - PNG
+#### PDF - PNG
 
 Similarly, it's possible to collide for example arbitrary PDF and PNG files with no restriction on either side. This is instant, re-usable and generic.
 
