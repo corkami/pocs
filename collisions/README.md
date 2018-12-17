@@ -1,7 +1,6 @@
 # Introduction
 
-This part of the repository is focused on hash collisions for MD5 and SHA1.
-
+This part of the repository is focused on hash collisions exploitation for MD5 and SHA1.
 
 This is a collaboration with [Marc Stevens](https://marc-stevens.nl/research/).
 
@@ -78,10 +77,10 @@ Two files with this structure:
 | Prefix        | = | Prefix        |
 | :----:        |:-:| :----:        |
 | Collision *A* | ≠ | Collision *B* |
-| **𝓐**        | = | 𝓐             |
-| 𝔅            | = | **𝔅**         |
+| **A**         | = | ~~A~~         |
+| ~~B~~         | = | **B**         |
 
-will show either 𝓐 or 𝔅.
+will show either A or B.
 
 <img alt='identical prefix collisions' src=pics/identical.png width=350/>
 
@@ -402,7 +401,7 @@ This means that it's possible to instantly collide any pair of PE executables. E
 
 While executables collisions is usually trivial via any loader, this kind of exploitation here is transparent: the code is identical and loaded at the same address.
 
-Examples: [tweakPNG.exe](examples/collision1.exe) (GUI) - [fastcoll.exe](examples/collision2.exe) (CLI)
+Examples: [tweakPNG.exe](examples/collision1.exe) (GUI) & [fastcoll.exe](examples/collision2.exe) (CLI)
 
 
 ## MP4
@@ -411,7 +410,7 @@ The format is quite permissive. Just use `free` atoms, abuse a length with UniCo
 
 The only thing to know is to adjust the `stco` or `co64` tables, since they are absolute(!) offsets pointing to the `mdat` movie data and they are enforced.
 
-Examples: [collision1.mp4](examples/collision1.mp4) - [collision2.mp4](examples/collision2.mp4)
+Examples: [collision1.mp4](examples/collision1.mp4) & [collision2.mp4](examples/collision2.mp4)
 
 *Videos by [KidMoGraph](https://www.kidmograph.com/)*
 
@@ -460,7 +459,7 @@ Of course another use is that you alter the Root object, which enables to instan
 
 A useful trick is that `mutool clean` output is reliably predictable, so it can be used to normalize PDFs as input, and fix your merged PDF while keeping the important parts of the file unmodified.
 
-Examples: [spectre.pdf](examples/collision1.pdf) - [meltdown.pdf](examples/collision2.pdf)
+Examples: [spectre.pdf](examples/collision1.pdf) & [meltdown.pdf](examples/collision2.pdf)
 
 <img alt='identical prefix PDF collisions' src=pics/specdown.png width=500/>
 
@@ -472,10 +471,67 @@ Examples: [spectre.pdf](examples/collision1.pdf) - [meltdown.pdf](examples/colli
 
 Collisions are usually about 2 valid files of the same type.
 
-Nothing prevents you to collide more than 2 files (by chaining collision blocks), by invalidating a file type (by killing the magic, for example, to bypass scanning) or to collide files of different types:
+### MultiColls: multiple collisions chain
+Nothing prevents to chain several collision blocks, and have more than 2 contents with the same hash value. An example of that are Hashquines - that shows their own MD5 value. The [PoCGTFO 14](https://github.com/angea/pocorgtfo#0x14) file contains 609 FastColl collisions, to do that through 2 file types in the same file.
+
+
+### Validity
+
+A different strategy would be to kill the file type to bypass scanning as a corrupted file. Just overwriting the magic signature will be enough. Appending both files (as valid or invalid) with a format that doesn't need to be at offset 0 (archive, like ZIP/RAR/...) would reveal another file type.
+
+This enables polyglot collisions without using a Chosen prefix collision:
+1. use UniColl to enable or disable a magic signature, for example a PNG:
+2. append a ZIP archive
+
+While technically both files are a valid ZIP, since most parser return the first file type found and they start scanning at offset 0, they will see a different file type.
+
+Examples: ![valid](examples/png-valid.png) - [invalid](examples/png-invalid.png)
+
+
+### Gotta collide 'em all!
+
+Another use of instant, re-usable and generic collisions would be to hide any file of a given type - say PNG - behind dummy files (or the same file every time) - which is actually just by concatenating it to the same prefix after stripping the signature - you could even do that at library level!
+
+From a strict parsing perspective,
+all your files will show the same content,
+and the evil images would be revealed as a file with the same MD5 as previously collected.
+
+Let's take 2 files:
+
+<img alt='MS 08-067' src=pics/trinity.png width=300/> and 
+<img alt='MS 08-067' src=pics/javascript.png width=300/>
+
+and collide them with the same PNG.
+
+They now show the same dummy image, and they're absolutely identical until the 2nd image at file level!
+
+<img alt='MS 08-067' src=examples/gcea1.png width=200/> and 
+<img alt='MS 08-067' src=examples/gcea2.png width=200/>
+
+Their evil payload is hidden behind a file with the same MD5 respectively:
+don't collect evidences by MD5 without any file introspection.
+So better discard MD5 altogether, because file introspection is just too time-consuming and too risky!
+
+
+### PolyColls: collisions of different file types
+
+It's also possible to have both side of a collision with different types to lower suspicion:
+
+Attack scenario:
 1. send `holiday.jpg`
 2. get it whitelisted
 3. send `evil.exe`, which has the same MD5.
+
+Some examples of polycoll layouts:
+
+![pdf-jpg polyglot collision](pics/pdf-jpg.png)
+
+*PDF/JPG polycoll*
+
+
+![pe-png polyglot collision](pics/pe-png.png)
+
+*PE/PNG polycoll*
 
 
 ### Portable Executable - JPG
@@ -488,14 +544,14 @@ Since a PE header is usually smaller than 0x500 bytes, it's a perfect fit for a 
 
 Once again, the collision is instant.
 
-Examples: [fastcoll.exe](examples/jpg-pe.exe) - [Marc.jpg](examples/jpg-pe.jpg) 
+Examples: [fastcoll.exe](examples/jpg-pe.exe) & [Marc.jpg](examples/jpg-pe.jpg) 
 
 
 ### PDF - PNG
 
-Similarly, it's possible to collide for example arbitrary PDF and PNG files.
+Similarly, it's possible to collide for example arbitrary PDF and PNG files with no restriction on either side. This is instant, re-usable and generic.
 
-Examples: [Hello.pdf](examples/png-pdf.pdf) - [1x1.png](examples/png-pdf.png)
+Examples: [Hello.pdf](examples/png-pdf.pdf) & [1x1.png](examples/png-pdf.png)
 
 
 # Presentations
