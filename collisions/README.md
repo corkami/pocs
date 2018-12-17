@@ -380,7 +380,7 @@ So in the end, the current GIF limitations for *instant* MD5 collisions are:
 - the images have to be the same dimensions
 - after 11 minutes, both files will show the same image
 
-<img alt='identical prefix collisions' src=examples/collision1.gif width=350/>
+<img alt='identical prefix collisions' src=examples/collision1.gif width=350/> &
 <img alt='identical prefix collisions' src=examples/collision2.gif width=350/>
 
 *Pics by [KidMoGraph](https://www.kidmograph.com/)*
@@ -464,7 +464,6 @@ Examples: [spectre.pdf](examples/collision1.pdf) & [meltdown.pdf](examples/colli
 <img alt='identical prefix PDF collisions' src=pics/specdown.png width=500/>
 
 
-### Unicoll based
 
 
 ## Uncommon collisions
@@ -485,7 +484,9 @@ This enables polyglot collisions without using a Chosen prefix collision:
 
 While technically both files are a valid ZIP, since most parser return the first file type found and they start scanning at offset 0, they will see a different file type.
 
-Examples: ![valid](examples/png-valid.png) - [invalid](examples/png-invalid.png)
+Examples:
+
+<img alt='valid image' src=examples/png-valid.png width=300/> & [invalid](examples/png-invalid.png)
 
 
 ### Gotta collide 'em all!
@@ -498,14 +499,14 @@ and the evil images would be revealed as a file with the same MD5 as previously 
 
 Let's take 2 files:
 
-<img alt='MS 08-067' src=pics/trinity.png width=300/> and 
+<img alt='MS 08-067' src=pics/trinity.png width=300/> & 
 <img alt='MS 08-067' src=pics/javascript.png width=300/>
 
 and collide them with the same PNG.
 
 They now show the same dummy image, and they're absolutely identical until the 2nd image at file level!
 
-<img alt='MS 08-067' src=examples/gcea1.png width=200/> and 
+<img alt='MS 08-067' src=examples/gcea1.png width=200/> & 
 <img alt='MS 08-067' src=examples/gcea2.png width=200/>
 
 Their evil payload is hidden behind a file with the same MD5 respectively:
