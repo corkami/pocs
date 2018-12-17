@@ -137,7 +137,7 @@ Variant: there is a [single-block MD5 collision](https://marc-stevens.nl/researc
 
 ### [UniColl](unicoll.md) (MD5)
 
-[UniColl](https://github.com/cr-marcstevens/hashclash#create-you-own-identical-prefix-collision) let you control a few bytes in the collision blocks, before and after the first difference, which makes it an identical-prefix collision with some controllable differences, almost like a chosen prefix collision. This is very handy, and even better the difference can be very predictable: in the case of `m2+= 2^8` (`N=1` or `m2 9` in [HashClash](https://github.com/cr-marcstevens/hashclash/blob/master/scripts/poc_no.sh#L30)), the difference is +1 on the 9th byte, which makes it very exploitable, as you can even think about the collision in your head: the 9th character of that sentence will be replaced with the next one: `0` replaced by `1`, `a` replaced by `b`..
+[UniColl](https://github.com/cr-marcstevens/hashclash#create-you-own-identical-prefix-collision) lets you control a few bytes in the collision blocks, before and after the first difference, which makes it an identical-prefix collision with some controllable differences, almost like a chosen prefix collision. This is very handy, and even better the difference can be very predictable: in the case of `m2+= 2^8` (a.k.a. `N=1` / `m2 9` in HashClash [poc_no.sh](https://github.com/cr-marcstevens/hashclash/blob/master/scripts/poc_no.sh#L30) script), the difference is +1 on the 9th byte, which makes it very exploitable, as you can even think about the collision in your head: the 9th character of that sentence will be replaced with the next one: `0` replaced by `1`, `a` replaced by `b`..
 
 - time: a few minutes (depends on the amount of byte you want to control )
 - space: 2 blocks
@@ -146,10 +146,10 @@ Variant: there is a [single-block MD5 collision](https://marc-stevens.nl/researc
    .. .. .. .. DD .. .. .. ..
    .. .. .. .. +1 .. .. .. ..
    ```
-- exploitation: very easy - controlled bytes before and after the difference, predictable difference
+- exploitation: very easy - controlled bytes before and after the difference, and the difference is predictable. The only restrictions are alignment and that you 'only' control 10 bytes after the difference.
 
 
-Examples with `m2 9` (`n=1` in the [script](https://github.com/cr-marcstevens/hashclash/blob/master/scripts/poc_no.sh)) with 20 bytes of set text in the hash:
+Examples with `N=1` and 20 bytes of set text in the collision blocks:
 ```
 00:  55 6E 69 43-6F 6C 6C 20-31 20 70 72-65 66 69 78  UniColl 1 prefix
 10:  20 32 30 62-F5 48 34 B9-3B 1C 01 9F-C8 6B E6 44   20b⌡H4╣;∟☺ƒ╚kµD
