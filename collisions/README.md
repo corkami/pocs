@@ -5,7 +5,10 @@ This part of the repository is focused on hash collisions exploitation for MD5 a
 This is a collaboration with [Marc Stevens](https://marc-stevens.nl/research/).
 
 The idea is to explore existing attacks, also to show how weak MD5 is (instant collisions of any JPG, PNG, PDF, MP4, PE...), and also explore file formats landscape to determine how they can be exploited with present or with future attacks:
-the same file format trick can be used on several hashes, as long as the collisions follow the same byte patterns.
+the same file format trick can be used on several hashes
+(the same JPG tricks were used for [MD5](https://archive.org/stream/pocorgtfo14#page/n49/mode/1up),
+[malicious SHA-1](https://malicioussha1.github.io/) and [SHA1](http://shattered.io)),
+as long as the collisions follow the same byte patterns.
 
 This is not about new attacks (the most recent one was documented in 2012),
 but about new forms of exploitations of existing attacks.
@@ -48,6 +51,50 @@ If 2 contents A & B have the same hash, then appending the same contents C to bo
 ``` text
 hash(A) = hash(B) -> hash(A + C) = hash(B + C)
 ```
+
+Collisions work by inserting at a block boundary a number of computed collision blocks
+that depends on what came before in the file.
+These collision blocks are very random-looking with some minor differences,
+(that follow a specific pattern for each attack)
+and they will introduce tiny differences while eventually
+getting hashes the same values after these blocks.
+
+These differences are abused to craft valid files with specific properties.
+
+File formats also work top-down, and most of them work by byte-level chunks.
+
+Some 'comment' chunks can be inserted to align file chunks to block boundaries,
+to align specific structures to collision blocks differences,
+to hide the rest of the collision blocks randomness from the file parsers,
+and to hide one file content from the parser (so that it will see another content).
+
+These 'comment' chunks are often not official comments: they are just data containers that are ignored by the parser
+(for example, PNG chunks with a lowercase-starting ID are ancillary, not critical).
+
+Most of the time, the difference of the collision block is used to modify the length of a comment chunk,
+which is typically declared just before the data of this chunk:
+in the gap between the smaller and the longer version of this chunk,
+another comment chunk is declared to jump over one file's content `A`.
+After this file content `A`, just append another file content `B`.
+
+Since file formats usually define a terminator that will make parsers stop after it,
+`A` will terminate parsing, which will make the appended content `B` ignored.
+
+So typically at least 2 comments are needed:
+1. alignment
+2. hide collision blocks
+3. hide one file content (for re-usable collisions)
+
+
+These common properties of file formats make it possible - they are not typically seen as weaknesses, but they can be detected or normalized out:
+- dummy chunks - used as comments
+- more than 1 comment
+- huge comments
+- store any data in a comment (UTF8 could be enforced)
+- store anything after the terminator (usually used only for malicious purposes)
+- no integrity check. CRC32 in PNG are usually ignored, which would prevent PNG re-useable collisions otherwise.
+- flat structure: [ASN.1](https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One) defines parent structure with the length of all the enclosed substructures, which prevents these constructs: you'd need to abuse a length, but also the length of the parent.
+- put a comment before the header - this makes generic re-usable collisions possible.
 
 
 ## Identical prefix
@@ -94,9 +141,13 @@ Final version in 2009.
 - time: a few seconds of computation
 - space: 2 blocks
 - differences: no control before, no control after.
-   ```
-   ?? ?? ?? DD ?? ?? ??
-   ```
+    FastColl difference mask:
+    ```
+    .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. X. .. .. .. .. .. .. .. .. .. .. .. ..
+    .. .. .. .. .. .. .. .. .. .. .. .. .. X. .X ..
+    .. .. .. .. .. .. .. .. .. .. .. X. .. .. .. ..
+    ```
 - exploitation: hard
 
 The differences aren't near the start/end of the blocks, so it's very hard to exploit since you don't control any nearby byte. A potential solution is to bruteforce the surrounding bytes - cf [PoCGTFO 14:10](https://github.com/angea/pocorgtfo#0x14).
@@ -134,9 +185,10 @@ With an empty prefix:
 - MD5: `fe6c446ee3a831ee010f33ac9c1b602c`
 - SHA256: `e27cf3073c704d0665da42d597d4d20131013204eecb6372a5bd60aeddd5d670`
 
+
 Other examples, with an identical prefix: [1](examples/fastcoll1.bin) & [2](examples/fastcoll2.bin)
 
-Variant: there is a [single-block MD5 collision](https://marc-stevens.nl/research/md5-1block-collision/) but it takes five weeks of computation.
+**Variant**: there is a [single-block MD5 collision](https://marc-stevens.nl/research/md5-1block-collision/) but it takes five weeks of computation.
 
 
 ### [UniColl](unicoll.md) (MD5)
@@ -196,6 +248,15 @@ Documented in [2013](https://marc-stevens.nl/research/papers/EC13-S.pdf), comput
   ?? ?? ?? DD .. .. .. ..
   ```
 - exploitation: easy. The differences are right at the start of the collision blocks.
+
+
+The difference between collision blocks of each side is this Xor mask:
+```
+0c 00 00 02 c0 00 00 10 b4 00 00 1c 3c 00 00 04
+bc 00 00 1a 20 00 00 10 24 00 00 1c ec 00 00 14
+0c 00 00 02 c0 00 00 10 b4 00 00 1c 2c 00 00 04
+bc 00 00 18 b0 00 00 10 00 00 00 0c b8 00 00 10
+```
 
 Examples: [PoC||GTFO 0x18](https://github.com/angea/pocorgtfo#0x18)
 
