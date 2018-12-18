@@ -11,13 +11,15 @@ This part of the repository is focused on hash collisions exploitation for MD5 a
 
 This is a collaboration with [Marc Stevens](https://marc-stevens.nl/research/).
 
-The idea is to explore existing attacks, also to show how weak MD5 is (instant collisions of any JPG, PNG, PDF, MP4, PE...), and also explore file formats landscape to determine how they can be exploited with present or with future attacks:
-the same file format trick can be used on several hashes
+The goal of this page is to explore extensively existing attacks - and show on the way how weak MD5 is (instant collisions of any JPG, PNG, PDF, MP4, PE...) -
+and also explore in detail common file formats to determine how they can be exploited with present or with future attacks.
+
+Indeed, the same file format trick can be used on several hashes
 (the same JPG tricks were used for [MD5](https://archive.org/stream/pocorgtfo14#page/n49/mode/1up),
 [malicious SHA-1](https://malicioussha1.github.io/) and [SHA1](http://shattered.io)),
 as long as the collisions follow the same byte patterns.
 
-This is not about new attacks (the most recent one was documented in 2012),
+This document is **not** about new attacks (the most recent one was documented in 2012),
 but about new forms of exploitations of existing attacks.
 
 # Status
@@ -61,10 +63,10 @@ hash(A) = hash(B) -> hash(A + C) = hash(B + C)
 
 Collisions work by inserting at a block boundary a number of computed collision blocks
 that depends on what came before in the file.
-These collision blocks are very random-looking with some minor differences,
+These collision blocks are very random-looking with some minor differences
 (that follow a specific pattern for each attack)
 and they will introduce tiny differences while eventually
-getting hashes the same values after these blocks.
+getting hashes the same value after these blocks.
 
 These differences are abused to craft valid files with specific properties.
 
@@ -73,16 +75,19 @@ File formats also work top-down, and most of them work by byte-level chunks.
 Some 'comment' chunks can be inserted to align file chunks to block boundaries,
 to align specific structures to collision blocks differences,
 to hide the rest of the collision blocks randomness from the file parsers,
-and to hide one file content from the parser (so that it will see another content).
+and to hide otherwise valid content from the parser (so that it will see another content).
 
 These 'comment' chunks are often not official comments: they are just data containers that are ignored by the parser
 (for example, PNG chunks with a lowercase-starting ID are ancillary, not critical).
 
-Most of the time, the difference of the collision block is used to modify the length of a comment chunk,
+
+Most of the time, a difference in the collision blocks is used to modify the length of a comment chunk,
 which is typically declared just before the data of this chunk:
 in the gap between the smaller and the longer version of this chunk,
 another comment chunk is declared to jump over one file's content `A`.
 After this file content `A`, just append another file content `B`.
+
+![](pics/layout.png)
 
 Since file formats usually define a terminator that will make parsers stop after it,
 `A` will terminate parsing, which will make the appended content `B` ignored.
@@ -96,7 +101,7 @@ So typically at least 2 comments are needed:
 These common properties of file formats make it possible - they are not typically seen as weaknesses, but they can be detected or normalized out:
 - dummy chunks - used as comments
 - more than 1 comment
-- huge comments
+- huge comments (lengths: 64b for MP4, 32b for PNG -> trivial collisions. 16b for JPG, 8b for GIF -> no generic collision for GIF, limited for JPG)
 - store any data in a comment (UTF8 could be enforced)
 - store anything after the terminator (usually used only for malicious purposes)
 - no integrity check. CRC32 in PNG are usually ignored, which would prevent PNG re-useable collisions otherwise.
