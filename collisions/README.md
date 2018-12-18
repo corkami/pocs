@@ -541,6 +541,89 @@ This should be extendable to any MP4-like format (in terms of Atom/Box structure
 
 ### PDF
 
+**collision**
+
+Shattered exploitation was not a PDF trick, but a JPG trick in a PDF.
+
+It only enabled a PDF to contain a JPG-compressed object that could have 2 different contents.
+Both PDFs needed to be totally identical beside.
+
+With MD5 (and other collision patterns), we can do PDF collisions at document level,
+with no restrictions at all on either file!
+
+PDF has a very different structure from other file formats.
+It uses object numbers and references to define a tree.
+The whole document depends on the Root element.
+
+<!--
+digraph {
+ rankdir=LR;
+ root -> "catalog#1"
+ "catalog#1" -> "pages#2"
+ "pages#2" -> "page#3"
+ "page#3" -> "pages#2"
+ "page#3" -> "content#4"
+ "content#4" -> "Hello World!"
+}
+-->
+
+![](pics/pdf.svg)
+
+This (valid) PDF
+``` text
+%PDF-1.
+1 0 obj<</Pages 2 0 R>>endobj
+2 0 obj<</Kids[3 0 R]/Count 1>>endobj
+3 0 obj<</Parent 2 0 R>>endobj
+trailer <</Root 1 0 R>>
+```
+
+is equivalent to:
+``` text
+%PDF-1.
+11 0 obj<</Pages 12 0 R>>endobj
+12 0 obj<</Kids[13 0 R]/Count 1>>endobj
+13 0 obj<</Parent 12 0 R>>endobj
+trailer <</Root 11 0 R>>
+```
+
+Tricks:
+- Storing unused objects in a PDF is tolerated.
+- Skipping any object numbers is also ok. There's even an official way to skip numbers in the `XREF` table.
+
+So storing 2 document trees in the same file is ok.
+We just need to make the root object refer to either root object of both documents.
+
+So we just need to take 2 documents,
+renumber objects and references so that there is no overlap,
+craft a collision so that the element number referenced as Root object can be changed while keeping the same hash value,
+which is a perfect fit for UniColl with `N=1`, and adjust the `XREF` table accordingly.
+
+
+<!--
+digraph {
+ rankdir=LR;
+ "trailer" -> "catalog#1" [color=green]
+ "catalog#1" -> "pages#2"
+ "pages#2" -> "page#3"
+ "page#3" -> "pages#2"
+ "page#3" -> "content#4"
+ "content#4" -> "Hello World!"
+ trailer -> "catalog#11" [<col>or=red, style=dashed]
+ "catalog#11" -> "pages#12"
+ "pages#12" -> "page#13"
+ "page#13" -> "pages#12"
+ "page#13" -> "content#14"
+ "content#14" -> "Bye World!";
+}
+-->
+
+![](pics/pdfcollision.svg)
+
+This way, we can safely collide any pair of PDFs, no matter the page numbers, dimensions, images...
+
+**comments**
+
 PDF can store foreign data in two ways: 
 - as a line comment, in which the only forbidden characters are newline (`\r` and `\n`).
   This can be used inside a dictionary object, to modify for example an object reference, via UniColl.
