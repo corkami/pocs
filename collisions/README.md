@@ -77,7 +77,8 @@ to align specific structures to collision blocks differences,
 to hide the rest of the collision blocks randomness from the file parsers,
 and to hide otherwise valid content from the parser (so that it will see another content).
 
-These 'comment' chunks are often not official comments: they are just data containers that are ignored by the parser
+These 'comment' chunks are often not officially real comments:
+they are just used as data containers that are ignored by the parser
 (for example, PNG chunks with a lowercase-starting ID are ancillary, not critical).
 
 
@@ -105,7 +106,8 @@ These common properties of file formats make it possible - they are not typicall
 - store any data in a comment (UTF8 could be enforced)
 - store anything after the terminator (usually used only for malicious purposes)
 - no integrity check. CRC32 in PNG are usually ignored, which would prevent PNG re-useable collisions otherwise.
-- flat structure: [ASN.1](https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One) defines parent structure with the length of all the enclosed substructures, which prevents these constructs: you'd need to abuse a length, but also the length of the parent.
+- flat structure: [ASN.1](https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One) defines parent structure with the length of all the enclosed substructures,
+  which prevents these constructs: you'd need to abuse a length, but also the length of the parent.
 - put a comment before the header - this makes generic re-usable collisions possible.
 
 
@@ -162,7 +164,8 @@ Final version in 2009.
     ```
 - exploitation: hard
 
-The differences aren't near the start/end of the blocks, so it's very hard to exploit since you don't control any nearby byte. A potential solution is to bruteforce the surrounding bytes - cf [PoCGTFO 14:10](https://github.com/angea/pocorgtfo#0x14).
+The differences aren't near the start/end of the blocks, so it's very hard to exploit since you don't control any nearby byte.
+A potential solution is to bruteforce the surrounding bytes - cf [PoCGTFO 14:10](https://github.com/angea/pocorgtfo#0x14).
 
 
 **Examples**:
@@ -207,7 +210,13 @@ Other examples, with an identical prefix: [1](examples/fastcoll1.bin) ⟷ [2](ex
 
 Documented in [2012](https://www.cwi.nl/system/files/PhD-Thesis-Marc-Stevens-Attacks-on-Hash-Functions-and-Applications.pdf#page=199), implemented in [2017](https://github.com/cr-marcstevens/hashclash/blob/95c2619a8078990056beb7aaa59104021714ee3c/scripts/poc_no.sh)
 
-[UniColl](https://github.com/cr-marcstevens/hashclash#create-you-own-identical-prefix-collision) lets you control a few bytes in the collision blocks, before and after the first difference, which makes it an identical-prefix collision with some controllable differences, almost like a chosen prefix collision. This is very handy, and even better the difference can be very predictable: in the case of `m2+= 2^8` (a.k.a. `N=1` / `m2 9` in HashClash [poc_no.sh](https://github.com/cr-marcstevens/hashclash/blob/master/scripts/poc_no.sh#L30) script), the difference is +1 on the 9th byte, which makes it very exploitable, as you can even think about the collision in your head: the 9th character of that sentence will be replaced with the next one: `0` replaced by `1`, `a` replaced by `b`..
+[UniColl](https://github.com/cr-marcstevens/hashclash#create-you-own-identical-prefix-collision) lets you control a few bytes in the collision blocks,
+before and after the first difference, which makes it an identical-prefix collision with some controllable differences, almost like a chosen prefix collision.
+This is very handy, and even better the difference can be very predictable:
+in the case of `m2+= 2^8` (a.k.a. `N=1` / `m2 9` in HashClash [poc_no.sh](https://github.com/cr-marcstevens/hashclash/blob/master/scripts/poc_no.sh#L30) script),
+the difference is +1 on the 9th byte, which makes it very exploitable,
+as you can even think about the collision in your head:
+the 9th character of that sentence will be replaced with the next one: `0` replaced by `1`, `a` replaced by `b`..
 
 - time: a few minutes (depends on the amount of byte you want to control )
 - space: 2 blocks
@@ -244,7 +253,8 @@ Examples with `N=1` and 20 bytes of set text in the collision blocks:
 
 UniColl has less control than chosen prefix, but it's much faster especially since it takes only 2 blocks.
 
-It was used in the [Google CTF 2018](https://github.com/google/google-ctf/tree/master/2018/finals/crypto-hrefin), where the frequency of a certificate serial changes and limitations on the lengths prevented the use of chosen prefix collisions.
+It was used in the [Google CTF 2018](https://github.com/google/google-ctf/tree/master/2018/finals/crypto-hrefin),
+where the frequency of a certificate serial changes and limitations on the lengths prevented the use of chosen prefix collisions.
 
 
 ### [Shattered](http://shattered.io) (SHA1)
@@ -259,7 +269,10 @@ Documented in [2013](https://marc-stevens.nl/research/papers/EC13-S.pdf), comput
   or
   ?? ?? ?? DD .. .. .. ..
   ```
-- exploitation: easy. The differences are right at the start of the collision blocks.
+- exploitation: medium. The differences are right at the start of the collision blocks. So no control before and after the length:
+  PNG stores its length before the chunk type, so it won't work.
+
+<!-- However MP4 and its length (when stored as 64bit) should work. TODO: MP4 as chosen prefix MD5 with Shattered pattern -->
 
 
 The difference between collision blocks of each side is this Xor mask:
@@ -270,8 +283,9 @@ bc 00 00 1a 20 00 00 10 24 00 00 1c ec 00 00 14
 bc 00 00 18 b0 00 00 10 00 00 00 0c b8 00 00 10
 ```
 
-Examples: [PoC||GTFO 0x18](https://github.com/angea/pocorgtfo#0x18)
+<img alt='Shattered PoCs side by side' src=pics/shattered.png width=1000 />
 
+Examples: [PoC||GTFO 0x18](https://github.com/angea/pocorgtfo#0x18)
 
 ## Chosen-prefix collisions
 
@@ -406,8 +420,10 @@ Classic collisions of 2 valid files with the same filetype.
 ### JPG
 
 Theoretical limitations and workarounds:
-- the *Application* segment should in theory right after the *Start of Image* marker. In practice, this is not necessary, so our collision can be generic: the only limitation is the size of the smallest image.
-- a comment's length is stored on 2 bytes, so it's limited to 65536 bytes. To jump over another image, its *Entropy Coded Segment* needs to be split to scans smaller than this, either by storing the image as progressive, either by using *JPEGTran* and custom scans definition.
+- the *Application* segment should in theory right after the *Start of Image* marker.
+  In practice, this is not necessary, so our collision can be generic: the only limitation is the size of the smallest image.
+- a comment's length is stored on 2 bytes, so it's limited to 65536 bytes.
+  To jump over another image, its *Entropy Coded Segment* needs to be split to scans smaller than this, either by storing the image as progressive, either by using *JPEGTran* and custom scans definition.
 
 So an MD5 collision of 2 arbitrary JPGs is *instant*, and needs no chosen-prefix collision, just UniColl.
 
@@ -426,7 +442,11 @@ With the [script](scripts/jpg.py):
 
 Theoretical limitations and workarounds:
 - PNG uses CRC32 at the end of its chunks, which would prevent the use of collision blocks, but in practice they're ignored.
-- the image metadata (dimensions, colorspace...) are stored in the `IHDR` chunk, which should in theory be right after the signature (ie, before any potential comment), so it would mean that we can only pre-compute collisions of images with the same metadata. However, that chunk can actually be after a comment block, so we can put the collision data before the header, which enables to collide any pair of PNG with a single pre-computation. 
+- the image metadata (dimensions, colorspace...) are stored in the `IHDR` chunk,
+  which should in theory be right after the signature (ie, before any potential comment),
+  so it would mean that we can only pre-compute collisions of images with the same metadata.
+  However, that chunk can actually be after a comment block, so we can put the collision data before the header,
+  which enables to collide any pair of PNG with a single pre-computation. 
 
 Since a PNG chunk has a length on 4 bytes, there's no need to modify the structure of either file: we can jump over a whole image in one go.
 
@@ -452,8 +472,9 @@ GIF is tricky:
  - if the file has a global palette, it is also stored before a comment is possible too.
 - its comment chunks are limited to a single byte in length, so a maximum of 256 bytes!
 
-However, the comment chunks follow a peculiar structure: it's a chain of `<length:1>` `<data:length>` until a null length is defined. So it makes any non-null byte a valid 'jump forward'. Which makes it suitable to be used with FastColl, as 
-shown in [PoC||GTFO 14:11](https://github.com/angea/pocorgtfo#0x14). 
+However, the comment chunks follow a peculiar structure: it's a chain of `<length:1>` `<data:length>` until a null length is defined.
+So it makes any non-null byte a valid 'jump forward'. Which makes it suitable to be used with FastColl,
+as shown in [PoC||GTFO 14:11](https://github.com/angea/pocorgtfo#0x14). 
 
 So at least, even if we can't have a generic prefix, we can collide any pair of GIF of same metadata (dimensions, palette) and we only need a second of FastColl to compute its prefix.
 
@@ -465,9 +486,11 @@ Another idea that works generically is that the image data is also stored using 
 so if we take 2 GIFs with no animation, we only have to:
 - normalize the palette
 - set the first frame duration to the maximum
-- craft a comment that will jump to the start of the first frame data, so that the comment will sled over the image data as a comment, and end the same way: until a null length is encountered. Then the parser will meet the next frame, and display it. 
+- craft a comment that will jump to the start of the first frame data, so that the comment will sled over the image data as a comment,
+  and end the same way: until a null length is encountered. Then the parser will meet the next frame, and display it. 
 
-With a minor setup (only a few hundred bytes of overhead), we can sled over any GIF image and work around the 256 bytes limitation. This idea was suggested by Marc, and it's brilliant!
+With a minor setup (only a few hundred bytes of overhead), we can sled over any GIF image and work around the 256 bytes limitation.
+This idea was suggested by Marc, and it's brilliant!
 
 
 So in the end, the current GIF limitations for *instant* MD5 collisions are:
@@ -476,7 +499,7 @@ So in the end, the current GIF limitations for *instant* MD5 collisions are:
 - the images have to be the same dimensions
 - after 11 minutes, both files will show the same image
 
-<img alt='identical prefix collisions' src=examples/collision1.gif width=350/> &
+<img alt='identical prefix collisions' src=examples/collision1.gif width=350/> ⟷
 <img alt='identical prefix collisions' src=examples/collision2.gif width=350/>
 
 *Pics by [KidMoGraph](https://www.kidmograph.com/)*
@@ -485,8 +508,10 @@ So in the end, the current GIF limitations for *instant* MD5 collisions are:
 ### Portable Executable
 
 The Portable Executable has a peculiar structure:
-- the old DOS header is almost useless, and points to the next structure, the PE header. The DOS headers has no other role. DOS headers can be exchanged between executables.
-- the DOS header has to be at offset 0, and has a fixed length of a full block, and the pointer is at the end of the structure, beyond UniColl's reach: so only Chosen Prefix collision is useful to collide PE files thisd way.
+- the old DOS header is almost useless, and points to the next structure, the PE header.
+  The DOS headers has no other role. DOS headers can be exchanged between executables.
+- the DOS header has to be at offset 0, and has a fixed length of a full block, and the pointer is at the end of the structure,
+  beyond UniColl's reach: so only Chosen Prefix collision is useful to collide PE files this way.
 - The PE header and what follows defines the whole file. 
 
 So the strategy is:
@@ -517,7 +542,8 @@ This should be extendable to any MP4-like format (in terms of Atom/Box structure
 ### PDF
 
 PDF can store foreign data in two ways: 
-- as a line comment, in which the only forbidden characters are newline (`\r` and `\n`). This can be used inside a dictionary object, to modify for example an object reference, via UniColl.
+- as a line comment, in which the only forbidden characters are newline (`\r` and `\n`).
+  This can be used inside a dictionary object, to modify for example an object reference, via UniColl.
   So this is a valid PDF object even if it contains binary collision blocks - just retry until you have no newline characters:
   ```
   1 0 obj
@@ -526,9 +552,11 @@ PDF can store foreign data in two ways:
   >>
   endobj
   ```
-- as a stream object, in which case any data is possible, but since we're inside an object, we can't alter the whole PDF structure, so it requires a chosen prefix collision to modify the structure outside the containing stream object.
+- as a stream object, in which case any data is possible, but since we're inside an object, we can't alter the whole PDF structure,
+  so it requires a chosen prefix collision to modify the structure outside the containing stream object.
 
-The first case makes it possible to highlight the beauty of UniColl, a collision where differences are predictable, so you can write poetry over colliding data - thanks [Jurph](https://github.com/Jurph/word-decrementer)!
+The first case makes it possible to highlight the beauty of UniColl, a collision where differences are predictable,
+so you can write poetry over colliding data - thanks [Jurph](https://github.com/Jurph/word-decrementer)!
 
 - [poeMD5 A](examples/poeMD5_A.pdf)
   ```
@@ -559,9 +587,14 @@ The first case makes it possible to highlight the beauty of UniColl, a collision
 
 (Note I screwed up with Adobe compatibility, but that's my fault, not UniColl's)
 
-Whether you use UniColl as inline comment or Chosen Prefix in a dummy stream object, the strategy is similar: shuffle objects numbers around, then make Root object point to different objects, so unlike Shattered, this means instant collision of any arbitrary pair of PDF, at document level.
+Whether you use UniColl as inline comment or Chosen Prefix in a dummy stream object, the strategy is similar:
+shuffle objects numbers around, then make Root object point to different objects, so unlike Shattered, this means instant collision of any arbitrary pair of PDF, at document level.
 
-A useful trick is that [`mutool clean`](https://mupdf.com/docs/manual-mutool-clean.html) output is reliably predictable, so it can be used to normalize PDFs as input, and fix your merged PDF while keeping the important parts of the file unmodified. MuTool doesn't discard bogus key/values - unless asked, and keep them in the same order, so using fake dictionary entries such as `/MD5_is /REALLY_dead_now__` is perfect to align things predicatbly. However it won't keep comments in dictionaries (so no inline-comment trick)
+A useful trick is that [`mutool clean`](https://mupdf.com/docs/manual-mutool-clean.html) output is reliably predictable,
+so it can be used to normalize PDFs as input, and fix your merged PDF while keeping the important parts of the file unmodified.
+MuTool doesn't discard bogus key/values - unless asked, and keep them in the same order,
+so using fake dictionary entries such as `/MD5_is /REALLY_dead_now__` is perfect to align things predictably without needing another kind of comments.
+However it won't keep comments in dictionaries (so no inline-comment trick)
 
 Examples: [spectre.pdf](examples/collision1.pdf) ⟷ [meltdown.pdf](examples/collision2.pdf)
 
@@ -574,12 +607,14 @@ Collisions are usually about 2 valid files of the same type.
 
 
 ### MultiColls: multiple collisions chain
-Nothing prevents to chain several collision blocks, and have more than 2 contents with the same hash value. An example of that are Hashquines - that shows their own MD5 value. The [PoCGTFO 14](https://github.com/angea/pocorgtfo#0x14) file contains 609 FastColl collisions, to do that through 2 file types in the same file.
+Nothing prevents to chain several collision blocks, and have more than 2 contents with the same hash value.
+An example of that are Hashquines - that shows their own MD5 value. The [PoCGTFO 14](https://github.com/angea/pocorgtfo#0x14) file contains 609 FastColl collisions, to do that through 2 file types in the same file.
 
 
 ### Validity
 
-A different strategy would be to kill the file type to bypass scanning as a corrupted file. Just overwriting the magic signature will be enough. Appending both files (as valid or invalid) with a format that doesn't need to be at offset 0 (archive, like ZIP/RAR/...) would reveal another file type.
+A different strategy would be to kill the file type to bypass scanning as a corrupted file.
+Just overwriting the magic signature will be enough. Appending both files (as valid or invalid) with a format that doesn't need to be at offset 0 (archive, like ZIP/RAR/...) would reveal another file type.
 
 This enables polyglot collisions without using a Chosen prefix collision:
 1. use UniColl to enable or disable a magic signature, for example a PNG:
@@ -664,7 +699,8 @@ Their evil payload is hidden behind a file with the same MD5 respectively.
 
 ### Incriminating files
 
-Another use case for collisions is to hide something incriminating inside something innocent, but desirable: if the only thing to collect evidence is comparing weak hashes,
+Another use case for collisions is to hide something incriminating inside something innocent,
+but desirable: if the only thing to collect evidence is comparing weak hashes,
 then you can't deny that you don't have the other file (showing incriminating content but hiding innocent content).
 
 Softwares typically focus on (quick) parsing, not on detailed file analysis.
