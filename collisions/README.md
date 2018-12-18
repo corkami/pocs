@@ -1,3 +1,10 @@
+**TL;DR** getting an MD5 collision of these 2 images is [trivial](scripts/png.py) and instant.
+
+<img src=examples/tldr-1.png alt='MD5 page on Wikipedia - https://en.wikipedia.org/wiki/MD5'> ⟷
+<img src=examples/tldr-2.png height=400 alt='On Fire / This is fine - http://gunshowcomic.com/648'>
+
+Don't play with fire, don't rely on MD5.
+
 # Introduction
 
 This part of the repository is focused on hash collisions exploitation for MD5 and SHA1.
