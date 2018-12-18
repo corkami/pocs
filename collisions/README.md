@@ -1,7 +1,7 @@
 **TL;DR** getting an MD5 collision of these 2 images is [trivial](scripts/png.py) and instant.
 
-<img src=examples/tldr-1.png alt='MD5 page on Wikipedia - https://en.wikipedia.org/wiki/MD5'> ⟷
-<img src=examples/tldr-2.png height=400 alt='On Fire / This is fine - http://gunshowcomic.com/648'>
+[![MD5 page on Wikipedia](examples/tldr-1.png)](https://en.wikipedia.org/wiki/MD5) ⟷
+<a href=http://gunshowcomic.com/648><img src=examples/tldr-2.png height=400 alt='On Fire / This is fine'></a>
 
 Don't play with fire, don't rely on MD5.
 
@@ -28,10 +28,10 @@ Current status - as of December 2018 - of known attacks:
   - works for simpler hashes(\*) <!-- Thanks Sven! -->
 
 - get 2 different files with the same MD5: **instant**
-  - examples: [1](examples/single-ipc1.bin) & [2](examples/single-ipc2.bin)
+  - examples: [1](examples/single-ipc1.bin) ⟷ [2](examples/single-ipc2.bin)
 
 - make 2 arbitrary files get the same MD5: **a few hours** (72 hours.core)
-  - examples: [1](examples/single-cpc1.bin) & [2](examples/single-cpc2.bin)
+  - examples: [1](examples/single-cpc1.bin) ⟷ [2](examples/single-cpc2.bin)
 
 - make 2 arbitrary files of specific file formats (PNG, JPG, PE...) get the same MD5: **instant**
   - read below
@@ -193,7 +193,7 @@ With an empty prefix:
 - SHA256: `e27cf3073c704d0665da42d597d4d20131013204eecb6372a5bd60aeddd5d670`
 
 
-Other examples, with an identical prefix: [1](examples/fastcoll1.bin) & [2](examples/fastcoll2.bin)
+Other examples, with an identical prefix: [1](examples/fastcoll1.bin) ⟷ [2](examples/fastcoll2.bin)
 
 **Variant**: there is a [single-block MD5 collision](https://marc-stevens.nl/research/md5-1block-collision/) but it takes five weeks of computation.
 
@@ -493,7 +493,7 @@ This means that it's possible to instantly collide any pair of PE executables. E
 
 While executables collisions is usually trivial via any loader, this kind of exploitation here is transparent: the code is identical and loaded at the same address.
 
-Examples: [tweakPNG.exe](examples/collision1.exe) (GUI) & [fastcoll.exe](examples/collision2.exe) (CLI)
+Examples: [tweakPNG.exe](examples/collision1.exe) (GUI) ⟷ [fastcoll.exe](examples/collision2.exe) (CLI)
 
 
 ### MP4
@@ -502,7 +502,7 @@ The format is quite permissive. Just use `free` atoms, abuse a length with UniCo
 
 The only thing to know is to adjust the `stco` or `co64` tables, since they are absolute(!) offsets pointing to the `mdat` movie data and they are enforced.
 
-Examples: [collision1.mp4](examples/collision1.mp4) & [collision2.mp4](examples/collision2.mp4)
+Examples: [collision1.mp4](examples/collision1.mp4) ⟷ [collision2.mp4](examples/collision2.mp4)
 
 *Videos by [KidMoGraph](https://www.kidmograph.com/)*
 
@@ -558,7 +558,7 @@ Whether you use UniColl as inline comment or Chosen Prefix in a dummy stream obj
 
 A useful trick is that [`mutool clean`](https://mupdf.com/docs/manual-mutool-clean.html) output is reliably predictable, so it can be used to normalize PDFs as input, and fix your merged PDF while keeping the important parts of the file unmodified. MuTool doesn't discard bogus key/values - unless asked, and keep them in the same order, so using fake dictionary entries such as `/MD5_is /REALLY_dead_now__` is perfect to align things predicatbly. However it won't keep comments in dictionaries (so no inline-comment trick)
 
-Examples: [spectre.pdf](examples/collision1.pdf) & [meltdown.pdf](examples/collision2.pdf)
+Examples: [spectre.pdf](examples/collision1.pdf) ⟷ [meltdown.pdf](examples/collision2.pdf)
 
 <img alt='identical prefix PDF collisions' src=pics/specdown.png width=500/>
 
@@ -584,32 +584,8 @@ While technically both files are a valid ZIP, since most parser return the first
 
 Examples:
 
-<img alt='valid image' src=examples/png-valid.png width=300/> & [invalid](examples/png-invalid.png)
+<img alt='valid image' src=examples/png-valid.png width=300/> ⟷ [invalid](examples/png-invalid.png)
 
-
-### Gotta collide 'em all!
-
-Another use of instant, re-usable and generic collisions would be to hide any file of a given type - say PNG - behind dummy files (or the same file every time) - which is actually just by concatenating it to the same prefix after stripping the signature - you could even do that at library level!
-
-From a strict parsing perspective,
-all your files will show the same content,
-and the evil images would be revealed as a file with the same MD5 as previously collected.
-
-Let's take 2 files:
-
-<img alt='MS 08-067' src=pics/trinity.png width=300/> & 
-<img alt='MS 08-067' src=pics/javascript.png width=300/>
-
-and collide them with the same PNG.
-
-They now show the same dummy image, and they're absolutely identical until the 2nd image at file level!
-
-<img alt='MS 08-067' src=examples/gcea1.png width=200/> & 
-<img alt='MS 08-067' src=examples/gcea2.png width=200/>
-
-Their evil payload is hidden behind a file with the same MD5 respectively:
-don't collect evidences by MD5 without any file introspection.
-So better discard MD5 altogether, because file introspection is just too time-consuming and too risky!
 
 
 ### PolyColls: collisions of different file types
@@ -643,14 +619,54 @@ Since a PE header is usually smaller than 0x500 bytes, it's a perfect fit for a 
 
 Once again, the collision is instant.
 
-Examples: [fastcoll.exe](examples/jpg-pe.exe) & [Marc.jpg](examples/jpg-pe.jpg) 
+Examples: [fastcoll.exe](examples/jpg-pe.exe) ⟷ [Marc.jpg](examples/jpg-pe.jpg) 
 
 
 #### PDF - PNG
 
 Similarly, it's possible to collide for example arbitrary PDF and PNG files with no restriction on either side. This is instant, re-usable and generic.
 
-Examples: [Hello.pdf](examples/png-pdf.pdf) & [1x1.png](examples/png-pdf.png)
+Examples: [Hello.pdf](examples/png-pdf.pdf) ⟷ [1x1.png](examples/png-pdf.png)
+
+
+## Use cases
+
+
+Better discard MD5 altogether, because file introspection is just too time-consuming and too risky!
+
+### Gotta collide 'em all!
+
+Another use of instant, re-usable and generic collisions would be to hide any file of a given type - say PNG - behind dummy files (or the same file every time) - which is actually just by concatenating it to the same prefix after stripping the signature - you could even do that at library level!
+
+From a strict parsing perspective,
+all your files will show the same content,
+and the evil images would be revealed as a file with the same MD5 as previously collected.
+
+Let's take 2 files:
+
+<img alt='MS 08-067' src=pics/trinity.png width=300/> ⟷ 
+<img alt='MS 08-067' src=pics/javascript.png width=300/>
+
+and collide them with the same PNG.
+
+They now show the same dummy image, and they're absolutely identical until the 2nd image at file level!
+
+<img alt='MS 08-067' src=examples/gcea1.png width=200/> ⟷ 
+<img alt='MS 08-067' src=examples/gcea2.png width=200/>
+
+Their evil payload is hidden behind a file with the same MD5 respectively.
+
+
+### Incriminating files
+
+Another use case for collisions is to hide something incriminating inside something innocent, but desirable: if the only thing to collect evidence is comparing weak hashes,
+then you can't deny that you don't have the other file (showing incriminating content but hiding innocent content).
+
+Softwares typically focus on (quick) parsing, not on detailed file analysis.
+
+<img alt='an image showing different previews under different tabs of EnCase Forensic' src=pics/encase.png width=400/>
+
+*an image showing different previews under different tabs of EnCase Forensic*
 
 
 # Presentations
@@ -662,6 +678,8 @@ Examples: [Hello.pdf](examples/png-pdf.pdf) & [1x1.png](examples/png-pdf.png)
 
 # Conclusion
 
-**Kill MD5**:
-unless you actively check for malformations or collisions blocks in files, don't use MD5:
-it's not a cryptographic hash, it's a toy function!
+**Kill MD5!**
+
+Unless you actively check for malformations or collisions blocks in files, don't use MD5!
+
+It's not a cryptographic hash, it's a toy function!
