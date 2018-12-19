@@ -622,6 +622,7 @@ digraph {
 
 This way, we can safely collide any pair of PDFs, no matter the page numbers, dimensions, images...
 
+
 **comments**
 
 PDF can store foreign data in two ways: 
@@ -678,6 +679,7 @@ A true cryptographic artistic creation :)
 
 (Note I screwed up with Adobe compatibility, but that's my fault, not UniColl's)
 
+
 **colliding document structure**
 
 Whether you use UniColl as inline comment or Chosen Prefix in a dummy stream object, the strategy is similar:
@@ -689,9 +691,23 @@ MuTool doesn't discard bogus key/values - unless asked, and keep them in the sam
 so using fake dictionary entries such as `/MD5_is /REALLY_dead_now__` is perfect to align things predictably without needing another kind of comments.
 However it won't keep comments in dictionaries (so no inline-comment trick)
 
+An easy way to do the object-shuffling operation without hassle is just to merge both PDF files
+via `mutool merge` then split the `/Pages` object in 2.
+
+To make room for this object, just merge in front of the 2 documents a dummy PDF.
+
+Optionally, create a fake reference to the dangling array
+to prevent garbage collection from deleting the second set of pages.
+
+With this [script](scripts/pdf.py),
+it takes less than a second to collide the 2 public PDF papers like Spectre and Meltdown:
+
 Examples: [spectre.pdf](examples/collision1.pdf) ⟷ [meltdown.pdf](examples/collision2.pdf)
 
 <img alt='identical prefix PDF collisions' src=pics/specdown.png width=500/>
+
+Possible extension: chain UniColl blocks to also keep pairs of the various [non-critical objects](https://www.adobe.com/content/dam/acom/en/devnet/pdf/pdfs/PDF32000_2008.pdf#page=81)
+that can be referenced in the Root object - such as `Outlines`, `Names`, `AcroForm` and Additional Actions (`AA`) - in the original source files.
 
 **in PDFLaTeX**
 
@@ -753,6 +769,7 @@ You can define objects directly - including dummy key and values for alignments 
 
 Don't forget to normalize PDFLaTeX output - with `mutool` for example - if needed:
 PDFLaTeX is hard to get reproducible builds across distributions - you may even want to hook the time on execution to get the exact hash if required.
+
 
 ## Uncommon strategies
 
@@ -858,7 +875,7 @@ then you can't deny that you don't have the other file (showing incriminating co
 
 Softwares typically focus on (quick) parsing, not on detailed file analysis.
 
-<img alt='an image showing different previews under different tabs of EnCase Forensic' src=pics/encase.png width=400/>
+<img alt='different previews under different tabs of EnCase Forensic' src=pics/encase.png width=400/>
 
 *an image showing different previews under different tabs of EnCase Forensic*
 
