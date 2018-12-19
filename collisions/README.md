@@ -495,7 +495,7 @@ This idea was suggested by Marc, and it's brilliant!
 
 So in the end, the current GIF limitations for *instant* MD5 collisions are:
 - no animation
-- the images have to be normalized to the same palette - see [Gifsicle](https://www.lcdf.org/gifsicle/)
+- the images have to be normalized to the same palette - see [`gifsicle --use-colormap web`](https://www.lcdf.org/gifsicle/)
 - the images have to be the same dimensions
 - after 11 minutes, both files will show the same image
 
@@ -638,8 +638,16 @@ PDF can store foreign data in two ways:
 - as a stream object, in which case any data is possible, but since we're inside an object, we can't alter the whole PDF structure,
   so it requires a chosen prefix collision to modify the structure outside the containing stream object.
 
+**colliding text**
+
 The first case makes it possible to highlight the beauty of UniColl, a collision where differences are predictable,
 so you can write poetry over colliding data - thanks [Jurph](https://github.com/Jurph/word-decrementer)!
+
+Rather than modifying the structure of the document and fool parsers,
+we'll just use collision blocks directly to produce directly text,
+with alternate reading!
+
+A true cryptographic artistic creation :)
 
 - [poeMD5 A](examples/poeMD5_A.pdf)
   ```
@@ -670,6 +678,8 @@ so you can write poetry over colliding data - thanks [Jurph](https://github.com/
 
 (Note I screwed up with Adobe compatibility, but that's my fault, not UniColl's)
 
+**colliding document structure**
+
 Whether you use UniColl as inline comment or Chosen Prefix in a dummy stream object, the strategy is similar:
 shuffle objects numbers around, then make Root object point to different objects, so unlike Shattered, this means instant collision of any arbitrary pair of PDF, at document level.
 
@@ -683,6 +693,66 @@ Examples: [spectre.pdf](examples/collision1.pdf) ⟷ [meltdown.pdf](examples/col
 
 <img alt='identical prefix PDF collisions' src=pics/specdown.png width=500/>
 
+**in PDFLaTeX**
+
+The previous technics work with just a pair of PDF files,
+but it's also possible to do it directly from TeX sources
+via [specific PDFTeX operators](http://texdoc.net/texmf-dist/doc/pdftex/manual/pdftex-a.pdf).
+
+You can define objects directly - including dummy key and values for alignments - and define empty objects to reserve some object slots by including this at the very start of your TeX sources:
+
+
+``` latex
+% set PDF version low to prevent stream XREF
+\pdfminorversion=3
+
+\begingroup
+
+  % disable compression to keep alignments
+  \pdfcompresslevel=0\relax
+
+  \immediate
+  \pdfobj{<<
+    /Type /Catalog
+
+    % cool alignment padding
+    /MD5_is /REALLY_dead_now__
+
+    % the first reference number should be on offset 0x49, so 2 will be changed to 3 by UniColl
+    /Pages 2 0 R
+
+    % now padding so that the collision blocks (ends at 0xC0) are covered
+    /0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+    % with an extra character to be replaced by a return char
+    /0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0
+  >>}
+
+  % the original catalog of the shifted doc
+  \immediate\pdfobj{<</Type/Pages/Count 1/Kids[8 0 R]>>}
+
+  % the original catalog of the host doc
+  \immediate\pdfobj{<</Type/Pages/Count 1/Kids[33 0 R]>>}
+
+  % now we need to reserve PDF Objects so that there is no overlap
+  \newcount\objcount
+
+  % the host size (+3 for spare object slots) - 1
+  % putting a higher margin will just work, and XREF can have huge gaps
+  \objcount=25
+  \loop
+    \message{\the\objcount}
+    \advance \objcount -1
+
+  \immediate\pdfobj{<<>>} % just an empty object
+
+  \ifnum \objcount>0
+  \repeat
+
+\endgroup
+```
+
+Don't forget to normalize PDFLaTeX output - with `mutool` for example - if needed:
+PDFLaTeX is hard to get reproducible builds across distributions - you may even want to hook the time on execution to get the exact hash if required.
 
 ## Uncommon strategies
 
