@@ -90,6 +90,8 @@ with open("hacked.pdf", "wb") as f:
 
 # let's adjust offsets - -g to get rid of object 4 by garbage collecting
 # (yes, errors will appear)
+print
+print "KEEP CALM and IGNORE THE NEXT ERRORS"
 os.system('mutool clean -gggg hacked.pdf cleaned.pdf')
 
 with open("cleaned.pdf", "rb") as f:
@@ -116,10 +118,22 @@ with open("collision1.pdf", "wb") as f:
 with open("collision2.pdf", "wb") as f:
   f.write(file2)
 
-assert hashlib.md5(file1).digest() == hashlib.md5(file2).digest()
-
 os.remove('first.pdf')
 os.remove('second.pdf')
 os.remove('merged.pdf')
 os.remove('hacked.pdf')
 os.remove('cleaned.pdf')
+
+md5 = hashlib.md5(file1).hexdigest()
+
+assert md5 == hashlib.md5(file2).hexdigest()
+
+print
+os.system('mutool info -X collision1.pdf')
+print
+print
+os.system('mutool info -X collision2.pdf')
+
+print
+print "MD5: %s" % md5
+print "Success!"
