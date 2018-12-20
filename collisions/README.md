@@ -272,9 +272,6 @@ Documented in [2013](https://marc-stevens.nl/research/papers/EC13-S.pdf), comput
 - exploitation: medium. The differences are right at the start of the collision blocks. So no control before and after the length:
   PNG stores its length before the chunk type, so it won't work.
 
-<!-- However MP4 and its length (when stored as 64bit) should work. TODO: MP4 as chosen prefix MD5 with Shattered pattern -->
-
-
 The difference between collision blocks of each side is this Xor mask:
 ```
 0c 00 00 02 c0 00 00 10 b4 00 00 1c 3c 00 00 04
@@ -526,18 +523,35 @@ While executables collisions is usually trivial via any loader, this kind of exp
 Examples: [tweakPNG.exe](examples/collision1.exe) (GUI) ⟷ [fastcoll.exe](examples/collision2.exe) (CLI)
 
 
-### MP4
+### MP4 and others
 
-The format is quite permissive. Just use `free` atoms, abuse a length with UniColl, then jump over the first video.
+This format's container is a sequence of `Length Type Value` chunks called Atoms.
+The length is a 32 bit big-endian and covers itself, the type and the value, so the minimum normal length is 8
+(the type is a 4 ASCII characters string).
 
-The only thing to know is to adjust the `stco` or `co64` tables, since they are absolute(!) offsets pointing to the `mdat` movie data and they are enforced.
+If the length is null, then the atom takes the rest of the file - such as `jp2c` atoms in JP2 files.
+If it's 1, then the Type is followed by a 64bit length, which kinda turns the atom to `Type Length Value`, which may enable other kinds of collision such as Shattered.
+
+This "atom/box" format used in MP4 is actually a derivate of Apple Quicktime,
+and is used by [many other formats](http://www.ftyps.com/) (JP2, HEIF).
+
+The first atom type is *usually* `ftyp`, which enables to differentiate the actual file format.
+
+The format is quite permissive:
+just chain `free` atoms, abuse one's length with UniColl, then jump over the first payload.
+
+For MP4 files, the only thing to add is to adjust the `stco` (Sample Table - Chunk Offsets) or `co64` (the 64 bit equivalent) tables, since they are absolute(!) offsets pointing to the `mdat` movie data - and they are actually enforced!
+
+This gives a [script](scripts/mp4.py) that instantly collides any abritrary video - and
+as mentioned, it may work on other format than MP4.
+
+If it doesn't work, then you might want to compute another UniColl prefix pairs dedicated to that format - JPEG2000 seems to enforce a `'jP  '` atom first before the usual `ftyp`.
+
+![Nirvana - Smells like Teen Spirit / Weird Al Yankovik - Smells like Nirvana](pics/mp4.png)
 
 Examples: [collision1.mp4](examples/collision1.mp4) ⟷ [collision2.mp4](examples/collision2.mp4)
 
 *Videos by [KidMoGraph](https://www.kidmograph.com/)*
-
-This should be extendable to any MP4-like format (in terms of Atom/Box structures), such as HEIF or JP2.
-
 
 ### PDF
 
