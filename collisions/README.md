@@ -105,7 +105,7 @@ These common properties of file formats make it possible - they are not typicall
 - huge comments (lengths: 64b for MP4, 32b for PNG -> trivial collisions. 16b for JPG, 8b for GIF -> no generic collision for GIF, limited for JPG)
 - store any data in a comment (UTF8 could be enforced)
 - store anything after the terminator (usually used only for malicious purposes)
-- no integrity check. CRC32 in PNG are usually ignored, which would prevent PNG re-useable collisions otherwise.
+- no integrity check. CRC32 in PNG are usually ignored, which would prevent PNG re-usable collisions otherwise.
 - flat structure: [ASN.1](https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One) defines parent structure with the length of all the enclosed substructures,
   which prevents these constructs: you'd need to abuse a length, but also the length of the parent.
 - put a comment before the header - this makes generic re-usable collisions possible.
@@ -165,7 +165,7 @@ Final version in 2009.
 - exploitation: hard
 
 The differences aren't near the start/end of the blocks, so it's very hard to exploit since you don't control any nearby byte.
-A potential solution is to bruteforce the surrounding bytes - cf [PoCGTFO 14:10](https://github.com/angea/pocorgtfo#0x14).
+A potential solution is to brute-force the surrounding bytes - cf [PoCGTFO 14:10](https://github.com/angea/pocorgtfo#0x14).
 
 
 **Examples**:
@@ -406,12 +406,12 @@ Identical prefix collisions is usually seen as (very) limited, but chosen prefix
 Another approach is to craft re-usable prefixes via either identical-prefix attack such as UniColl - or chosen prefix to overcome some limitations - but re-use that prefix pair in combinations with 2 payloads like a classic identical prefix attack.
 
 Once the prefix pair has been computed, it makes colliding 2 contents instant:
-it's just a matter of massaging file data (according to specific file formats) so that it fits the file formats specifications and the pre-computed prefix requirements.
+it's just a matter of massaging file data (according to specific file formats) so that it fits the file formats specifications and the precomputed prefix requirements.
 
 
 ## Standard strategy
 
-Classic collisions of 2 valid files with the same filetype.
+Classic collisions of 2 valid files with the same file type.
 
 
 ### JPG
@@ -439,17 +439,17 @@ With the [script](scripts/jpg.py):
 
 Theoretical limitations and workarounds:
 - PNG uses CRC32 at the end of its chunks, which would prevent the use of collision blocks, but in practice they're ignored.
-- the image metadata (dimensions, colorspace...) are stored in the `IHDR` chunk,
+- the image meta data (dimensions, color space...) are stored in the `IHDR` chunk,
   which should in theory be right after the signature (ie, before any potential comment),
-  so it would mean that we can only pre-compute collisions of images with the same metadata.
+  so it would mean that we can only precompute collisions of images with the same meta data.
   However, that chunk can actually be after a comment block, so we can put the collision data before the header,
-  which enables to collide any pair of PNG with a single pre-computation. 
+  which enables to collide any pair of PNG with a single precomputation. 
 
 Since a PNG chunk has a length on 4 bytes, there's no need to modify the structure of either file: we can jump over a whole image in one go.
 
 We can insert as many discarded chunks as we want, so we can add one for alignment, then one which length will be altered by a UniColl. so the length will be `00` `75` and `01` `75`.
 
-So an MD5 collision of 2 arbitrary PNG images is *instant*, with no pre-requesite (no computation, just some minor file changes), and needs no chosen-prefix collision, just UniColl.
+So an MD5 collision of 2 arbitrary PNG images is *instant*, with no prerequisite (no computation, just some minor file changes), and needs no chosen-prefix collision, just UniColl.
 
 With the [script](scripts/png.py):
 ```
@@ -465,7 +465,7 @@ With the [script](scripts/png.py):
 ### GIF
 
 GIF is tricky:
-- it stores its metadata in the header before any comment is possible, so there can't be a generic prefix for all GIF files.
+- it stores its meta data in the header before any comment is possible, so there can't be a generic prefix for all GIF files.
  - if the file has a global palette, it is also stored before a comment is possible too.
 - its comment chunks are limited to a single byte in length, so a maximum of 256 bytes!
 
@@ -542,7 +542,7 @@ just chain `free` atoms, abuse one's length with UniColl, then jump over the fir
 
 For MP4 files, the only thing to add is to adjust the `stco` (Sample Table - Chunk Offsets) or `co64` (the 64 bit equivalent) tables, since they are absolute(!) offsets pointing to the `mdat` movie data - and they are actually enforced!
 
-This gives a [script](scripts/mp4.py) that instantly collides any abritrary video - and
+This gives a [script](scripts/mp4.py) that instantly collides any arbitrary video - and
 as mentioned, it may work on other format than MP4.
 
 If it doesn't work, then you might want to compute another UniColl prefix pairs dedicated to that format - JPEG2000 seems to enforce a `'jP  '` atom first before the usual `ftyp`.
@@ -603,9 +603,9 @@ trailer <</Root 11 0 R>>
 
 Tricks:
 - Storing unused objects in a PDF is tolerated.
-- Skipping any object numbers is also ok. There's even an official way to skip numbers in the `XREF` table.
+- Skipping any object numbers is also OK. There's even an official way to skip numbers in the `XREF` table.
 
-So storing 2 document trees in the same file is ok.
+So storing 2 document trees in the same file is OK.
 We just need to make the root object refer to either root object of both documents.
 
 So we just need to take 2 documents,
@@ -725,7 +725,7 @@ that can be referenced in the Root object - such as `Outlines`, `Names`, `AcroFo
 
 **in PDFLaTeX**
 
-The previous technics work with just a pair of PDF files,
+The previous techniques work with just a pair of PDF files,
 but it's also possible to do it directly from TeX sources
 via [specific PDFTeX operators](http://texdoc.net/texmf-dist/doc/pdftex/manual/pdftex-a.pdf).
 
@@ -896,8 +896,9 @@ Softwares typically focus on (quick) parsing, not on detailed file analysis.
 
 # Presentations
 
-- Exploiting Hash Collisions (2017): [slides](https://speakerdeck.com/ange/exploiting-hash-collisions)
-
+Exploiting Hash Collisions (2017):
+- [slides](https://speakerdeck.com/ange/exploiting-hash-collisions)
+- [video](https://www.youtube.com/watch?v=Y-oJWEYKVLA)
   [![Exploiting hash collisions youtube video](https://img.youtube.com/vi/Y-oJWEYKVLA/0.jpg)](https://www.youtube.com/watch?v=Y-oJWEYKVLA)
 
 
