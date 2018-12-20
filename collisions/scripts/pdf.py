@@ -24,6 +24,10 @@ if len(sys.argv) == 1:
   print("Usage: pdf.py <file1.pdf> <file2.pdf>")
   sys.exit()
 
+if os.system('which mutool >/dev/null 2>&1') != 0:
+  print("Please install mutool")
+  sys.exit()
+
 os.system('mutool merge -o first.pdf %s' % sys.argv[1])
 os.system('mutool merge -o second.pdf %s' % sys.argv[2])
 os.system('mutool merge -o merged.pdf dummy.pdf %s %s' % (sys.argv[1], sys.argv[2]))
