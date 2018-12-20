@@ -53,7 +53,7 @@ template = """%%PDF-1.4
 <<
   /Type /Catalog
 
-  %% for alignements (comments will be removed by merging or cleaning)
+  %% for alignments (comments will be removed by merging or cleaning)
   /MD5_is__ /REALLY_dead_now__
   /Pages 2 0 R
   %% to make sure we don't get rid of the other pages when garbage collecting
