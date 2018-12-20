@@ -1,9 +1,13 @@
-**TL;DR** getting an MD5 collision of these 2 images is [trivial](scripts/png.py) and instant.
+**TL;DR** getting an MD5 collision of these 2 images is now(\*) [trivial](scripts/png.py) and instant.
 
 [![MD5 page on Wikipedia](examples/tldr-1.png)](https://en.wikipedia.org/wiki/MD5) ⟷
 <a href=http://gunshowcomic.com/648><img src=examples/tldr-2.png height=400 alt='On Fire / This is fine'></a>
 
 Don't play with fire, don't rely on MD5.
+
+(\*) Colliding any pair of files has been possible for many years, but it takes several hours each time, with no shortcut.
+This page provide tricks specific to file formats and pre-computed collision prefixes to make collision **instant**.
+`git clone`. Run Script. Done.
 
 # Introduction
 
