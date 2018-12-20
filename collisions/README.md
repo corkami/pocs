@@ -285,8 +285,9 @@ bc 00 00 18 b0 00 00 10 00 00 00 0c b8 00 00 10
 
 <img alt='Shattered PoCs side by side' src=pics/shattered.png width=1000 />
 
-Examples: [PoC||GTFO 0x18](https://github.com/angea/pocorgtfo#0x18)
-
+Examples: [PoC||GTFO 0x18](https://github.com/angea/pocorgtfo#0x18) is using the computed SHA1 prefixes,
+re-using the image directly from PDFLaTeX source (see [article 18:10](https://archive.org/stream/pocorgtfo18#page/n62/mode/1up)),
+but also checking the value of the prefixes via JavaScript in the HTML page (the file is polyglot, ZIP HTML and PDF).
 
 ## Chosen-prefix collisions
 
