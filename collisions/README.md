@@ -271,6 +271,9 @@ Documented in [2013](https://marc-stevens.nl/research/papers/EC13-S.pdf), comput
   ```
 - exploitation: medium. The differences are right at the start of the collision blocks. So no control before and after the length:
   PNG stores its length before the chunk type, so it won't work.
+  However it will work with JP2 files when they use the JFIF form (the same as JPG),
+  and likely MP4 and other atom/box formats if you use long lengths on 64bits
+  (in this case, they're placed *after* the atom type).
 
 The difference between collision blocks of each side is this Xor mask:
 ```
@@ -283,6 +286,7 @@ bc 00 00 18 b0 00 00 10 00 00 00 0c b8 00 00 10
 <img alt='Shattered PoCs side by side' src=pics/shattered.png width=1000 />
 
 Examples: [PoC||GTFO 0x18](https://github.com/angea/pocorgtfo#0x18)
+
 
 ## Chosen-prefix collisions
 
@@ -532,6 +536,8 @@ The length is a 32 bit big-endian and covers itself, the type and the value, so 
 If the length is null, then the atom takes the rest of the file - such as `jp2c` atoms in JP2 files.
 If it's 1, then the Type is followed by a 64bit length, which kinda turns the atom to `Type Length Value`, which may enable other kinds of collision such as Shattered.
 
+Some atoms contain other atoms: in this cases, they're called boxes. That's why this otherwise unnamed structure is called "atom/box".
+
 This "atom/box" format used in MP4 is actually a derivate of Apple Quicktime,
 and is used by [many other formats](http://www.ftyps.com/) (JP2, HEIF).
 
@@ -545,13 +551,38 @@ For MP4 files, the only thing to add is to adjust the `stco` (Sample Table - Chu
 This gives a [script](scripts/mp4.py) that instantly collides any arbitrary video - and
 as mentioned, it may work on other format than MP4.
 
-If it doesn't work, then you might want to compute another UniColl prefix pairs dedicated to that format - JPEG2000 seems to enforce a `'jP  '` atom first before the usual `ftyp`.
 
 ![Nirvana - Smells like Teen Spirit / Weird Al Yankovik - Smells like Nirvana](pics/mp4.png)
 
 Examples: [collision1.mp4](examples/collision1.mp4) ⟷ [collision2.mp4](examples/collision2.mp4)
 
 *Videos by [KidMoGraph](https://www.kidmograph.com/)*
+
+
+#### JPEG2000
+
+JPEG2000 files usually start with the Atom/Box structure like MP4,
+then the last atom `jp2c` is typically until the end of the file (null length),
+then from this point on it follows the JFIF structure, like JPEG (starting with `FF 4F` as a segment marker).
+
+The pure-JFIF form is also tolerated, in which case collision is like JPEG:
+Shattered-compatible, but with comments limited to 64Kb.
+
+On the other hand, if you manipulate JPEG2000 files with the Atom/Box,
+you don't have this limitation.
+
+As mentioned before, if you're trying to collide this structure and 
+if there are more restriction - for example starting with a `free` atom is not tolerated by some format -
+then you can compute another UniColl prefix pairs specific to this format:
+JPEG2000 seems to [enforce](https://github.com/uclouvain/openjpeg/blob/d2205ba2ee78faeea659263383446c4472b1f9df/src/bin/wx/OPJViewer/source/imagjpeg2000.cpp#L100-L111) a `'jP  '` atom first before the usual `ftyp`,
+but besides, that's the only restriction: there's no need to relocate anything.
+
+So the resulting [script](scripts/jp2.py) is even simpler!
+
+![Oded Goldreich / Neal Koblitz](pics/jp2.png)
+
+Examples: [collision1.jp2](examples/collision1.jp2) ⟷ [collision2.jp2](examples/collision2.jp2)
+
 
 ### PDF
 
