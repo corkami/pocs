@@ -1,6 +1,7 @@
 # script to craft MD5 collisions of 2 PDFs via mutool and UniColl
-
 # Ange Albertini 2018
+
+# uses mutool from https://mupdf.com/index.html
 
 import os
 import sys
@@ -53,7 +54,7 @@ template = """%%PDF-1.4
 <<
   /Type /Catalog
 
-  %% for alignements (comments will be removed by merging or cleaning)
+  %% for alignments (comments will be removed by merging or cleaning)
   /MD5_is__ /REALLY_dead_now__
   /Pages 2 0 R
   %% to make sure we don't get rid of the other pages when garbage collecting
@@ -89,7 +90,7 @@ with open("hacked.pdf", "wb") as f:
   f.write(dm[dm.find("5 0 obj"):].replace("/Parent 2 0 R", "/Parent 3 0 R", COUNT1))
 
 # let's adjust offsets - -g to get rid of object 4 by garbage collecting
-# (yes, errors will appear)
+# (yes, errors will appear because we modified objects without adjusting XREF)
 print
 print "KEEP CALM and IGNORE THE NEXT ERRORS"
 os.system('mutool clean -gggg hacked.pdf cleaned.pdf')
@@ -128,6 +129,7 @@ md5 = hashlib.md5(file1).hexdigest()
 
 assert md5 == hashlib.md5(file2).hexdigest()
 
+# to prove the files should be 100% valid
 print
 os.system('mutool info -X collision1.pdf')
 print
