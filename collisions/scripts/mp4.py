@@ -87,6 +87,8 @@ suffix = "".join([
   relocate(d2, 0x1C0 + 8 + l1),
   ])
 
+# 32b length prefix
+
 with open("mp4-1.bin", "rb") as f:
   prefix1 = f.read()
 with open("mp4-2.bin", "rb") as f:
@@ -104,4 +106,26 @@ if md5 == hashlib.md5(col2).hexdigest():
     f.write(col1)
 
   with open("collision2.mp4", "wb") as f:
+    f.write(col2)
+
+# 64b length prefix
+
+with open("mp4l-1.bin", "rb") as f:
+  prefix1 = f.read()
+with open("mp4l-2.bin", "rb") as f:
+  prefix2 = f.read()
+
+
+col1 = prefix1 + suffix
+col2 = prefix2 + suffix
+
+md5 = hashlib.md5(col1).hexdigest()
+
+if md5 == hashlib.md5(col2).hexdigest():
+  print "common md5: %s" % md5
+
+  with open("collisionl1.mp4", "wb") as f:
+    f.write(col1)
+
+  with open("collisionl2.mp4", "wb") as f:
     f.write(col2)

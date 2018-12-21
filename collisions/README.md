@@ -539,7 +539,7 @@ The length is a 32 bit big-endian and covers itself, the type and the value, so 
 (the type is a 4 ASCII characters string).
 
 If the length is null, then the atom takes the rest of the file - such as `jp2c` atoms in JP2 files.
-If it's 1, then the Type is followed by a 64bit length, which kinda turns the atom to `Type Length Value`, which may enable other kinds of collision such as Shattered.
+If it's 1, then the Type is followed by a 64bit length, changing the atom to `Type Length Value`, making it compatible with other collisions like Shattered.
 
 Some atoms contain other atoms: in this cases, they're called boxes. That's why this otherwise unnamed structure is called "atom/box".
 
@@ -556,12 +556,16 @@ For MP4 files, the only thing to add is to adjust the `stco` (Sample Table - Chu
 This gives a [script](scripts/mp4.py) that instantly collides any arbitrary video - and
 as mentioned, it may work on other format than MP4.
 
-
 ![Nirvana - Smells like Teen Spirit / Weird Al Yankovik - Smells like Nirvana](pics/mp4.png)
 
-Examples: [collision1.mp4](examples/collision1.mp4) ⟷ [collision2.mp4](examples/collision2.mp4)
+Examples (videos by [KidMoGraph](https://www.kidmograph.com/)):
+- 32b lengths (standard) [collision1.mp4](examples/collision1.mp4) ⟷ [collision2.mp4](examples/collision2.mp4)
 
-*Videos by [KidMoGraph](https://www.kidmograph.com/)*
+  <video width=300 controls> <source src="examples/collision1.mp4" type="video/mp4">🏭</video> ⟷ <video width=300 controls> <source src="examples/collision2.mp4" type="video/mp4">🛣️</video>
+
+- 64b lengths [collisionl1.mp4](examples/collisionl1.mp4) ⟷ [collisionl2.mp4](examples/collisionl2.mp4)
+
+  <video width=300 controls> <source src="examples/collisionl1.mp4" type="video/mp4">☀️</video> ⟷ <video width=300 controls> <source src="examples/collisionl2.mp4" type="video/mp4">🌙</video>
 
 
 #### JPEG2000
