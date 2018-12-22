@@ -425,6 +425,8 @@ Classic collisions of 2 valid files with the same file type.
 
 ### JPG
 
+<img alt='a JPG file' src=https://raw.githubusercontent.com/corkami/pics/master/binary/JPG.png width=500/>
+
 Theoretical limitations and workarounds:
 - the *Application* segment should in theory right after the *Start of Image* marker.
   In practice, this is not necessary, so our collision can be generic: the only limitation is the size of the smallest image.
@@ -445,6 +447,9 @@ With the [script](scripts/jpg.py):
 
 
 ### PNG
+
+
+<img alt='a PNG file' src=https://raw.githubusercontent.com/corkami/pics/master/binary/PNG.png width=500/>
 
 Theoretical limitations and workarounds:
 - PNG uses CRC32 at the end of its chunks, which would prevent the use of collision blocks, but in practice they're ignored.
@@ -472,6 +477,8 @@ With the [script](scripts/png.py):
 
 
 ### GIF
+
+<img alt='a GIF file' src=https://raw.githubusercontent.com/corkami/pics/master/binary/GIF.png width=500/>
 
 GIF is tricky:
 - it stores its meta data in the header before any comment is possible, so there can't be a generic prefix for all GIF files.
@@ -512,6 +519,8 @@ So in the end, the current GIF limitations for *instant* MD5 collisions are:
 
 
 ### Portable Executable
+
+<img alt='a PE file' src=https://raw.githubusercontent.com/corkami/pics/master/binary/PE.png width=600/>
 
 The Portable Executable has a peculiar structure:
 - the old DOS header is almost useless, and points to the next structure, the PE header.
@@ -597,6 +606,8 @@ Examples: [collision1.jp2](examples/collision1.jp2) ⟷ [collision2.jp2](example
 
 
 ### PDF
+
+<img alt='a PDF file' src=https://raw.githubusercontent.com/corkami/pics/master/binary/PDF.png width=300/>
 
 **collision**
 
@@ -953,6 +964,8 @@ but it's more like porting payloads than colliding file structure.
 
 ### ELF
 
+<img alt='an ELF file' src=https://raw.githubusercontent.com/corkami/pics/master/binary/ELF.png width=600/>
+
 The ELF header is required at offset 0 and contains critical information such as 32b/64b,
 endianness and ABI right from the beginning,
 so it's impossible to have a universal prefix then collision blocks
@@ -961,6 +974,8 @@ before critical parameters that are specific to the original file.
 
 ### Mach-O
 
+<img alt='a Mach-O file' src=https://raw.githubusercontent.com/corkami/pics/master/binary/MachO.png width=600/>
+
 Mach-O don't even start with the same magic for 32b (`feedface`) and 64b (`feedfacf`).
 Soon after, there is the number and size of commands (such as segment definition, symtab, version,...).
 
@@ -968,6 +983,8 @@ Like ELF, re-usable collisions are not possible.
 
 
 ### Java Class
+
+<img alt='a Java Class file' src=https://raw.githubusercontent.com/corkami/pics/master/binary/CLASS.png width=600/>
 
 Right from the start magic are located the versions (which can be troublesome)
 but the constant pool count which is quite specific to each file,
