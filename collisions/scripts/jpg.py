@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # a JPG image collider
+# Ange albertini 2018
 
 import sys
 import struct

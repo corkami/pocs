@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # script to craft MD5 collisions of 2 PDFs via mutool and UniColl
 # Ange Albertini 2018
 

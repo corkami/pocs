@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # script to collide JPEG2000 files
 # Ange Albertini, December 2018
 

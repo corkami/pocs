@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # script to collide "MP4"-based files
 # Ange Albertini, December 2018
 
