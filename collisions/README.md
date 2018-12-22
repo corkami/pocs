@@ -828,16 +828,6 @@ Don't forget to normalize PDFLaTeX output - with `mutool` for example - if neede
 PDFLaTeX is hard to get reproducible builds across distributions - you may even want to hook the time on execution to get the exact hash if required.
 
 
-### ELF
-
-The ELF header is required at offset 0 and contains critical information such as 32b/64b, endianness and ABI right from the beginning, so it's impossible to have a universal prefix then collision blocks.
-
-### Mach-O
-
-Mach-O don't even start with the same magic for 32b (`feedface`) and 64b (`feedfacf`). Soon after, there is the number and size of commands (such as segment definition, symtab, version,...).
-
-Like ELF, re-usable collisions are not possible.
-
 ## Uncommon strategies
 
 Collisions are usually about 2 valid files of the same type.
@@ -945,6 +935,49 @@ Softwares typically focus on (quick) parsing, not on detailed file analysis.
 <img alt='different previews under different tabs of EnCase Forensic' src=pics/encase.png width=400/>
 
 *an image showing different previews under different tabs of EnCase Forensic*
+
+
+# Failures
+
+Not all formats can have generic prefixes that can be re-used:
+if some kind of data holder can't be inserted between the magic signature
+and the standard headers that are critical and specific to each file,
+then generic collisions are not possible.
+
+Of course, one might still turn the old files into a new one,
+and even use code to branch out to 2 different payloads,
+but it's more like porting payloads than colliding file structure.
+
+
+### ELF
+
+The ELF header is required at offset 0 and contains critical information such as 32b/64b,
+endianness and ABI right from the beginning,
+so it's impossible to have a universal prefix then collision blocks
+before critical parameters that are specific to the original file.
+
+
+### Mach-O
+
+Mach-O don't even start with the same magic for 32b (`feedface`) and 64b (`feedfacf`).
+Soon after, there is the number and size of commands (such as segment definition, symtab, version,...).
+
+Like ELF, re-usable collisions are not possible.
+
+
+### Java Class
+
+Right from the start magic are located the versions (which can be troublesome)
+but the constant pool count which is quite specific to each file,
+so no universal collisions for all files.
+
+However, many files still have a common version and we can pad the shortest constant pool to the longuest count.
+First, insert a *UTF8 literal* to align information,
+then declare another one with its length abused by a UniColl (the length is stored on 16 bytes as big endian). 
+
+However this will require code manipulation since all pool indexes will be shifted.
+
+Instant MD5 re-usable collisions of Java Class should be possible, but require code analysis and modification.
 
 
 # Presentations
