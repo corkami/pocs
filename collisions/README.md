@@ -568,6 +568,8 @@ Examples (videos by [KidMoGraph](https://www.kidmograph.com/)):
 
   <video width=300 controls> <source src="examples/collisionl1.mp4" type="video/mp4">☀️</video> ⟷ <video width=300 controls> <source src="examples/collisionl2.mp4" type="video/mp4">🌙</video>
 
+<video>![how it should look (but your markdown doesn't render video tags)](pics/mp4-pocs.png)</video>
+
 
 #### JPEG2000
 
