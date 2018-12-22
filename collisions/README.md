@@ -544,7 +544,7 @@ If it's 1, then the Type is followed by a 64bit length, changing the atom to `Ty
 Some atoms contain other atoms: in this cases, they're called boxes. That's why this otherwise unnamed structure is called "atom/box".
 
 This "atom/box" format used in MP4 is actually a derivate of Apple Quicktime,
-and is used by [many other formats](http://www.ftyps.com/) (JP2, HEIF).
+and is used by [many other formats](http://www.ftyps.com/) (JP2, HEIF, F4V).
 
 The first atom type is *usually* `ftyp`, which enables to differentiate the actual file format.
 
@@ -753,12 +753,14 @@ To make room for this object, just merge in front of the 2 documents a dummy PDF
 Optionally, create a fake reference to the dangling array
 to prevent garbage collection from deleting the second set of pages.
 
-With this [script](scripts/pdf.py),
-it takes less than a second to collide the 2 public PDF papers like Spectre and Meltdown:
+
+**Example**:
+with this [script](scripts/pdf.py),
+it takes [less than a second](examples/pdf.log) to collide the 2 public PDF papers like Spectre and Meltdown:
 
 Examples: [spectre.pdf](examples/collision1.pdf) ⟷ [meltdown.pdf](examples/collision2.pdf)
 
-<img alt='identical prefix PDF collisions' src=pics/specdown.png width=500/>
+<img alt='identical prefix PDF collisions' src=pics/pdf.png width=600/>
 
 Possible extension: chain UniColl blocks to also keep pairs of the various [non-critical objects](https://www.adobe.com/content/dam/acom/en/devnet/pdf/pdfs/PDF32000_2008.pdf#page=81)
 that can be referenced in the Root object - such as `Outlines`, `Names`, `AcroForm` and Additional Actions (`AA`) - in the original source files.
