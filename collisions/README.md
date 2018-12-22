@@ -828,6 +828,16 @@ Don't forget to normalize PDFLaTeX output - with `mutool` for example - if neede
 PDFLaTeX is hard to get reproducible builds across distributions - you may even want to hook the time on execution to get the exact hash if required.
 
 
+### ELF
+
+The ELF header is required at offset 0 and contains critical information such as 32b/64b, endianness and ABI right from the beginning, so it's impossible to have a universal prefix then collision blocks.
+
+### Mach-O
+
+Mach-O don't even start with the same magic for 32b (`feedface`) and 64b (`feedfacf`). Soon after, there is the number and size of commands (such as segment definition, symtab, version,...).
+
+Like ELF, re-usable collisions are not possible.
+
 ## Uncommon strategies
 
 Collisions are usually about 2 valid files of the same type.
