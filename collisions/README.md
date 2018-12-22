@@ -999,6 +999,69 @@ However this will require code manipulation since all pool indexes will be shift
 Instant MD5 re-usable collisions of Java Class should be possible, but require code analysis and modification.
 
 
+### TAR
+
+<img alt='a TAR file' src=https://raw.githubusercontent.com/corkami/pics/master/binary/TAR.png width=600/>
+
+Tape Archives are a sequence of concatenated header and file contents, all aligned to 512 bytes.
+
+There's no central structure to the whole file. So no global header or comment of any kind to abuse.
+
+A trick would be to start a dummy file of variable length, but the length is always at the same offset, which is not compatible with UniColl, which means only Chosen Prefix collisions is useful here.
+
+No re-usable collision for TAR files.
+
+
+
+### ZIP
+
+<img alt='a TAR file' src=https://raw.githubusercontent.com/corkami/pics/master/binary/ZIP.png width=600/>
+
+ZIP archives are a sandwich of 3 layers (at least).
+First comes the files' content (sequence of `Local File Header` structures, one per archived file or directory),
+then some index (again, a sequence of `Central Directory`),
+then a single structure that points to this index (`End Of Central Directory`).
+
+The order of these layers can't be moved around.
+Some parser only need the file content's structure, but that's not a correct way to parse and it can be abused.
+
+Because of this required order, there's no generic prefix that could help for any collision.
+
+**non generic approach**
+
+Another approach could be to just merge both archives, with their merged layers, and using UniColl - but with N=2, which introduces a difference on the 4th byte - to kill the magic signature of the `End of Central Directory`.
+
+This means one could collide 2 arbitrary ZIP with a single UniColl and 24 bytes of set prefix, which takes 40 mins.
+
+
+A typical End of Central Directory:
+```
+50 4B 05 06-00 00 00 00-04 00 04 00-17 01 00 00  PK♣♠    ♦ ♦ ↨☺
+51 07 00 00-00 00      -           -             Q•
+```
+
+Examples of collision with UniColl and `N=2`: difference on the 4th byte.
+```
+00:  55 6E 69 43-6F 6C 6C 20-32 20 70 72-65 66 69 78  UniColl 2 prefix
+10:  20 32 30 62-24 FA 3F 50-2F 7A B1 A7-04 DC 2F 39   20b$·?P/z▒º♦▄/9
+20:  07 E7 6F 33-B4 64 97 DD-B1 95 8E F3-CB 60 18 B1  •τo3┤dù▌▒òÄ≤╦`↑▒
+30:  9F E9 DC B3-D8 03 FC 7C-52 40 8E 36-AF 0C 86 C7  ƒΘ▄│╪♥ⁿ|R@Ä6»♀å╟
+40:  8C 41 62 73-C9 B9 A7 EB-03 10 68 F0-5B 82 49 EE  îAbs╔╣ºδ♥►h≡[éIε
+50:  B6 77 D5 50-E2 B8 D7 A2-61 16 78 B0-35 24 1B 2F  ╢w╒PΓ╕╫óa▬x░5$←/
+60:  5A 83 E2 E0-49 4F B7 0D-7D 7C E7 3F-CC B7 F3 72  ZâΓαIO╖♪}|τ?╠╖≤r
+70:  8A 55 71 A0-B2 34 6C 0E-45 EE 04 60-ED 33 62 BC  èUqá▓4l♫Eε♦`φ3b╝
+```
+```
+00:  55 6E 69 C3-6F 6C 6C 20-32 20 70 72-65 66 69 78  Uni├oll 2 prefix
+10:  20 32 30 62-24 FA 3F 50-2F 7A B1 27-04 DC 2F 39   20b$·?P/z▒'♦▄/9
+20:  07 E7 6F 33-B4 64 97 DD-B1 95 8E F3-CB 60 18 B1  •τo3┤dù▌▒òÄ≤╦`↑▒
+30:  9F E9 DC B3-D8 03 FC 84-52 40 8E 36-AF 0C 86 C7  ƒΘ▄│╪♥ⁿäR@Ä6»♀å╟
+40:  8C 41 62 F3-C9 B9 A7 EB-03 10 68 F0-5B 82 49 EE  îAb≤╔╣ºδ♥►h≡[éIε
+50:  B6 77 D5 50-E2 B8 D7 A2-61 16 78 30-35 24 1B 2F  ╢w╒PΓ╕╫óa▬x05$←/
+60:  5A 83 E2 E0-49 4F B7 0D-7D 7C E7 3F-CC B7 F3 72  ZâΓαIO╖♪}|τ?╠╖≤r
+70:  8A 55 71 A0-B2 34 6C 06-45 EE 04 60-ED 33 62 BC  èUqá▓4l♠Eε♦`φ3b╝
+```
+
 # Presentations
 
 Exploiting Hash Collisions (2017):
