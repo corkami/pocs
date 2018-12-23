@@ -1073,6 +1073,19 @@ user 112m24.072s
 sys 2m0.194s
 ```
 
+A problem is that some parsers still parse ZIP files upside-down even if they should be parsed bottom-up:
+a way to make sure that both files are properly parsed is to chain 2 UniColl blocks,
+to enable/disable each `End of Central Directory`.
+
+To prevent ZIP parsers from complaining about unused space,
+one can abuse `Extra Fields`, 
+file comments in `Central Directory` and archive comments in `End of Central Directory`.
+
+**Example**: here is an [assembly source](scripts/zip.asm) that describes the structure of a dual ZIP,
+that can host 2 different archive files.
+
+After 2 unicoll computations, it gives the 2 colliding files:
+[collision1.zip](examples/collision1.zip) ⟷ [collision2.zip](examples/collision2.zip)
 
 # Presentations
 
