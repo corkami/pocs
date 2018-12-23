@@ -1,4 +1,6 @@
-; an ASM source to defines a dual ZIP for MD5 collisions
+; a nasm source to defines a dual ZIP for MD5 collisions
+
+; build with `nasm -o zip.zip zip.asm`
 
 ; Ange Albertini 2018
 
