@@ -1081,6 +1081,8 @@ To prevent ZIP parsers from complaining about unused space,
 one can abuse `Extra Fields`, 
 file comments in `Central Directory` and archive comments in `End of Central Directory`.
 
+![diagram of ZIP collision](pics/zip.png)
+
 **Example**: here is an [assembly source](scripts/zip.asm) that describes the structure of a dual ZIP,
 that can host 2 different archive files.
 
