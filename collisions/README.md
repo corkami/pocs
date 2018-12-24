@@ -540,6 +540,8 @@ While executables collisions is usually trivial via any loader, this kind of exp
 
 Examples: [tweakPNG.exe](examples/collision1.exe) (GUI) ⟷ [fastcoll.exe](examples/collision2.exe) (CLI)
 
+Here is a [script](scripts/pe.py) to generate instant MD5 collisions of Windows Executables.
+
 <img alt='collision of fastcoll.exe (CLI) and tweakPNG(GUI)' src=pics/pe.png width=500/>
 
 ### MP4 and others
