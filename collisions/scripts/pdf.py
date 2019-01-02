@@ -29,7 +29,9 @@ if len(sys.argv) == 1:
 
 os.system('mutool merge -o first.pdf %s' % sys.argv[1])
 os.system('mutool merge -o second.pdf %s' % sys.argv[2])
-os.system('mutool merge -o merged.pdf dummy.pdf %s %s' % (sys.argv[1], sys.argv[2]))
+os.system('mutool merge -o merged.pdf %s/dummy.pdf %s %s' % (sys.path[0], sys.argv[1], sys.argv[2]))
+
+
 
 with open("first.pdf", "rb") as f:
   d1 = f.read()
@@ -106,10 +108,10 @@ cleaned = cleaned.replace(
   " 65536 f \n0000000018 00000 n \n",
   1)
 
-with open("pdf1.bin", "rb") as f:
+with open("%s/pdf1.bin" % sys.path[0], "rb") as f:
   prefix1 = f.read()
 
-with open("pdf2.bin", "rb") as f:
+with open("%s/pdf2.bin" % sys.path[0], "rb") as f:
   prefix2 = f.read()
 
 file1 = prefix1 + "\n" + cleaned[192:]
