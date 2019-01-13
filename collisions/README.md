@@ -950,8 +950,41 @@ Similarly, it's possible to collide for example arbitrary PDF and PNG files with
 Examples: [Hello.pdf](examples/png-pdf.pdf) ⟷ [1x1.png](examples/png-pdf.png)
 
 
-## Use cases
 
+### PileUps (multi-collision)
+
+
+Cryptographic collisions are not limited to 2 files!
+
+As demonstrated in the [Nostradamus](https://www.win.tue.nl/hashclash/Nostradamus/) experiment in 2008,
+chaining collisions makes it possible to collide more than 2 files.
+
+The first collisions can be Identical or Chosen Prefix, the next ones have to be Chosen Prefix.
+
+You can call them multi-collisions, I prefer *pileups* - it's shorter :)
+
+
+
+#### PE - PNG - MP4 - PDF
+
+Combining all previously acquired knowledge,
+I used 3 Chosen Prefix collisions to craft 4 different prefixes for different file types:
+document (PDF), video (MP4), executable (PE) and image (PNG).
+
+![diagram of a PE/PNG/MP4/PDF pileup](pics/pileup-diagram.png)
+
+*diagram of a PE/PNG/MP4/PDF pileup*
+
+This script is generic and instant:
+
+![diagram of a PE/PNG/MP4/PDF pileup](pics/pileup.png)
+
+Examples: [commodore.pdf](examples/pileup.pdf) ⟷ [diagram.png](examples/pileup.png) ⟷ [kidmo.mp4](examples/pileup.mp4) ⟷ [sumatra18.exe](examples/pileup.exe)
+
+
+
+
+## Use cases
 
 Better discard MD5 altogether, because file introspection is just too time-consuming and too risky!
 
