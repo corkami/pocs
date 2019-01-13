@@ -168,9 +168,9 @@ with open("cleaned.pdf", "rb") as f:
   cleaned = f.read()
 
 
-with open("pdf.bin", "rb") as f:
+with open("pdfpe1.bin", "rb") as f:
   prefix1 = f.read()
-with open("pe.bin", "rb") as f:
+with open("pdfpe2.bin", "rb") as f:
   prefix2 = f.read()
 
 assert hashlib.md5(prefix1).hexdigest() == hashlib.md5(prefix2).hexdigest()
