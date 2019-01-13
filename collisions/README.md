@@ -895,6 +895,9 @@ Attack scenario:
 2. get it whitelisted
 3. send `evil.exe`, which has the same MD5.
 
+In these cases, a Chosen Prefix collision is required
+if both file formats need to start at offset 0.
+
 Some examples of polycoll layouts:
 
 ![pdf-jpg polyglot collision](pics/pdf-jpg.png)
@@ -907,7 +910,7 @@ Some examples of polycoll layouts:
 *PE/PNG polycoll*
 
 
-#### Portable Executable - JPG
+#### PE - JPG
 
 Since a PE header is usually smaller than 0x500 bytes, it's a perfect fit for a JPG comment:
 1. start with DOS/JPG headers
@@ -919,6 +922,26 @@ Once again, the collision is instant.
 
 Examples: [fastcoll.exe](examples/jpg-pe.exe) ⟷ [Marc.jpg](examples/jpg-pe.jpg) 
 
+#### PDF - PE
+
+Merging a PDF with a dummy file with `mutool` is a good generic way to reorder objects
+and then get the first 2 objects discardable (dummy page and content),
+which is a perfect fit for a hosting `stream` object of unknown length as `1 0`,
+and its length referenced further (after collision blocks) in the second object.
+
+The only problem is that `mutool` will always inline the length - and remove the length reference,
+so it has to be re-inserted in the PDF instead of the value,
+but most reference `2 0 R` will be smaller than hardcoded lengths.
+Thankfully this can be fixed without altering any object offset,
+so no need to patch the XREF.
+
+Here's a [script](scripts/pdfpe.py) to, for example, instantly collide a PDF viewer ([Sumatra](https://www.sumatrapdfreader.org/free-pdf-reader.html) is lightweight and standalone) and a PDF document:
+
+Examples: [Poster.pdf](examples/pepdf.pdf) ⟷ [Sumatra.exe](examples/pepdf.exe)
+
+![a PDF viewer showing a PDF (itself showing a PDF) with the same MD5](pics/pdfpe.png)
+
+*a PDF viewer showing a PDF (itself showing a PDF) with the same MD5*
 
 #### PDF - PNG
 
