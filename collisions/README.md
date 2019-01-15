@@ -615,6 +615,8 @@ Examples (videos by [KidMoGraph](https://www.kidmograph.com/)):
 
 <video>![how it should look (but your markdown doesn't render video tags)](pics/mp4-pocs.png)</video>
 
+Note that some viewers (OS X, Safari, FireFox) don't allow a file that starts with an Atom that is not `ftyp`.
+In this case, the prefix have to cover this, and it's not so generic, but besides it's the same strategy - only limited to a single file type.
 
 #### JPEG2000
 
