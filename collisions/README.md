@@ -936,7 +936,7 @@ Since a PE header is usually smaller than 0x500 bytes, it's a perfect fit for a 
 3. Put the full JPG image
 4. Put the whole PE specifications
 
-Once again, the collision is instant.
+Once again, the collision is [instant](scripts/jpgpe.py)
 
 Examples: [fastcoll.exe](examples/jpg-pe.exe) ⟷ [Marc.jpg](examples/jpg-pe.jpg) 
 
