@@ -456,7 +456,7 @@ Theoretical limitations and workarounds:
 - the image meta data (dimensions, color space...) are stored in the `IHDR` chunk,
   which should in theory be right after the signature (ie, before any potential comment),
   so it would mean that we can only precompute collisions of images with the same meta data.
-  However, that chunk can actually be after a comment block, so we can put the collision data before the header,
+  However, that chunk can actually be after a comment block (in the vast majority of readers), so we can put the collision data before the header,
   which enables to collide any pair of PNG with a single precomputation. 
 
 Since a PNG chunk has a length on 4 bytes, there's no need to modify the structure of either file: we can jump over a whole image in one go.
@@ -472,8 +472,26 @@ With the [script](scripts/png.py):
 19:27:04.87>
 ```
 
-<img alt='identical prefix collisions' src=examples/collision1.png width=350/>
-<img alt='identical prefix collisions' src=examples/collision2.png width=350/>
+<img alt='identical prefix collisions' src=examples/collision1.png width=40% /> ⟷
+<img alt='identical prefix collisions' src=examples/collision2.png width=40% />
+
+#### incompatibility
+
+Most readers accept flawlessly PNG files that start with a chunk that is not `IHDR`.
+
+However, some (such as Safari and Preview - any other?) don't tolerate it.
+In this case, the image header and its properties (dimensions, color space) must be first, before any collision blocks.
+
+In this case, both colliding files must have the same properties.
+Again, UniColl is enough, and of course the computed prefix pair can be reused for any other pair of files with the same properties
+
+Here is a [script](scripts/pngStd.py) to collide any pair of such files that launches UniColl if needed to compute the prefix pair.
+
+<img alt='identical prefix collisions' src=examples/0a959025-1.png width=350/> ⟷
+<img alt='identical prefix collisions' src=examples/0a959025-2.png width=350/>
+
+<img alt='identical prefix collisions' src=examples/aac2423a-1.png width=350/> ⟷
+<img alt='identical prefix collisions' src=examples/aac2423a-2.png width=350/>
 
 
 ### GIF
