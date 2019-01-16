@@ -1,7 +1,7 @@
 **TL;DR** getting an MD5 collision of these 2 images is now(\*) [trivial](scripts/png.py) and instant.
 
-[![MD5 page on Wikipedia](examples/tldr-1.png)](https://en.wikipedia.org/wiki/MD5) ⟷
-<a href=http://gunshowcomic.com/648><img src=examples/tldr-2.png height=400 alt='On Fire / This is fine'></a>
+[![MD5 page on Wikipedia](examples/tldr-1.jpg)](https://en.wikipedia.org/wiki/MD5) ⟷
+<a href=http://gunshowcomic.com/648><img src=examples/tldr-2.jpg height=400 alt='On Fire / This is fine'></a>
 
 Don't play with fire, don't rely on MD5.
 
