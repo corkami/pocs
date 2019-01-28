@@ -1,4 +1,4 @@
 # pocs
 Proof of Concepts
 
-[hash collisions](collisions/README.md)
+[hash collisions](https://github.com/corkami/collisions)
