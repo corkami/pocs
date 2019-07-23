@@ -40,11 +40,11 @@ with open("payload.pdf", "wb") as f:
 3 0 obj <</Type/Page/Contents 4 0 R>>endobj
 4 0 obj <<>>
 stream
-%s
+%(payloadbin)s
 endstream
 endobj
 
-trailer<</Size 5/Root 1 0 R>>""" % payloadbin)
+trailer<</Size 5/Root 1 0 R>>""" % locals())
 
 with open("first.pdf", "rb") as f:
   d1 = f.read()
@@ -61,7 +61,9 @@ pages = kids[:-1]
 
 COUNT = getCount(d1)
 KIDS = procreate(pages[:getCount(d1)])
-LASTPAGE = kids[-1]
+# the stream object should be just *before* the page object
+# (that's how mutool does it)
+LASTPAGE = "%i" % (int(kids[-1]) - 1)
 
 contents = """%%PDF-1.4
 
