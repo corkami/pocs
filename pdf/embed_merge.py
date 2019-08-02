@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# a script to embed any data to any PDF
+# a script to embed any data to any PDF via PDF merging
 
 # Ange Albertini 2019
 
