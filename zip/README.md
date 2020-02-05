@@ -29,15 +29,16 @@ encryption:
 - `aes.zip` AES-256 crypto
 
 compression (old):
-- `store.zip` storage (no compression)
-- `shrunk.zip`  shrunk
-- `implode.zip`  implode
- - `implodeV3.zip`  implodeV3
+- `store.zip` 0-storage (no compression)
+- `shrunk.zip`  1-shrunk
+- `implode.zip`  6-implode
+ - `implodeV3.zip`  6-implodeV3
+- `simple.zip` 8-Deflate
 compression (new):
-- `deflate64.zip` Deflate64
-- `bz2.zip` bzip2
-- `lzma.zip` LZMA
-- `PPMd.zip` PPMd
+- `deflate64.zip` 9-Deflate64
+- `bz2.zip` 12-bzip2
+- `lzma.zip` 14-LZMA
+- `PPMd.zip` 98-PPMd
 - `zopfli.zip` - super compressed with [Zopfli](https://github.com/google/zopfli) (via `advzip` from [AdvanceComp](https://www.advancemame.it/comp-readme.html))
 
 
