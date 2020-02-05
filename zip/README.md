@@ -31,6 +31,10 @@ encryption:
 compression (old):
 - `store.zip` 0-storage (no compression)
 - `shrunk.zip`  1-shrunk
+- `reduced1.zip` 2-reduced1
+- `reduced2.zip` 3-reduced2
+- `reduced3.zip` 4-reduced3
+- `reduced4.zip` 5-reduced4
 - `implode.zip`  6-implode
  - `implodeV3.zip`  6-implodeV3
 - `simple.zip` 8-Deflate
