@@ -28,7 +28,7 @@ encryption:
 - `zipcrypto.zip` old zip crypto (PkZip 2.0)
 - `aes.zip` AES-256 crypto
 
-compression (old):
+compressions:
 - `store.zip` 0-storage (no compression)
 - `shrunk.zip`  1-shrunk
 - `reduced1.zip` 2-reduced1
@@ -38,7 +38,6 @@ compression (old):
 - `implode.zip`  6-implode
  - `implodeV3.zip`  6-implodeV3
 - `simple.zip` 8-Deflate
-compression (new):
 - `deflate64.zip` 9-Deflate64
 - `bz2.zip` 12-bzip2
 - `lzma.zip` 14-LZMA
