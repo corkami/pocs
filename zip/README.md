@@ -41,7 +41,10 @@ compressions:
 - `deflate64.zip` 9-Deflate64
 - `bz2.zip` 12-bzip2
 - `lzma.zip` 14-LZMA
+- `jpeg.zip` 96-JPEG
+- `wavpack.zip` 97-WavPack
 - `PPMd.zip` 98-PPMd
+- `aes.zip` 99 AES-256 crypto
 - `zopfli.zip` - super compressed with [Zopfli](https://github.com/google/zopfli) (via `advzip` from [AdvanceComp](https://www.advancemame.it/comp-readme.html))
 
 
