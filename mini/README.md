@@ -1,6 +1,6 @@
 Input files of various file types with self-descriptive contents
 
-Example: The 13x7 PNG image is 102 bytes:
+Example: The 13x7 PNG image is 85 bytes:
 
 ```
 000:  89 .P .N .G \r \n ^Z \n 00 00 00 0D .I .H .D .R
@@ -11,6 +11,16 @@ Example: The 13x7 PNG image is 102 bytes:
 050:  06 00 21 1A 03 10 32 6A 0B 48 00 00 00 00 .I .E
 060:  .N .D AE 42 60 82
 ```
+
+```
+000:  89 .P .N .G \r \n ^Z \n 00 00 00 0D .I .H .D .R
+010:  00 00 00 0D 00 00 00 07 01 00 00 00 00 FB 0B FA
+020:  B7 00 00 00 1C .I .D .A .T 78 DA 63 FC FF 93 59
+030:  8A 81 49 F0 03 CB 87 7F 4C 0A 0C 4C 0C 0A 40 11
+040:  00 4E C1 07 49 D9 FD D2 02 00 00 00 00 .I .E .N
+050:  .D AE 42 60 82
+```
+
 
 and renders as ![](png.png)
 
