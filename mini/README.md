@@ -1,13 +1,14 @@
 Input files of various file types with self-descriptive contents
 
-Example: The 11x5 PNG image is 78 bytes:
+Example: The 13x7 PNG image is 84 bytes:
 
 ```
 000:  89 .P .N .G \r \n ^Z \n 00 00 00 0D .I .H .D .R
-010:  00 00 00 0B 00 00 00 05 01 00 00 00 00 BB DD 2B
-020:  FB 00 00 00 15 .I .D .A .T 78 DA 63 30 6E 60 08 
-030:  4D 60 30 75 60 28 05 A2 06 00 18 DB 03 88 B7 5A
-040:  16 34 00 00 00 00 .I .E .N .D AE 42 60 82
+010:  00 00 00 0D 00 00 00 07 01 00 00 00 00 FB 0B FA
+020:  B7 00 00 00 1B .I .D .A .T 78 DA 63 F8 FF 83 61 
+030:  E6 09 86 55 3B 18 66 AD 60 D8 05 44 27 80 22 00
+040:  71 04 0A D8 F5 CD 72 03 00 00 00 00 .I .E .N .D
+050:  AE 42 60 82
 ```
 
 and renders as ![](png.png)
