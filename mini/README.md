@@ -1,14 +1,14 @@
 Input files of various file types with self-descriptive contents
 
-Example: The 13x7 PNG image is 85 bytes:
+Example: The 13x7 PNG image is 84 bytes:
 
 ```
 000:  89 .P .N .G \r \n ^Z \n 00 00 00 0D .I .H .D .R
 010:  00 00 00 0D 00 00 00 07 01 00 00 00 00 FB 0B FA
-020:  B7 00 00 00 1C .I .D .A .T 78 DA 63 FC FF 93 59
-030:  8A 81 49 F0 03 CB 87 7F 4C 0A 0C 4C 0C 0A 40 11
-040:  00 4E C1 07 49 D9 FD D2 02 00 00 00 00 .I .E .N
-050:  .D AE 42 60 82
+020:  B7 00 00 00 1B .I .D .A .T 78 DA 63 F8 FF 83 61 
+030:  E6 09 86 55 3B 18 66 AD 60 D8 05 44 27 80 22 00
+040:  71 04 0A D8 F5 CD 72 03 00 00 00 00 .I .E .N .D
+050:  AE 42 60 82
 ```
 
 
