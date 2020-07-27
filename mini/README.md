@@ -87,7 +87,7 @@ Videos
 
 
 Script:
-- html.htm
+- html.htm / js.htm
 - php.php
 
 
