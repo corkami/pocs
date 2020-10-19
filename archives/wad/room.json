@@ -1,0 +1,158 @@
+{
+  "magic": "PWAD",
+  "numIndexEntries": 0x6,
+  "indexOffset": 0xf0,
+  "index": [
+    {
+      "offset": 0xc,
+      "size": 0x0,
+      "name": "MAP01",
+      "contents": []
+    },
+    {
+      "offset": 0xc,
+      "size": 0xa,
+      "name": "THINGS",
+      "contents": {
+        "entries": [
+          {
+            "x": 0x40,
+            "y": 0x40,
+            "angle": 0x0,
+            "type": 0x1,
+            "flags": 0x7
+          }
+        ]
+      }
+    },
+    {
+      "offset": 0x16,
+      "size": 0x38,
+      "name": "LINEDEFS",
+      "contents": {
+        "entries": [
+          {
+            "vertexStartIdx": 0x0,
+            "vertexEndIdx": 0x1,
+            "flags": 0x1,
+            "lineType": 0x0,
+            "sectorTag": 0x0,
+            "sidedefRightIdx": 0x0,
+            "sidedefLeftIdx": 0xffff
+          },
+          {
+            "vertexStartIdx": 0x1,
+            "vertexEndIdx": 0x2,
+            "flags": 0x1,
+            "lineType": 0x0,
+            "sectorTag": 0x0,
+            "sidedefRightIdx": 0x1,
+            "sidedefLeftIdx": 0xffff
+          },
+          {
+            "vertexStartIdx": 0x2,
+            "vertexEndIdx": 0x3,
+            "flags": 0x1,
+            "lineType": 0x0,
+            "sectorTag": 0x0,
+            "sidedefRightIdx": 0x2,
+            "sidedefLeftIdx": 0xffff
+          },
+          {
+            "vertexStartIdx": 0x3,
+            "vertexEndIdx": 0x0,
+            "flags": 0x1,
+            "lineType": 0x0,
+            "sectorTag": 0x0,
+            "sidedefRightIdx": 0x3,
+            "sidedefLeftIdx": 0xffff
+          }
+        ]
+      }
+    },
+    {
+      "offset": 0x4e,
+      "size": 0x78,
+      "name": "SIDEDEFS",
+      "contents": {
+        "entries": [
+          {
+            "offsetX": 0x0,
+            "offsetY": 0x0,
+            "upperTextureName": "-\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+            "lowerTextureName": "-\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+            "normalTextureName": "STONE2\u0000\u0000",
+            "sectorId": 0x0
+          },
+          {
+            "offsetX": 0x0,
+            "offsetY": 0x0,
+            "upperTextureName": "-\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+            "lowerTextureName": "-\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+            "normalTextureName": "STONE2\u0000\u0000",
+            "sectorId": 0x0
+          },
+          {
+            "offsetX": 0x0,
+            "offsetY": 0x0,
+            "upperTextureName": "-\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+            "lowerTextureName": "-\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+            "normalTextureName": "STONE2\u0000\u0000",
+            "sectorId": 0x0
+          },
+          {
+            "offsetX": 0x0,
+            "offsetY": 0x0,
+            "upperTextureName": "-\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+            "lowerTextureName": "-\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+            "normalTextureName": "STONE2\u0000\u0000",
+            "sectorId": 0x0
+          }
+        ]
+      }
+    },
+    {
+      "offset": 0xc6,
+      "size": 0x10,
+      "name": "VERTEXES",
+      "contents": {
+        "entries": [
+          {
+            "x": 0x0,
+            "y": 0x80
+          },
+          {
+            "x": 0x80,
+            "y": 0x80
+          },
+          {
+            "x": 0x80,
+            "y": 0x0
+          },
+          {
+            "x": 0x0,
+            "y": 0x0
+          }
+        ]
+      }
+    },
+    {
+      "offset": 0xd6,
+      "size": 0x1a,
+      "name": "SECTORS",
+      "contents": {
+        "entries": [
+          {
+            "floorZ": 0x0,
+            "ceilZ": 0x80,
+            "floorFlat": "MFLR8_1\u0000",
+            "ceilFlat": "MFLR8_1\u0000",
+            "light": 0xa0,
+            "specialType": { "name": "NORMAL", "value": 0 },
+            "tag": 0x0
+          }
+        ]
+      }
+    }
+  ]
+}
