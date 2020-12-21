@@ -1,6 +1,6 @@
 ; A file-targeted polymock
 ; (a file faking multiple file types, just via the minimum information)
-; also contain some fake signatures to hopefully .
+; also contain some fake signatures to hopefully trigger more detections.
 
 ; Ange Albertini 2020, BSD-3
 
@@ -36,11 +36,15 @@ C equ 0
 %endmacro
 
 
+%macro _al16 0
+  align 16, db 0
+%endmacro
+
 ; signatures with padding
 %macro _exa 1
   %1
   db 0
-  align 16, db 0
+  _al16
 %endmacro
 
 
@@ -160,7 +164,7 @@ _ats 109, {db "MAP ("}   ; EZD Electron Density Map
 
 _ats 128, {db "DICM"} ; DICOM
 
-	_ex {db "%PDF-1.4 obj stream endstream endobj xref trailer startxref"} ; PDF
+	_ex {db "%PDF-1.4", 0ah, "obj stream endstream endobj xref trailer startxref"} ; PDF
 
 ;_ats 192, {db "\044\377\256Qi\232"} ; Nintendo DS Game ROM Image
 
@@ -178,13 +182,20 @@ _ats 256, {db "NCCH"} ; Nintendo 3DS archive
 
 _ats 260, {db 0xCE, 0xED, 0x66, 0x66, 0xCC, 0x0D, 0x00, 0x0B} ; Game Boy ROM image
 
+; the test file from EICAR - European Institute for Computer Antivirus Research
+	_al16
+	_ex {db "X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*"}
 
 _ats 369, {db "MICROSOFT PIFEX", 0} ; Windows Program Information File
 
-
 ;ats 384, {db "LockStream"}         ; LockStream Embedded file
 
+; the GTUBE - Generic Test for Unsolicited Bulk Email - test string
+	_al16
+	_exa {db "XJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34X*"}
+
 	_ex {dd 0x184c2102} ; LZ4
+	_ex {dd 0x184d2102} ; LZ4 compressed data, legacy
 
 _ats 510, {db 055h, 0AAh} ; Master Boot Record
 
@@ -194,7 +205,6 @@ _ats 514, {db "HdrS"} ; Linux RW-rootFS
 
 _ats 596, {db "X", 0DFh, 0FFh, 0FFh} ; Ultrix core file
 
-	_ex {db "X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H", "*"} ; EICAR
 
 _ats 1008, {db "DECFILE11"} ; Files-11 On-Disk Structure
 
